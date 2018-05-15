@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<title>Minux</title>
+		<style>
+			.inputtext{
+				border: none;	
+				max-width: 200px;
+				min-width: 50px;
+			}
+			.spaninput{
+				padding: 8px 13px;	
+				border: solid 1px #ddf;
+				display: inline-block;
+			}
+			.inputtext:focus{
+				outline: none;
+			}
+			.divinput{
+				display: inline-block;
+				margin: 0 15px;	
+			}
+			#asks{
+				text-align: center;
+			}
+			#infinitive{
+				font-size: 30px;
+				margin: 120px 0 60px 0;
+				text-align: center;	
+			}
+			.textask{
+				text-align: left;
+				width: 100%;
+				display: block;
+				margin: 0 0 5px 10px;
+			}
+			table {
+			    font-family: arial, sans-serif;
+			    border-collapse: collapse;
+			    width: calc(100% - 60px);
+			    margin: 30px;
+			}
+			
+			td, th {
+			    border: 1px solid #dddddd;
+			    text-align: left;
+			    padding: 8px;
+			}
+			.checksimbol{
+				border: none;
+			}
+			.red{
+				color: red;
+			}
+			.blue{
+				color: blue;
+			}
+		</style>
+	</head>
+<body>
+
+	<h1 style="text-align: center;margin-buttom: 80px;">Irregular Verbs Test</h1>
+
+	<div id="infinitive"></div>
+	<form action="">
+		<div id="asks">
+			<div class="divinput">
+				<span class="textask">Significado:</span>
+				<span class="spaninput"><input class="inputtext" type"text" size=200 id="meaning"   ></span>
+			</div> 
+			<div class="divinput">
+				<span class="textask">Pasado:</span>
+				<span class="spaninput"><input class="inputtext" type"text" size=200 id="past"      ></span>
+			</div>                                       
+			<div class="divinput">
+				<span class="textask">Participio:</span>
+				<span class="spaninput"><input class="inputtext" type"text" size=200 id="participle"></span>
+			</div>
+			<div class="divinput">
+				<span class="textask">3ra persona:</span>
+				<span class="spaninput"><input class="inputtext" type"text" size=200 id="person3"   ></span>
+			</div>
+			<div class="divinput">
+				<span class="textask">Gerundio:</span>
+				<span class="spaninput"><input class="inputtext" type"text" size=200 id="gerund"    ></span>
+			</div>
+		</div>
+	</form>
+	<button id="enter" onclick="getverb()"> Siguiente verbo </button>  
+</body>
+<script>
+
+var formulario = document.getElementById("asks");
+formulario.addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("enter").click();
+    }
+});
+var results = '<table><tr><th>Infinitivo</th><th>Pasado</th><th>Participio</th><th>3ra Persona</th><th>Gerundio</th><th>Significado</th><th class="checksimbol"></th></tr>';
+var finalTag = "</table>"
+
+var verboEvaluado;
+
+function comparaPalabras(correct, answer, incorrecto){
+
+	var inputEdit = answer.replace(/ /g , "");
+	inputEdit = inputEdit?inputEdit.toLowerCase():'-';
+	if( correct.toLowerCase() == inputEdit ){
+		var retorno = '<td><span class="blue">'+ answer +'</td>';
+	}else{
+		incorrecto.valor = true;
+		var retorno = '<td><span class="red">'+ inputEdit +'</span> <span class="blue"> '+ correct + ' </span></td>';
+	}
+	return retorno;
+}
+
+function comparaSignificado(correct, answer, incorrecto){
+	
+	var significados = correct.split(" ");
+	var inputEdit = answer.replace(/ /g , "");
+	inputEdit = inputEdit?inputEdit.toLowerCase():'-';
+	var isCorrect = false;
+	for(var i=0; i<significados.length; i++){
+		if(significados[i].toLowerCase() == inputEdit){
+			isCorrect = true;
+		}
+	}
+
+	if( isCorrect ){
+		var retorno = '<td><span class="blue">'+ answer +'</td>';
+	}else{
+		incorrecto.valor = true;
+		var retorno = '<td><span class="red">'+ inputEdit +'</span> <span class="blue"> '+ correct + ' </span></td>';
+	}	
+	return retorno;
+}
+
+
+function evalua(verbo, ingresado){
+	console.log(verbo)
+
+	var incorrecto = {valor : false};
+
+	var cell = '<tr>';
+
+	//  Infinitivo 
+	cell = cell + '<td><span class="infcolum">'+ verbo.inf +'</td>';
+
+	var pass = comparaPalabras( verbo.pas, ingresado.pas, incorrecto );
+	var part = comparaPalabras( verbo.par, ingresado.par, incorrecto );
+	var per3 = comparaPalabras( verbo.pe3, ingresado.pe3, incorrecto );
+	var geru = comparaPalabras( verbo.ger, ingresado.ger, incorrecto );
+	var mean = comparaSignificado( verbo.mea, ingresado.mea, incorrecto );
+	
+	cell = cell + pass + part + per3 + geru + mean;
+
+	var checksimbol = incorrecto.valor?'<td class="checksimbol" style="color:red;">&#10007;</td>':'<td class="checksimbol" style="color:green;">&#10003;</td>'
+	
+	cell = cell + checksimbol + '</tr>';
+
+	document.getElementById("meaning").value = "";
+	document.getElementById("past").value = "";
+	document.getElementById("participle").value = "";
+	document.getElementById("person3").value = "";
+	document.getElementById("gerund").value = "";
+
+	results = results + cell;
+
+}
+
+function getverb(){
+
+	//Evita que se ejecute dos veces esta funcion cuando focus esta sobre el boton y se hace enter
+	var boton = document.getElementById('enter');
+	var isFocused = (document.activeElement === boton);
+	if(isFocused){		
+		document.getElementById("meaning").focus();
+		return 0;
+	}
+
+	if( verboEvaluado ){
+		var inputs = {
+			inf : document.getElementById("meaning").value,
+			pas : document.getElementById("past").value,
+			par : document.getElementById("participle").value,
+			pe3 : document.getElementById("person3").value,
+			ger : document.getElementById("gerund").value,
+			mea : document.getElementById("meaning").value
+		}
+
+		evalua( verboEvaluado, inputs );
+	}
+
+	if(verbs.length == 0){
+		results = results + finalTag;
+		document.body.innerHTML = results;
+		return false;
+	}
+
+	
+	var x = Math.floor((Math.random() * (verbs.length)) );
+	document.getElementById("infinitive").innerHTML = verbs[x].inf;
+	verboEvaluado = verbs[x];
+	var a = verbs.slice(0, x);
+	var b = verbs.slice(x+1, verbs.length);
+	verbs = a.concat(b);
+
+	document.getElementById("meaning").focus();
+}
+
+
+       //infinitivo     pasado,        participio,       3er p,	         gerundio,              significado
+var v= [["hit",		"hit", 		"hit", 		"hits", 	"hitting", 	"golpear pegar"],
+	["become", 	"became", 	"became", 	"becomes", 	"becoming", 	"convertir convertirse volverse"],
+	["split",	"split", 	"split", 	"splits", 	"splitting", 	"dividir apartar separar"],
+	["let", 	"let", 		"let", 		"lets", 	"letting", 	"dejar permitir"],
+	["set",		"set",		"set",		"sets",		"setting",	"establecer ajustar fijar"],
+	["spread",	"spread",	"spread",	"spreads",	"spreadign",	"difundir esparcir propagar extender"],
+	["put",		"put",		"put",		"puts",		"putting",	"poner"],
+	["cut",		"cut",		"cut",		"cuts",		"cutting",	"cortar"],
+	["shut",	"shut",		"shut",		"shuts",	"shutting",	"cerrar"],
+	["thrust",	"thrust",	"thrust",	"thrusts",	"thrusting",	"empujar introducir impulsar clavar"],
+	["hurt",	"hurt",		"hurt",		"hurts",	"hurting",	"herir"],
+	["burst",	"burst",	"burst",	"bursts",	"bursting",	"estallar reventar irrumpir"],
+	["cast",	"cast",		"cast",		"casts",	"casting",	"emitir lanzar arrojar"],
+	["broadcast",	"broadcast",	"broadcast",	"broadcasts",	"broadcasting",	"transmitir emitir difundir"],
+	["forecast",	"forecast",	"forecast",	"forecasts",	"forecasting",	"prever preever predecir"]/*,
+	["","","","","",""],
+	["","","","","",""],
+	["cost","","","","",""],
+	["beat","","","","",""],
+	["sweat","","","","",""],
+	["bet","","","","",""],
+	["wet","","","","",""],
+	["bid", ],
+	["rid", "rid", "eliminar liberar deshacerse deshacer"],
+	["fit"],
+	["slit", "slit", "slit", "slits"],
+	["quit", "quit", "quit" ],*/
+	]
+
+function verbo(){
+    this.inf,
+    this.pas,
+    this.par,
+    this.pe3,
+    this.ger,
+    this.mea
+};
+
+var verbs = []
+
+
+for(var i=0; i< v.length; i++){
+	var e = new verbo;
+	e.inf = v[i][0];
+	e.pas = v[i][1];
+	e.par = v[i][2];
+	e.pe3 = v[i][3];
+	e.ger = v[i][4];
+	e.mea = v[i][5];
+	verbs.push( e );
+}
+
+getverb();
+
+</script>
+</html>
