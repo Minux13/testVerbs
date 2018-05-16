@@ -59,6 +59,9 @@
 			.blue{
 				color: blue;
 			}
+			.infcolum, .mlink{
+				cursor: pointer;	
+			}
 		</style>
 	</head>
 <body>
@@ -93,6 +96,11 @@
 	<button style="padding:15px;margin:15px;background:#eef;border:solid 1px #eef;" id="enter" onclick="getverb()"> Siguiente verbo </button>  
 </body>
 <script>
+function createWindow(cUrl,cName,cFeatures) {
+	var xWin = window.open(cUrl,cName,cFeatures);
+	//setTimeout(function(){ xWin.scroll(0,100); }, 3000);
+	//setTimeout(function(){ console.log(window.onfocus); }, 3000);
+}
 
 var formulario = document.getElementById("asks");
 formulario.addEventListener("keyup", function(event) {
@@ -159,7 +167,12 @@ function evalua(verbo, ingresado){
 	var cell = '<tr>';
 
 	//  Infinitivo 
-	cell = cell + '<td><span class="infcolum">'+ verbo.inf +'</td>';
+	var hrefGT = 'https://translate.google.com/?hl=es#en/es/'+ verbo.inf;
+	var newWindowFeatures = 'toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=0,width=800,height=500';
+	var onclickAttr = 'onclick="createWindow(\''+ hrefGT +'\',\'window2\',\''+ newWindowFeatures +'\')"';	
+	var hrefMeaning = 'https://dictionary.cambridge.org/es/diccionario/ingles-espanol/'+verbo.inf;
+	var tag_meaning = '<span class="mlink" style="float:right;" onclick="createWindow(\''+ hrefMeaning +'\',\'window2\',\''+ newWindowFeatures +'\');">&#10067;</span>'
+	cell = cell + '<td><span '+ onclickAttr +'class="infcolum">'+ verbo.inf +'</span>'+ tag_meaning +'</td>';
 
 	var pass = comparaPalabras( verbo.pas, ingresado.pas, incorrecto );
 	var part = comparaPalabras( verbo.par, ingresado.par, incorrecto );
@@ -235,18 +248,18 @@ var v= [["hit",		"hit", 		"hit", 		"hits", 	"hitting", 	"golpear/pegar"],
 	["put",		"put",		"put",		"puts",		"putting",	"poner"],
 	["cut",		"cut",		"cut",		"cuts",		"cutting",	"cortar"],
 	["shut",	"shut",		"shut",		"shuts",	"shutting",	"cerrar"],
-	["thrust",	"thrust",	"thrust",	"thrusts",	"thrusting",	"empujar/introducir impulsar clavar"],
+	["thrust",	"thrust",	"thrust",	"thrusts",	"thrusting",	"empujar/introducir/impulsar/clavar"],//empujar, meter bruscamente, abrir camino
 	["hurt",	"hurt",		"hurt",		"hurts",	"hurting",	"herir"],
 	["burst",	"burst",	"burst",	"bursts",	"bursting",	"estallar/reventar/irrumpir"],
-	["cast",	"cast",		"cast",		"casts",	"casting",	"emitir/lanzar/arrojar"],
+	["cast",	"cast",		"cast",		"casts",	"casting",	"emitir/transmitir/lanzar/arrojar"],//lanzar un hechizo, pasar a alguien(casi no se usa)
 	["broadcast",	"broadcast",	"broadcast",	"broadcasts",	"broadcasting",	"transmitir/emitir/difundir"],
-	["forecast",	"forecast",	"forecast",	"forecasts",	"forecasting",	"prever/preever/predecir"],
+	["forecast",	"forecast",	"forecast",	"forecasts",	"forecasting",	"pronosticar/prever/preever/predecir"],//pronosticar
 	["cost",	"costed/cost",	"costed/cost",	"costs",	"costing",	"costar"],
-	["beat",	"beat/beaten",	"beat/beaten",	"beats",	"beating",	"golpear/vencer/superar"],
+	["beat",	"beat/beaten",	"beat/beaten",	"beats",	"beating",	"golpear/pegar/vencer/superar"],
 	["sweat",	"sweat/sweated","sweat/sweated","sweats",	"sweating",	"sudar"],
 	["bet",		"betted/bet",	"betted/bet",	"bets",		"betting",	"apostar"],
 	["wet",		"wetted/wet",	"wetted/wet",	"wets",		"wetting",	"mojar/humedecer"],
-	["bid",		"bid/bade/bidden","bid/bade/bidden","bids/bid",	"bidding", 	"pujar/ofrecer/ofrecerensubasta"],
+	["bid",		"bid/bade/bidden","bid/bade/bidden","bids/bid",	"bidding", 	"pujar/ofrecer"],//ofrecer en una subasta
 	["rid",		"ridded/rid", 	"ridded/rid",	"rids",		"ridding",	"eliminar/liberar/deshacerse/deshacer"],
 	["slit",	"slitted/slit", "slitted/slit", "slits", 	"slitting",	"cortar/rajar/degollar"],
 	["quit",	"quitted/quit", "quitted/quit", "quits", 	"quitting", 	"dejar/abandonar/renunciar/dimitir"]/*,
