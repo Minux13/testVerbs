@@ -63,6 +63,9 @@
 				cursor: pointer;	
 			}
 		</style>
+
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	</head>
 <body>
 
@@ -109,33 +112,15 @@ formulario.addEventListener("keyup", function(event) {
         document.getElementById("enter").click();
     }
 });
-var results = '<table><tr><th>Infinitivo</th><th>Pasado</th><th>Participio</th><th>3ra Persona</th><th>Gerundio</th><th>Significado</th><th class="checksimbol"></th></tr>';
+
+var addMeaningExtra = true;
+var thTagMeaningExtra = addMeaningExtra ? '<th>Significado</th>' : ""
+var results = '<table><tr><th>Infinitivo</th><th>Pasado</th><th>Participio</th><th>3ra Persona</th><th>Gerundio</th><th>Significado</th>'+thTagMeaningExtra+'<th class="checksimbol"></th></tr>';
 var finalTag = "</table>"
 
 var verboEvaluado;
 
-/*
-function comparaPalabras(correct, answer, incorrecto){
-
-	var inputEdit = answer.replace(/ /g , "");
-	inputEdit = inputEdit?inputEdit.toLowerCase():'-';
-
-	var conjugation = correct.split("/");	
-
-	if( !correct.includes("/") ){
-		conjugation.push("*********")		
-	}
-
-	if( conjugation[0].toLowerCase() == inputEdit || conjugation[1].toLowerCase() == inputEdit ){
-		var retorno = '<td><span class="blue">'+ answer +'</td>';
-	}else{
-		incorrecto.valor = true;
-		var retorno = '<td><span class="red">'+ inputEdit +'</span> <span class="blue"> '+ correct + ' </span></td>';
-	}
-	return retorno;
-}
-*/
-
+var Score = 0;
 
 function comparaPalabras(correct, answer, incorrecto){
 	
@@ -150,7 +135,7 @@ function comparaPalabras(correct, answer, incorrecto){
 	}
 
 	if( isCorrect ){
-		var retorno = '<td><span class="blue">'+ answer +'</td>';
+		var retorno = '<td><span class="blue">'+ answer +'</span></td>';
 	}else{
 		incorrecto.valor = true;
 		var retorno = '<td><span class="red">'+ inputEdit +'</span> <span class="blue"> '+ correct + ' </span></td>';
@@ -172,19 +157,24 @@ function evalua(verbo, ingresado){
 	var onclickAttr = 'onclick="createWindow(\''+ hrefGT +'\',\'window2\',\''+ newWindowFeatures +'\')"';	
 	var hrefMeaning = 'https://dictionary.cambridge.org/es/diccionario/ingles-espanol/'+verbo.inf;
 	var tag_meaning = '<span class="mlink" style="float:right;" onclick="createWindow(\''+ hrefMeaning +'\',\'window2\',\''+ newWindowFeatures +'\');">&#10067;</span>'
-	cell = cell + '<td><span '+ onclickAttr +'class="infcolum">'+ verbo.inf +'</span>'+ tag_meaning +'</td>';
+	var urlConjutation = 'http://conjugador.reverso.net/conjugacion-ingles-verbo-'+ verbo.inf +'.html';
+	var htmlConjutation = '<span class="mlink" style="float:right;" onclick="createWindow(\''+ urlConjutation +'\',\'window2\',\''+ newWindowFeatures +'\');">&#10067;</span>'
+	cell = cell + '<td><span '+ onclickAttr +'class="infcolum">'+ verbo.inf +'</span>'+ tag_meaning + htmlConjutation + '</td>';
 
 	var pass = comparaPalabras( verbo.pas, ingresado.pas, incorrecto );
 	var part = comparaPalabras( verbo.par, ingresado.par, incorrecto );
 	var per3 = comparaPalabras( verbo.pe3, ingresado.pe3, incorrecto );
 	var geru = comparaPalabras( verbo.ger, ingresado.ger, incorrecto );
 	var mean = comparaPalabras( verbo.mea, ingresado.mea, incorrecto );
+	var mea2 = addMeaningExtra ? '<td><span class="blue">'+ verbo.me2 +'</td>': "";
 	
-	cell = cell + pass + part + per3 + geru + mean;
+	cell = cell + pass + part + per3 + geru + mean + mea2;
 
 	var checksimbol = incorrecto.valor?'<td class="checksimbol" style="color:red;">&#10007;</td>':'<td class="checksimbol" style="color:green;">&#10003;</td>'
 	
 	cell = cell + checksimbol + '</tr>';
+
+	Score = incorrecto.valor ? Score : Score+1;
 
 	document.getElementById("meaning").value = "";
 	document.getElementById("past").value = "";
@@ -205,7 +195,7 @@ function getverb(){
 		document.getElementById("meaning").focus();
 		return 0;
 	}
-
+	//El primer getverb no tiene ninguno que evaluar, la variable es undefine
 	if( verboEvaluado ){
 		var inputs = {
 			inf : document.getElementById("meaning").value,
@@ -220,8 +210,8 @@ function getverb(){
 	}
 
 	if(verbs.length == 0){
-		results = results + finalTag;
-		document.body.innerHTML = results;
+		results = Score + '/' + v.length + results + finalTag;
+		document.body.innerHTML =   results;
 		return false;
 	}
 
@@ -237,34 +227,106 @@ function getverb(){
 }
 
 
-       //infinitivo     pasado,        participio,       3er p,	         gerundio,              significado
-var v= [["hit",		"hit", 		"hit", 		"hits", 	"hitting", 	"golpear/pegar"],
-	["become", 	"became", 	"became", 	"becomes", 	"becoming", 	"convertir/convertirse/volverse"],
-	["fit",		"fitted/fit",	"fitted/fit",	"fits",		"fitting",	"ajustar/caber/adaptar"],
-	["split",	"split", 	"split", 	"splits", 	"splitting", 	"dividir/apartar/separar/partir"],
-	["let", 	"let", 		"let", 		"lets", 	"letting", 	"dejar/permitir"],
-	["set",		"set",		"set",		"sets",		"setting",	"establecer/ajustar/fijar"],
-	["spread",	"spread",	"spread",	"spreads",	"spreadign",	"difundir/esparcir/propagar/extender"],
-	["put",		"put",		"put",		"puts",		"putting",	"poner"],
-	["cut",		"cut",		"cut",		"cuts",		"cutting",	"cortar"],
-	["shut",	"shut",		"shut",		"shuts",	"shutting",	"cerrar"],
-	["thrust",	"thrust",	"thrust",	"thrusts",	"thrusting",	"empujar/introducir/impulsar/clavar"],//empujar, meter bruscamente, abrir camino
-	["hurt",	"hurt",		"hurt",		"hurts",	"hurting",	"herir"],
-	["burst",	"burst",	"burst",	"bursts",	"bursting",	"estallar/reventar/irrumpir"],
-	["cast",	"cast",		"cast",		"casts",	"casting",	"emitir/transmitir/lanzar/arrojar"],//lanzar un hechizo, pasar a alguien(casi no se usa)
-	["broadcast",	"broadcast",	"broadcast",	"broadcasts",	"broadcasting",	"transmitir/emitir/difundir"],
-	["forecast",	"forecast",	"forecast",	"forecasts",	"forecasting",	"pronosticar/prever/preever/predecir"],//pronosticar
-	["cost",	"costed/cost",	"costed/cost",	"costs",	"costing",	"costar"],
-	["beat",	"beat/beaten",	"beat/beaten",	"beats",	"beating",	"golpear/pegar/vencer/superar"],
-	["sweat",	"sweat/sweated","sweat/sweated","sweats",	"sweating",	"sudar"],
-	["bet",		"betted/bet",	"betted/bet",	"bets",		"betting",	"apostar"],
-	["wet",		"wetted/wet",	"wetted/wet",	"wets",		"wetting",	"mojar/humedecer"],
-	["bid",		"bid/bade/bidden","bid/bade/bidden","bids/bid",	"bidding", 	"pujar/ofrecer"],//ofrecer en una subasta
-	["rid",		"ridded/rid", 	"ridded/rid",	"rids",		"ridding",	"eliminar/liberar/deshacerse/deshacer"],
-	["slit",	"slitted/slit", "slitted/slit", "slits", 	"slitting",	"cortar/rajar/degollar"],
-	["quit",	"quitted/quit", "quitted/quit", "quits", 	"quitting", 	"dejar/abandonar/renunciar/dimitir"]/*,
+       //infinitivo     pasado,        participio,       3er p,	         gerundio,              significado			significado extendido
+var v= [/*["hit",		"hit", 		"hit", 		"hits", 	"hitting", 	"golpear/pegar",			""],
+	["become", 	"became", 	"became", 	"becomes", 	"becoming", 	"convertir/convertirse/volverse",	""],
+	["fit",		"fitted/fit",	"fitted/fit",	"fits",		"fitting",	"ajustar/caber/adaptar",		""],
+	["split",	"split", 	"split", 	"splits", 	"splitting", 	"dividir/apartar/separar/partir",	""],
+	["let", 	"let", 		"let", 		"lets", 	"letting", 	"dejar/permitir",			""],
+	["set",		"set",		"set",		"sets",		"setting",	"establecer/ajustar/fijar",		""],
+	["spread",	"spread",	"spread",	"spreads",	"spreadign",	"difundir/esparcir/propagar/extender",	""],
+	["put",		"put",		"put",		"puts",		"putting",	"poner",				""],
+	["cut",		"cut",		"cut",		"cuts",		"cutting",	"cortar",				""],
+	["shut",	"shut",		"shut",		"shuts",	"shutting",	"cerrar",				""],
+	["thrust",	"thrust",	"thrust",	"thrusts",	"thrusting",	"empujar/introducir/impulsar/clavar",	"Meter bruscamente, Abrir camino, Empujón"],
+	["hurt",	"hurt",		"hurt",		"hurts",	"hurting",	"herir",				""],
+	["burst",	"burst",	"burst",	"bursts",	"bursting",	"estallar/reventar/irrumpir",		""],
+	["cast",	"cast",		"cast",		"casts",	"casting",	"emitir/transmitir/lanzar/arrojar",	"Lanzar un hechizo, Pasar a alguien algo(n)"],
+	["broadcast",	"broadcast",	"broadcast",	"broadcasts",	"broadcasting",	"transmitir/emitir/difundir",		""],
+	["forecast",	"forecast",	"forecast",	"forecasts",	"forecasting",	"pronosticar/prever/preever/predecir",	""],
+	["cost",	"costed/cost",	"costed/cost",	"costs",	"costing",	"costar",				""],
+	["beat",	"beat/beaten",	"beat/beaten",	"beats",	"beating",	"golpear/pegar/vencer/superar/latir",	""],
+	["sweat",	"sweat/sweated","sweat/sweated","sweats",	"sweating",	"sudar",				""],
+	["bet",		"betted/bet",	"betted/bet",	"bets",		"betting",	"apostar",				""],
+	["wet",		"wetted/wet",	"wetted/wet",	"wets",		"wetting",	"mojar/humedecer",			""],
+	["bid",		"bid/bade/bidden","bid/bade/bidden","bids/bid",	"bidding", 	"pujar/ofrecer",			"Ofrecer en una subasta"],
+	["rid",		"ridded/rid", 	"ridded/rid",	"rids",		"ridding",	"eliminar/liberar/deshacerse/deshacer",	""],
+	["slit",	"slitted/slit", "slitted/slit", "slits", 	"slitting",	"cortar/rajar/degollar",		""],
+	["quit",	"quitted/quit", "quitted/quit", "quits", 	"quitting", 	"dejar/abandonar/renunciar/dimitir",	""],*/
+	///Group 2
+	["keep",	"kept",		"kept",		"keeps",	"keeping",	"mantener/retener",			""],
+	["sweep",	"swept",	"swept",	"sweeps",	"sweeping",	"barrer/arrastrar",			""],
+	["meet",	"met",		"met",		"meets",	"meeting",	"conocer/quedar/verse/buscar",		"Ir a buscar, quedar verse, quedar(con)"],
+	["lead",	"led",		"led",		"leads",	"leading",	"dirigir/liderar/guiar/conducir/llevar","Ir ganando"],
+	["leap",	"leaped/leapt",	"leaped/leapt",	"leaps",	"leaping",	"salto/actuar/moverse",			"Hacer un movimiento repentino"],
+	["deal",	"dealt",	"dealt",	"deals",	"dealing",	"repartir",				""],
+	["lean",	"leaned/leant","leaned/leant",	"leans",	"leaning",	"apoyar/inclinar/apoyarse/ladear",	"Mover la parte superior del cuerpo en cierta dirección"],
+	["sleep",	"slept",	"slept",	"sleeps",	"sleeping",	"dormir",				""],
+	["weep",	"wept",		"wept",		"weeps",	"weeping",	"sollozar/llorar",			""],
+	["feel",	"felt",		"felt",		"feels",	"feeling",	"sentir",				""],
+	["kneel",	"kneeled/knelt","kneeled/knelt","kneels",	"kneeling",	"arrodillar/arrodillarse",		""],
+	["feed",	"fed",		"fed",		"feeds",	"feeding",	"alimentar/comer/alimentarse",		""],
+	["bleed",	"bled",		"bled",		"bleeds",	"bleeding",	"sangrar/desangrar/purgar",		""],
+	["breed",	"bred",		"bred",		"breeds",	"breeding",	"criar/reproducir/crear/procrear",	""],
+	["speed",	"speeded/sped",	"speeded/sped",	"speeds",	"speeding",	"acelerar/apresurar/rapidez",		"Ir muy rápido"],
+	["mean",	"meant",	"meant",	"means",	"meaning",	"significar/querer/implicar", 		""],
+	["dream",	"dreamed/dreamt","dreamed/dreamt","dreams",	"dreaming",	"soñar/imaginar",			""],
+	["read",	"read",		"read",		"reads",	"reading",	"leer",					""],
+	["hear",	"heard",	"heard",	"hears",	"hearing",	"oir/escuchar",				""],
+	["learn",	"learned/learnt","learned/learnt","learns",	"learning",	"aprender/saber/enterarse",		""],
+	///
+	["find",	"found",	"found",	"finds",	"finding",	"encontrar/hallar/descubrir",		""],
+	["bind","bound","bound","binds","binding","unir/atar/unirse",""],
+	["grind","ground","ground","grinds","grinding","moler/triturar/rechinar",""],
+	["wind","winded/wound","winded/wound","winds","winding","darcuerda/enrollar/arrollar",""],
+	["unwind","unwound","unwound","unwinds","unwinding","relajarse/descansar/desconectar",""],
+	["unbind","unbound","unbound","unbinds","unbinding","desatar",""],
+	["send","sent","sent","sends","sending","enviar/mandar/transmitir",""],
+	["spend","spent","spent","spends","spending","pasar/gastar/dedicar",""],
+	["bend","bent","bent","bends","bending","doblar/inclinar/inclinarse",""],
+	["blend","blended","blended","blends","blending","mezclar/mezclarse/combinar",""],
+	["lend","lent","lent","lends","lending","prestar/dar/dejar",""],
+	["sting","stung","stung","stings","stinging","picar/doler/arder",""],
+	["cling","clung","clung","clings","clinging","aferrar/aferrarse/agarrarse",""],
+	["swing","swung","swung","swings","swinging","balancear/batear/mover",""],
+	["slink","slunk","slunk","slinks","slinking","escabullirse",""],
+	["stick","stuck","stuck","sticks","sticking","meter/pegar/quedarse",""],
+	["dig","dug","dug","digs","digging","cavar/excavar/buscar",""],
+	["hang","hanged/hung","hanged/hung","hangs","hanging","colgar/esperar/ahorcar",""],
+
+	/*
+	["","","","","",""],
+	["","","","","",""],
 	["","","","","",""],*/
 	]
+
+/*
+
+
+function copyToClipboard(text){
+    var dummy = document.createElement("input");
+    document.body.appendChild(dummy);
+    dummy.setAttribute('value', text);
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+}
+function a(){
+var traduccion = $(".word-translated-wrap")[0].children[1].innerHTML
+var significados = traduccion.replace(/ /g , "").replace(/;/g , "/");
+	var texto= '\t["' + document.getElementsByClassName("verb-forms-wrap")[0].children[0].children[0].children[0].innerHTML.slice(3)+'","' +
+					document.getElementsByClassName("verb-forms-wrap")[0].children[1].children[0].children[0].innerHTML  + '","' +
+					document.getElementsByClassName("verb-forms-wrap")[0].children[2].children[0].children[0].innerHTML  + '","' +
+					$(".word-wrap-row")[0].children[1].children[0].children[1].children[2].children[1].innerHTML  + '","' + 
+					$(".word-wrap-row")[4].children[1].children[1].children[0].children[1].children[0].children[0].innerHTML  + '","'  +
+					significados  + '",""],\n' ;
+copyToClipboard(texto)
+
+}
+a()
+
+
+*/
 
 function verbo(){
     this.inf,
@@ -272,7 +334,8 @@ function verbo(){
     this.par,
     this.pe3,
     this.ger,
-    this.mea
+    this.mea,
+    this.me2
 };
 
 var verbs = []
@@ -286,10 +349,12 @@ for(var i=0; i< v.length; i++){
 	e.pe3 = v[i][3];
 	e.ger = v[i][4];
 	e.mea = v[i][5];
+	e.me2 = v[i][6];
 	verbs.push( e );
 }
 
 getverb();
+
 
 </script>
 </html>
