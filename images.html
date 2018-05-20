@@ -99,6 +99,10 @@
 	<button style="padding:15px;margin:15px;background:#eef;border:solid 1px #eef;" id="enter" onclick="getverb()"> Siguiente verbo </button>  
 </body>
 <script>
+document.getElementsByClassName("divinput")[1].style.display = "none";
+document.getElementsByClassName("divinput")[2].style.display = "none";
+document.getElementsByClassName("divinput")[3].style.display = "none";
+document.getElementsByClassName("divinput")[4].style.display = "none";
 function createWindow(cUrl,cName,cFeatures) {
 	var xWin = window.open(cUrl,cName,cFeatures);
 	//setTimeout(function(){ xWin.scroll(0,100); }, 3000);
@@ -161,14 +165,15 @@ function evalua(verbo, ingresado){
 	var htmlConjutation = '<span class="mlink" style="float:right;" onclick="createWindow(\''+ urlConjutation +'\',\'window2\',\''+ newWindowFeatures +'\');">&#10067;</span>'
 	cell = cell + '<td><span '+ onclickAttr +'class="infcolum">'+ verbo.inf +'</span>'+ tag_meaning + htmlConjutation + '</td>';
 
-	var pass = comparaPalabras( verbo.pas, ingresado.pas, incorrecto );
-	var part = comparaPalabras( verbo.par, ingresado.par, incorrecto );
-	var per3 = comparaPalabras( verbo.pe3, ingresado.pe3, incorrecto );
-	var geru = comparaPalabras( verbo.ger, ingresado.ger, incorrecto );
-	var mean = comparaPalabras( verbo.mea, ingresado.mea, incorrecto );
-	var mea2 = addMeaningExtra ? '<td><span class="blue">'+ verbo.me2 +'</td>': "";
+	var inf = comparaPalabras( verbo.inf, ingresado.mea, incorrecto );
+	//var pass = comparaPalabras( verbo.pas, ingresado.pas, incorrecto );
+	//var part = comparaPalabras( verbo.par, ingresado.par, incorrecto );
+	//var per3 = comparaPalabras( verbo.pe3, ingresado.pe3, incorrecto );
+	//var geru = comparaPalabras( verbo.ger, ingresado.ger, incorrecto );
+	//var mean = comparaPalabras( verbo.mea, ingresado.mea, incorrecto );
+	//var mea2 = addMeaningExtra ? '<td><span class="blue">'+ verbo.me2 +'</td>': "";
 	
-	cell = cell + pass + part + per3 + geru + mean + mea2;
+	cell = cell + inf; //+ pass + part + per3 + geru + mean + mea2;
 
 	var checksimbol = incorrecto.valor?'<td class="checksimbol" style="color:red;">&#10007;</td>':'<td class="checksimbol" style="color:green;">&#10003;</td>'
 	
@@ -217,7 +222,7 @@ function getverb(){
 
 	
 	var x = Math.floor((Math.random() * (verbs.length)) );
-	document.getElementById("infinitive").innerHTML = verbs[x].inf;
+	document.getElementById("infinitive").innerHTML = '<img style="width:200px;height:auto;" src="'+verbs[x].inf +'.jpg">';
 	verboEvaluado = verbs[x];
 	var a = verbs.slice(0, x);
 	var b = verbs.slice(x+1, verbs.length);
