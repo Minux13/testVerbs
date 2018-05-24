@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<title>Minux</title>
+		<style>
+			body{
+				text-align: center;	
+			}
+			.inputtext{
+				border: none;	
+				max-width: 200px;
+				min-width: 50px;
+			}
+			.spaninput{
+				padding: 8px 13px;	
+				border: solid 1px #ddf;
+				display: inline-block;
+			}
+			.inputtext:focus{
+				outline: none;
+			}
+			.divinput{
+				display: inline-block;
+				margin: 0 15px;	
+			}
+			#asks{
+				text-align: center;
+			}
+			#infinitive{
+				font-size: 30px;
+				margin: 120px 0 60px 0;
+				text-align: center;	
+			}
+			.textask{
+				text-align: left;
+				width: 100%;
+				display: block;
+				margin: 0 0 5px 10px;
+			}
+			table {
+			    font-family: arial, sans-serif;
+			    border-collapse: collapse;
+			    width: calc(100% - 60px);
+			    margin: 30px;
+			}
+			tr:nth-child(even) {
+    				background-color: #f0f0f0;
+			}
+			
+			td, th {
+			    border: 1px solid #dddddd;
+			    text-align: left;
+			    padding: 8px;
+			}
+			.checksimbol{
+				border: none;
+			}
+			.red{
+				color: red;
+			}
+			.blue{
+				color: blue;
+			}
+			.infcolum, .mlink{
+				cursor: pointer;	
+			}
+		</style>
+
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+<body>
+
+	<h1 style="text-align: center;margin-buttom: 80px;">Irregular Verbs Test</h1>
+
+	<div id="infinitive"></div>
+	
+</body>
+<script>
+
+
+
+var addMeaningExtra = true;
+var thTagMeaningExtra = addMeaningExtra ? '<th>Significado</th>' : ""
+var results = '';
+var finalTag = ""
+
+var verboEvaluado;
+
+var Score = 0;
+
+
+function sound( e ){
+	var thisVerb = e.getAttribute("verbo");
+	
+	var audio = new Audio( 'mp3/' +thisVerb + '.mp3');
+	audio.play();
+	//var audio = document.getElementById("audio");
+	//audio.play();
+}
+
+var idAttr = 0;
+
+var verbosSinRepetir = [];
+
+function getTag( word ){
+
+	var palabras = word.split('/');
+	var retorno = ""
+	for(var w=0; w<palabras.length; w++){
+		var esNuevaPalabra=true;
+		for( var vsr = 0; vsr < verbosSinRepetir.length; vsr++ ) {
+			if (palabras[w] == verbosSinRepetir[vsr]){
+				esNuevaPalabra = false;
+			}		
+		}
+		
+		if( esNuevaPalabra ){	
+			verbosSinRepetir.push( palabras[w] )
+			var TagP = '<p class="blue"><a id="'+ palabras[w] +'" href="https://www.linguasorb.com/speech/en/' + palabras[w] + '" download >'+ palabras[w] +'</a></p>';
+			retorno = retorno + TagP;
+		}
+	}
+	
+	return retorno;
+}
+
+var elemId = 1;
+
+function getverb( verb, end ){
+
+	if( end ){
+		results = results + finalTag;
+		document.body.innerHTML =   results;
+		setInterval(function(){	
+			document.getElementById( verbosSinRepetir[elemId] ).click();
+			elemId = elemId + 1;
+		}, 20000)
+		return false;
+	}
+	
+
+	var tagA1 = getTag( verb.inf );
+	var tagA2 = getTag( verb.pas );
+	var tagA3 = getTag( verb.par );
+	//var tagA4 = getTag( verb.pe3 );
+	//var tagA5 = getTag( verb.ger );
+
+	
+	
+	var cell = tagA1 + tagA2 + tagA3 ;//+ tagA4 + tagA5;
+
+	results = results + cell;
+
+}
+
+
+       //infinitivo     pasado,        participio,       3er p,	         gerundio,              significado			significado extendido
+var v= [
+	//["hit",		"hit", 		"hit", 		"hits", 	"hitting", 	"golpear/pegar",			""],
+	["Accept",	"Accepted",	"Accepted",	"Aceptar"],
+	["Act",		"Acted",	"Acted",	"Actuar"],
+	["Achieve",	"Achieved",	"Achieved",	"Lograr, Alcanzar"],
+	["Admire",	"Admired",	"Admired",	"Admirar"],
+	["Advise",	"Advised",	"Advised",	"Aconsejar"],
+	["Affect",	"Affected",	"Affected",	"Afectar"],
+	["Agree",	"Agreed",	"Agreed",	"Acordar"],
+	["Amaze",	"Amazed",	"Amazed",	"Asombrar"],
+	["Amuse",	"Amused",	"Amused",	"Divertir"],
+	["Answer",	"Answered",	"Answered",	"Responder"],
+	["Appear",	"Appeared",	"Appeared",	"Aparecer"],
+	["Arrange",	"Arranged",	"Arranged",	"Arreglar, Disponer"],
+	["Arrive",	"Arrived",	"Arrived",	"Llegar"],
+	["Ask",		"Asked",	"Asked",	"Preguntar"],
+	["Attack",	"Attacked",	"Attacked",	"Atacar"],
+	["Bake",	"Baked",	"Baked",	"Hornear"],
+	["Behave",	"Behaved",	"Behaved",	"Comportarse"],
+	["Believe",	"Believed",	"Believed",	"Creer"],
+	["Belong",	"Belonged",	"Belonged",	"Pertenecer"],
+	["Blame",	"Blamed",	"Blamed",	"Culpar"],
+	["Borrow",	"Borrowed",	"Borrowed",	"Pedir prestado"],
+	["Bother",	"Bothered",	"Bothered",	"Molestar"],
+	["Call",	"Called",	"Called",	"Llamar"],
+	["Cancel",	"Canceled",	"Canceled",	"Cancelar, Suprimir"],
+	["Carry",	"Carried",	"Carried",	"Llevar"],
+	["Cause",	"Caused",	"Caused",	"Causar"],
+	["Celebrate",	"Celebrated",	"Celebrated",	"Celebrar"],
+	["Clean",	"Cleaned",	"Cleaned",	"Limpiar"],
+	["Clear",	"Cleared",	"Cleared",	"Aclarar"],
+	["Climb",	"Climbed",	"Climbed",	"Trepar"],
+	["Close",	"Closed",	"Closed",	"Cerrar"],
+	["Compare",	"Compared",	"Compared",	"Comparar"],
+	["Compete",	"Competed",	"Competed",	"Competir"],
+	["Complete",	"Completed",	"Completed",	"Completar"],
+	["Contain",	"Contained",	"Contained",	"Contener"],
+	["Continue",	"Continued",	"Continued",	"Continuar"],
+	["Cook",	"Cooked",	"Cooked",	"Cocinar"],
+	["Correct",	"Corrected",	"Corrected",	"Corregir"],
+	["Cough",	"Coughed",	"Coughed",	"Toser"],
+	["Count",	"Counted",	"Counted",	"Contar"],
+	["Crash",	"Crashed",	"Crashed",	"Chocar"],
+	["Create",	"Created",	"Created",	"Crear"],
+	["Cross",	"Crossed",	"Crossed",	"Cruzar"],
+	["Curse",	"Cursed",	"Cursed",	"Maldecir"]
+
+	];
+
+
+function verbo(){
+    this.inf,
+    this.pas,
+    this.par
+    //this.pe3,
+    //this.ger,
+    //this.mea,
+    //this.me2
+}
+
+var verbs = []
+
+
+for(var i=0; i< v.length; i++){
+	var e = new verbo;
+	e.inf = v[i][0];
+	e.pas = v[i][1];
+	e.par = v[i][2];
+	//e.pe3 = v[i][3];
+	/*e.ger = v[i][4];
+	e.mea = v[i][5];
+	e.me2 = v[i][6];*/
+	verbs.push( e );
+}
+
+for(var i=0; i< v.length; i++){
+	getverb( verbs[i], false );
+}
+
+getverb( "dd" , true );
+
+</script>
+</html>
