@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<title>Minux</title>
+		<style>
+			body{
+				text-align: center;	
+			}
+			.inputtext{
+				border: none;	
+				max-width: 200px;
+				min-width: 50px;
+			}
+			.spaninput{
+				padding: 8px 13px;	
+				border: solid 1px #ddf;
+				display: inline-block;
+			}
+			.inputtext:focus{
+				outline: none;
+			}
+			.divinput{
+				display: inline-block;
+				margin: 0 15px;	
+			}
+			#asks{
+				text-align: center;
+			}
+			#infinitive{
+				font-size: 30px;
+				margin: 120px 0 60px 0;
+				text-align: center;	
+			}
+			.textask{
+				text-align: left;
+				width: 100%;
+				display: block;
+				margin: 0 0 5px 10px;
+			}
+			table {
+			    font-family: arial, sans-serif;
+			    border-collapse: collapse;
+			    width: calc(100% - 60px);
+			    margin: 30px;
+			}
+			tr:nth-child(even) {
+    				background-color: #f0f0f0;
+			}
+			
+			td, th {
+			    border: 1px solid #dddddd;
+			    text-align: left;
+			    padding: 8px;
+			}
+			.checksimbol{
+				border: none;
+			}
+			.red{
+				color: red;
+			}
+			.blue{
+				color: blue;
+			}
+			.infcolum, .mlink{
+				cursor: pointer;	
+			}
+		</style>
+
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+<body>
+
+	<h1 style="text-align: center;margin-buttom: 80px;">Irregular Verbs Test</h1>
+
+</body>
+<script>
+function createWindow(cUrl,cName,cFeatures) {
+	var xWin = window.open(cUrl,cName,cFeatures);
+	//setTimeout(function(){ xWin.scroll(0,100); }, 3000);
+	//setTimeout(function(){ console.log(window.onfocus); }, 3000);
+}
+
+
+var addMeaningExtra = true;
+var thTagMeaningExtra = addMeaningExtra ? '<th style="width:150px;" >Significado</th>' : ""
+var results = '<table><tr><th>Infinitivo</th><th>Pasado</th><th>Participio</th><th>3ra Persona</th><th>Gerundio</th><th>Significado</th>'+thTagMeaningExtra+'<th class="checksimbol"></th></tr>';
+var finalTag = "</table>"
+
+var verboEvaluado;
+
+var Score = 0;
+
+
+function getFieldCellWithSound(elemento){
+	
+	var palabras = elemento.replace(/ /g , "");
+	var palabras = palabras.split("/");
+	var cell = "<td>";
+	var endCell = "</td>"
+	var espacio = ""
+	
+	var featuresNewWindow = 'toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=0,width=800,height=500';
+
+	for(var i=0; i < palabras.length; i++){
+		var thisWord = palabras[i];
+		var onhoverAttr = ' verbo="'+ palabras[i] +'" onmouseenter="sound(this);" ';
+		cell = cell + espacio;
+		var urlGoogleTraslate  = 'https://translate.google.com/?hl=es#en/es/'+ thisWord;
+		var onclickAttr = 'onclick="createWindow(\''+ urlGoogleTraslate +'\',\'window2\',\''+ featuresNewWindow +'\')"';
+		var tagHTMLGoogleTraslate = '<span '+ onhoverAttr + onclickAttr +' class="infcolum">'+ thisWord +'</span>';
+
+		var cell = cell + tagHTMLGoogleTraslate;
+		espacio = " - "
+	}
+
+	return cell + endCell;
+}
+
+
+function getFieldCell(elemento){
+	
+	var palabras = elemento.replace(/ /g , "");
+	var palabras = palabras.split("/");
+	var cell = "<td>";
+	var endCell = "</td>"
+	var espacio = ""
+	for(var i=0; i < palabras.length; i++){
+		cell = cell + espacio;
+		var cell = cell + '<span class="blue">'+ palabras[i] +'</span>';
+		espacio = " - "
+	}
+
+	return cell + endCell;
+}
+
+
+function evalua(verbo){
+	
+	var incorrecto = {valor : false};
+	
+	//Sound
+	var hoverSoundAttr = ' verbo="'+ verbo.inf +'" onmouseenter="sound(this);" ';
+	var hoverSoundAttrC = ' verbo="'+ verbo.inf +'" onmouseenter="soundC(this);" ';
+
+	var featuresNewWindow = 'toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=0,width=800,height=500';
+	//  Columna infinitivo 
+	var urlGoogleTraslate  = 'https://translate.google.com/?hl=es#en/es/'+ verbo.inf;
+	var onclickAttr = 'onclick="createWindow(\''+ urlGoogleTraslate +'\',\'window2\',\''+ featuresNewWindow +'\')"';
+	var tagHTMLGoogleTraslate = '<span '+ onclickAttr +' '+ hoverSoundAttr +' class="infcolum">'+ verbo.inf +'</span>';
+
+	var urlCambDic = 'https://dictionary.cambridge.org/es/diccionario/ingles-espanol/'+verbo.inf;
+	var onclickAttrCambDic = 'onclick="createWindow(\''+ urlCambDic +'\',\'window2\',\''+ featuresNewWindow +'\');"';
+	var tagHTMLCamDic = '<span class="mlink" '+ onclickAttrCambDic + hoverSoundAttrC + ' style="float:right;" >&#10067;</span>';
+
+	var urlConjutation = 'http://conjugador.reverso.net/conjugacion-ingles-verbo-'+ verbo.inf +'.html';
+	var onclickAttrConjugation = 'onclick="createWindow(\''+ urlConjutation +'\',\'window2\',\''+ featuresNewWindow +'\');"';
+	var tagHtmlConjugation = '<span class="mlink" '+ onclickAttrConjugation +' style="float:right;" >&#9740;</span>';
+
+	
+
+	var trHTMLInvinitive = '<td>'+ tagHTMLGoogleTraslate + tagHTMLCamDic + tagHtmlConjugation + '</td>';
+
+	var pass = getFieldCellWithSound( verbo.pas );
+	var part = getFieldCellWithSound( verbo.par );
+	var per3 = getFieldCellWithSound( verbo.pe3 );
+	var geru = getFieldCellWithSound( verbo.ger );
+	var mean = getFieldCell( verbo.mea );
+	var mea2 = addMeaningExtra ? '<td><span class="blue">'+ verbo.me2 +'</td>': "";
+	//Color columna
+	var isMeanCorrect = mean.slice(0,21)=='<td><span class="red"'? false: true;
+	var cell = isMeanCorrect ? '<tr>' : '<tr style="background:#ffcccc;">';
+	//var cell =  '<tr>' ;
+
+	cell = cell + trHTMLInvinitive + pass + part + per3 + geru + mean + mea2;
+
+	var checksimbol = incorrecto.valor?'<td class="checksimbol" style="color:red;">&#10007;</td>':'<td class="checksimbol" style="color:green;">&#10003;</td>'
+	
+	cell = cell + checksimbol + '</tr>';
+
+	console.log("asdf")
+	results = results + cell;
+
+}
+
+function sound( e ){
+	var thisVerb = e.getAttribute("verbo");
+	
+	var audio = new Audio( 'linguasorb/' +thisVerb + '.mp3');
+	audio.play();
+	//var audio = document.getElementById("audio");
+	//audio.play();
+}
+
+function soundC( e ){
+	var thisVerb = e.getAttribute("verbo");
+	
+	var audio = new Audio( 'mp3/' +thisVerb + '.mp3');
+	audio.play();
+	//var audio = document.getElementById("audio");
+	//audio.play();
+}
+
+function getverb(){
+
+
+	if(verbs.length == 0){
+		results = Score + '/' + v.length + results + finalTag;
+		document.body.innerHTML =   results;
+		return false;
+	}
+
+	var x = Math.floor((Math.random() * (verbs.length)) );
+	
+	evalua(verbs[x])
+
+	var currentVerb = verbs[x].inf;
+
+
+	verboEvaluado = verbs[x];
+	var a = verbs.slice(0, x);
+	var b = verbs.slice(x+1, verbs.length);
+	verbs = a.concat(b);
+
+}
+
+
+       //infinitivo     pasado,        participio,       3er p,	         gerundio,              significado			significado extendido
+var v= [
+	["hit",		"hit", 		"hit", 		"hits", 	"hitting", 	"golpear/pegar",			""],
+	["become", 	"became", 	"became", 	"becomes", 	"becoming", 	"convertir/convertirse/volverse",	""],
+	["fit",		"fitted/fit",	"fitted/fit",	"fits",		"fitting",	"ajustar/caber/adaptar/encajar",	""],
+	["split",	"split", 	"split", 	"splits", 	"splitting", 	"dividir/apartar/separar/partir",	""],
+	["let", 	"let", 		"let", 		"lets", 	"letting", 	"dejar/permitir",			""],
+	["set",		"set",		"set",		"sets",		"setting",	"establecer/ajustar/fijar",		""],
+	["spread",	"spread",	"spread",	"spreads",	"spreadign",	"difundir/esparcir/propagar/extender",	""],
+	["put",		"put",		"put",		"puts",		"putting",	"poner",				""],
+	["cut",		"cut",		"cut",		"cuts",		"cutting",	"cortar",				""],
+	["shut",	"shut",		"shut",		"shuts",	"shutting",	"cerrar",				""],
+	["thrust",	"thrust",	"thrust",	"thrusts",	"thrusting",	"empujar/introducir/impulsar/clavar",	"Meter bruscamente, Abrir camino, Empujón, empuje del cohete o un empuje repentino, a menudo con gran fuerza"],
+	["hurt",	"hurt",		"hurt",		"hurts",	"hurting",	"herir",				""],
+	["burst",	"burst",	"burst",	"bursts",	"bursting",	"estallar/reventar/irrumpir",		""],
+	["cast",	"cast",		"cast",		"casts",	"casting",	"emitir/transmitir/lanzar/arrojar",	"Lanzar un hechizo, Pasar a alguien algo(n)"],
+	["broadcast",	"broadcast",	"broadcast",	"broadcasts",	"broadcasting",	"transmitir/emitir/difundir",		""],
+	["forecast",	"forecast",	"forecast",	"forecasts",	"forecasting",	"pronosticar/prever/preever/predecir",	""],
+	["cost",	"costed/cost",	"costed/cost",	"costs",	"costing",	"costar",				""],
+	["beat",	"beat/beaten",	"beat/beaten",	"beats",	"beating",	"golpear/pegar/vencer/superar/latir",	""],
+	["sweat",	"sweat/sweated","sweat/sweated","sweats",	"sweating",	"sudar",				""],
+	["bet",		"betted/bet",	"betted/bet",	"bets",		"betting",	"apostar",				""],
+	["wet",		"wetted/wet",	"wetted/wet",	"wets",		"wetting",	"mojar/humedecer",			""],
+	["bid",		"bid/bade/bidden","bid/bade/bidden","bids/bid",	"bidding", 	"pujar/ofrecer",			"Ofrecer en una subasta"],
+	["rid",		"ridded/rid", 	"ridded/rid",	"rids",		"ridding",	"eliminar/liberar/deshacerse/deshacer",	""],
+	["slit",	"slitted/slit", "slitted/slit", "slits", 	"slitting",	"cortar/rajar/degollar",		""],
+	["quit",	"quitted/quit", "quitted/quit", "quits", 	"quitting", 	"dejar/abandonar/renunciar/dimitir",	""],
+	///Group 2
+	["keep",	"kept",		"kept",		"keeps",	"keeping",	"mantener/retener",			""],
+	["sweep",	"swept",	"swept",	"sweeps",	"sweeping",	"barrer/arrastrar",			"Mover de un lado a otro"],
+	["meet",	"met",		"met",		"meets",	"meeting",	"conocer/quedar/verse/buscar",		"Ir a buscar, quedar verse, quedar(con)"],
+	["lead",	"led",		"led",		"leads",	"leading",	"dirigir/liderar/guiar/conducir/llevar","Ir ganando"],
+	["leap",	"leaped/leapt",	"leaped/leapt",	"leaps",	"leaping",	"salto/saltar",				"Salto horizotal, Jump hacia arriba"],
+	["deal",	"dealt",	"dealt",	"deals",	"dealing",	"repartir/encargarse",			""],
+	["lean",	"leaned/leant","leaned/leant",	"leans",	"leaning",	"recargar/apoyar/inclinar/apoyarse/ladear","Recargarse en algo, un sillón"],
+	["sleep",	"slept",	"slept",	"sleeps",	"sleeping",	"dormir",				""],
+	["weep",	"wept",		"wept",		"weeps",	"weeping",	"sollozar/llorar",			""],
+	["feel",	"felt",		"felt",		"feels",	"feeling",	"sentir",				""],
+	["kneel",	"kneeled/knelt","kneeled/knelt","kneels",	"kneeling",	"arrodillar/arrodillarse",		""],
+	["feed",	"fed",		"fed",		"feeds",	"feeding",	"alimentar/comer/alimentarse",		""],
+	["bleed",	"bled",		"bled",		"bleeds",	"bleeding",	"sangrar/desangrar/purgar",		""],
+	["breed",	"bred",		"bred",		"breeds",	"breeding",	"criar/reproducir/crear/procrear",	""],
+	["speed",	"speeded/sped",	"speeded/sped",	"speeds",	"speeding",	"acelerar/apresurar/rapidez",		"Ir muy rápido"],
+	["mean",	"meant",	"meant",	"means",	"meaning",	"significar/querer/implicar", 		""],
+	["dream",	"dreamed/dreamt","dreamed/dreamt","dreams",	"dreaming",	"soñar/imaginar",			""],
+	["read",	"read",		"read",		"reads",	"reading",	"leer",					""],
+	["hear",	"heard",	"heard",	"hears",	"hearing",	"oir/escuchar",				""],
+	["learn",	"learned/learnt","learned/learnt","learns",	"learning",	"aprender/saber/enterarse",		""],
+	///
+	["find",	"found",	"found",	"finds",	"finding",	"encontrar/hallar/descubrir",		""],
+	["bind",	"bound",	"bound",	"binds",	"binding",	"unir/atar/amarrar/encuadernar",	""],
+	["grind",	"ground",	"ground",	"grinds",	"grinding",	"moler/triturar/rechinar",		""],
+	["wind",	"winded/wound",	"winded/wound",	"winds",	"winding",	"darcuerda/enrollar/arrollar",		""],
+	["unwind",	"unwound",	"unwound",	"unwinds",	"unwinding",	"relajar/descansar/desenrollar",	""],
+	["unbind",	"unbound",	"unbound",	"unbinds",	"unbinding",	"desatar/desamarrar",			""],
+	["send",	"sent",		"sent",		"sends",	"sending",	"enviar/mandar/transmitir",		""],
+	["spend",	"spent",	"spent",	"spends",	"spending",	"pasar/gastar/dedicar",			""],
+	["bend",	"bent",		"bent",		"bends",	"bending",	"doblar/inclinar/inclinarse",		""],
+	["blend",	"blended",	"blended",	"blends",	"blending",	"mezclar/mezclarse/combinar",		""],
+	["lend",	"lent",		"lent",		"lends",	"lending",	"prestar/dar/dejar",			""],
+	["sting",	"stung",	"stung",	"stings",	"stinging",	"picar/doler/arder",			""],
+	["cling",	"clung",	"clung",	"clings",	"clinging",	"aferrar/aferrarse/agarrarse",		""],
+	["swing",	"swung",	"swung",	"swings",	"swinging",	"balancear/oscilar/mecer/columpiar/mover",""],
+	["slink",	"slunk",	"slunk",	"slinks",	"slinking",	"escabullirse/escabullir",		"Moverse sigilosamente"],
+	["stick",	"stuck",	"stuck",	"sticks",	"sticking",	"pegar/quedarse/aderir",		""],
+	["dig",		"dug",		"dug",		"digs",		"digging",	"cavar/excavar",			"Mover tierra"],
+	["hang",	"hanged/hung",	"hanged/hung",	"hangs",	"hanging",	"colgar/esperar/ahorcar",		""],
+	//
+	["say",		"said",		"said",		"says",		"saying",	"decir/dar/afirmar",			""],	
+	["pay",		"paid",		"paid",		"pays",		"paying",	"pagar/prestar/rendir",			""],
+	["lay",		"laid",		"laid",		"lays",		"laying",	"poner/hacer/colocar",			""],
+	//["inlay",	"inlaid",	"inlaid",	"inlays",	"inlaying",	"incrustar/embutir",			""],	
+	["tell",	"told",		"told",		"tells",	"telling",	"decir/contar/saber",			""],
+	["sell",	"sold",		"sold",		"sells",	"selling",	"vender/venderse/convencer",		""],
+	["hold",	"held",		"held",		"holds",	"holding",	"sostener/guardar/celebrar/mantener",	""],
+	["behold",	"beheld",	"beheld",	"beholds",	"beholding",	"contemplar/mirar/observar",		""],
+	["uphold",	"upheld",	"upheld",	"upholds",	"upholding",	"defender/apoyar/mantener/respetar",	""],
+	["stand",	"stood",	"stood",	"stands",	"standing",	"soportar/quedar/estar",		""],
+	["understand",	"understood",	"understood",	"understands",	"understanding","entender/comprender/saber",		""],
+	["withstand",	"withstood",	"withstood",	"withstands",	"withstanding",	"soportar/resistir/aguantar",		""],
+	["lose",	"lost",		"lost",		"loses",	"losing",	"perder/quitar/bajar",			""],
+	["shoot",	"shot",		"shot",		"shoots",	"shooting",	"disparar/matar/tirar",			""],
+	["bite",	"bit",		"bitten",	"bites",	"biting",	"morder/picar/arrancar",		""],
+	["hide",	"hid",		"hidden/hid",	"hides",	"hiding",	"esconder/ocultar/esconderse",		""],
+	["slide",	"slid",		"slid",		"slides",	"sliding",	"deslizar/pasar/resbalar",		""],
+	//
+	["buy",		"bought",	"bought",	"buys",		"buying",	"comprar/invitar/adquirir",		""],
+	["bring",	"brought",	"brought",	"brings",	"bringing",	"traer/llevar/poner",			""],
+	["think",	"thought",	"thought",	"thinks",	"thinking",	"creer/pensar/parecer",			""],
+	["fight",	"fought",	"fought",	"fights",	"fighting",	"luchar/pelear/combatir",		""],
+	["teach",	"taught",	"taught",	"teaches",	"teaching",	"enseñar/aprender/impartir",		""],
+	["catch",	"caught",	"caught",	"catches",	"catching",	"atrapar/coger/capturar",		""],
+	["spit",	"spat",		"spat",		"spits",	"spitting",	"escupir/espetar",			""],
+	["have",	"had",		"had",		"has",		"having",	"haber/tener/estar",			""],
+	["make",	"made",		"made",		"makes",	"making",	"hacer/tomar/realizar",			""],
+	//
+	["write",	"wrote",	"written",	"writes",	"writing",	"escribir/redactar/anotar",		""],
+	["ride",	"rode",		"ridden",	"rides",	"riding",	"llevar/viajar/montar",			""],
+	["drive",	"drove",	"driven",	"drives",	"driving",	"conducir/manejar/llevar",		""],
+	["rise",	"rose",		"risen",	"rises",	"rising",	"aumentar/subir/levantarse",		""],
+	["strive",	"strove",	"striven",	"strives",	"striving",	"esforzar/esforzarse/luchar",		""],
+	["stride",	"strode",	"stridden",	"strides",	"striding",	"darzancadas",				""],
+//	["smite",	"smote",	"smitten",	"smites",	"smiting",	"golpear/castigar/aniquilar",		""],
+	["speak",	"spoke",	"spoken",	"speaks",	"speaking",	"hablar/decir/intervenir",		""],
+	["steal",	"stole",	"stolen",	"steals",	"stealing",	"robar/robarse/quitar",			""],
+	["break",	"broke",	"broken",	"breaks",	"breaking",	"romper/quebrar/terminar",		""],
+	["wake",	"woke/waked",	"woken/waked",	"wakes",	"waking",	"despertar/levantar",			""],
+	["begin",	"began",	"begun",	"begins",	"beginning",	"comenzar/empezar/iniciar",		""],
+	["drink",	"drank",	"drunk",	"drinks",	"drinking",	"tomar/brindar/beberse",		""],
+	["sink",	"sank",		"sunk",		"sinks",	"sinking",	"hundir/hundirse/caer",			""],
+	["stink",	"stank",	"stunk",	"stinks",	"stinking",	"apestar/olermal",			""],
+	["swim",	"swam",		"swum",		"swims",	"swimming",	"nadar/bañar/bañarse",			""],
+	["spring",	"sprang",	"sprung",	"springs",	"springing",	"saltar/brotar/soltar",			""],	
+	["wear",	"wore",		"worn",		"wears",	"wearing",	"usar/llevar/poner",		""],
+	["swear",	"swore",	"sworn",	"swears",	"swearing",	"jurar/prometer/maldecir",	""],
+	["bear",	"bore",		"borne",	"bears",	"bearing",	"soportar/tener/llevar",	""],
+	["tear",	"tore",		"torn",		"tears",	"tearing",	"arrancar/romper/desgarrar",	""],
+	//
+	["take",	"took",		"taken",	"takes",	"taking",	"tomar/llevar/adoptar",		""],
+//	["undertake",	"undertook",	"undertaken",	"undertakes",	"undertaking",	"realizar/emprender/adoptar",	""],
+//	["partake",	"partook",	"partaken",	"partakes",	"partaking",	"participar/compartir/tomarparte",""],
+	["shake",	"shook",	"shaken",	"shakes",	"shaking",	"sacudir/agitar/estrechar",	""],
+	["get",		"got",		"got/gotten",	"gets",		"getting",	"conseguir/tener/llegar",	""],
+	["forget",	"forgot",	"forgotten",	"forgets",	"forgetting",	"olvidar/olvidarse/perdonar",	""],
+	["give",	"gave",		"given",	"gives",	"giving",	"dar/hacer/prestar",		""],
+	["forgive",	"forgave",	"forgiven",	"forgives",	"forgiving",	"perdonar/disculpar/olvidar",	""],
+	["forbid",	"forbade/forbad","forbidden",	"forbids",	"forbidding",	"prohibir/impedir",		""],
+	["shrink",	"shrank",	"shrunk",	"shrinks",	"shrinking",	"reducir/encoger/disminuir",	""],
+	["ring",	"rang",		"rung",		"rings",	"ringing",	"sonar/llamar/tocar",		""],
+	["run",		"ran",		"run",		"runs",		"running",	"correr/huir/dirigir",		""],
+	["know",	"knew",		"known",	"knows",	"knowing",	"saber/conocer/entender",	""],
+	["grow",	"grew",		"grown",	"grows",	"growing",	"crecer/cultivar/aumentar",	""],
+	["throw",	"threw",	"thrown",	"throws",	"throwing",	"tirar/lanzar/echar",		""],
+	["blow",	"blew",		"blown",	"blows",	"blowing",	"volar/explotar/soplar",	""],
+	["draw",	"drew",		"drawn",	"draws",	"drawing",	"llamar/sacar/extraer",		""],
+	["withdraw",	"withdrew",	"withdrawn",	"withdraws",	"withdrawing",	"retirar/retirarse/extraer",	""],
+//	["overdraw",	"overdrew",	"overdrawn",	"overdraws",	"overdrawing",	"",				""],
+	["fly",		"flew",		"flown",	"flies",	"flying",	"volar/pilotar/viajar",		""],
+
+	["come",	"came",		"come",		"comes",	"coming",	"venir/llegar/ir",		""],
+	["overdo",	"overdid",	"overdone",	"overdoes",	"overdoing",	"exagerar/abusar/excederse",	""],
+	["undo",	"undid",	"undone",	"undoes",	"undoing",	"deshacer/reparar/anular",	""],
+	["go",		"went",		"gone",		"goes",		"going",	"ir/irse/salir",		""],
+	["do",		"did",		"done",		"does",		"doing",	"hacer/ver/ser",		""],
+	["oversee",	"oversaw",	"overseen",	"oversees",	"overseeing",	"supervisar/vigilar/velar",	""],
+	["see",		"saw",		"seen",		"sees",		"seeing",	"ver/mirar/saber",		""],
+	["overcome",	"overcame",	"overcome",	"overcomes",	"overcoming",	"superar/vencer/resolver",	""],
+	["become",	"became",	"become",	"becomes",	"becoming",	"convertirseen/volver/hacer",	""],
+	["undergo",	"underwent",	"undergone",	"undergoes",	"undergoing",	"sometersea/recibir/sufrir",	""],
+	["eat",		"ate",		"eaten",	"eats",		"eating",	"comer/comerse/cenar",		""],
+	["fall",	"fell",		"fallen",	"falls",	"falling",	"caer/quedar/caerse",		""],
+	["be",		"was",		"been",		"is",		"being",	"ser/estar/haber",		""],
+
+
+	]
+
+
+function verbo(){
+    this.inf,
+    this.pas,
+    this.par,
+    this.pe3,
+    this.ger,
+    this.mea,
+    this.me2
+};
+
+var verbs = []
+
+
+for(var i=0; i< v.length; i++){
+	var e = new verbo;
+	e.inf = v[i][0];
+	e.pas = v[i][1];
+	e.par = v[i][2];
+	e.pe3 = v[i][3];
+	e.ger = v[i][4];
+	e.mea = v[i][5];
+	e.me2 = v[i][6];
+	verbs.push( e );
+}
+
+for (var i=0; i<= v.length; i++){
+
+	getverb();
+
+}
+
+</script>
+</html>
