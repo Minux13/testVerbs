@@ -154,6 +154,65 @@ function getFieldCell(elemento){
 	return cell + endCell;
 }
 
+var ya = [
+"spell",
+"pardon",
+"turn",
+"miss",
+"shop",
+"pick",
+"order",
+"underline",
+"hunt",
+"water",
+"share",
+"sneeze",
+"review",
+"land",
+"watch",
+"greet",
+"decrease",
+"please",
+"vary",
+"date",
+"match",
+"taste",
+"jog",
+"provide",
+"discuss",
+"check",
+"guess",
+"witness",
+"sail",
+"locate",
+"pamper",
+"wrestle",
+"last",
+"link",
+"damage",
+"deliver",
+"release",
+"manage",
+"grant",
+"stress",
+"perform",
+"pack",
+"offer",
+"handle",
+"suggest",
+"purchase",
+"fix",
+"relate",
+"disturb",
+"tune",
+"shout",
+"warn",
+"step",
+"chase",
+"slow", "hail"
+];
+
+
 
 function evalua(verbo){
 	
@@ -231,11 +290,23 @@ function getverb(){
 	}
 
 	var x = Math.floor((Math.random() * (verbs.length)) );
-	
-	evalua(verbs[x])
 
 	var currentVerb = verbs[x].inf;
 
+
+	for( var e = 0; e<ya.length; e++){
+		if(ya[e]==currentVerb){
+			verboEvaluado = verbs[x];
+			var a = verbs.slice(0, x);
+			var b = verbs.slice(x+1, verbs.length);
+			verbs = a.concat(b);
+			return 0;	
+		}	
+	}
+	
+	evalua(verbs[x])
+
+	
 
 	verboEvaluado = verbs[x];
 	var a = verbs.slice(0, x);
@@ -455,74 +526,6 @@ for (var i=0; i<= v.length; i++){
 
 }
 
-/*
-
-
-
-
-"spell"
-"pardon"
-"turn"
-"miss"
-"shop"
-"pick"
-"order"
-"underline"
-"hunt"
-"water"
-"share"
-"sneeze"
-"review"
-"land"
-"watch"
-"greet"
-"decrease"
-"please"
-"vary"
-"date"
-"match"
-"taste"
-"jog"
-"provide"
-"discuss"
-"check"
-"guess"
-"witness"
-"sail"
-"locate"
-"pamper"
-"wrestle"
-"last"
-"link"
-"damage"
-"deliver"
-"release"
-"manage"
-"grant"
-"stress"
-"perform"
-"pack"
-"offer"
-"handle"
-"suggest"
-"purchase"
-"fix"
-"relate"
-"disturb"
-"tune"
-"shout"
-"warn"
-"step"
-"chase"
-"slow"
-"hail"
-
-
-
-
-
-
-*/
 
 </script>
 </html>
