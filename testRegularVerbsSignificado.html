@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<title>Minux</title>
+		<style>
+			body{
+				text-align: center;	
+			}
+			.inputtext{
+				border: none;	
+				max-width: 200px;
+				min-width: 50px;
+			}
+			.spaninput{
+				padding: 8px 13px;	
+				border: solid 1px #ddf;
+				display: inline-block;
+			}
+			.inputtext:focus{
+				outline: none;
+			}
+			.divinput{
+				display: inline-block;
+				margin: 0 15px;	
+			}
+			#asks{
+				text-align: center;
+			}
+			#infinitive{
+				font-size: 30px;
+				margin: 120px 0 60px 0;
+				text-align: center;	
+			}
+			.textask{
+				text-align: left;
+				width: 100%;
+				display: block;
+				margin: 0 0 5px 10px;
+			}
+			table {
+			    font-family: arial, sans-serif;
+			    border-collapse: collapse;
+			    width: calc(100% - 60px);
+			    margin: 30px;
+			}
+			
+			td, th {
+			    border: 1px solid #dddddd;
+			    text-align: left;
+			    padding: 8px;
+			}
+			.checksimbol{
+				border: none;
+			}
+			.red{
+				color: red;
+			}
+			.blue{
+				color: blue;
+			}
+			.infcolum, .mlink{
+				cursor: pointer;	
+			}
+		</style>
+
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+<body>
+
+	<h1 style="text-align: center;margin-buttom: 80px;">Irregular Verbs Test</h1>
+
+	<div id="infinitive"></div>
+	<form action="">
+		<div id="asks">
+			<div class="divinput">
+				<span class="textask">Significado:</span>
+				<span class="spaninput"><input class="inputtext" type"text" size=200 id="meaning"   ></span>
+			</div> 
+			<div class="divinput">
+				<span class="textask">Pasado:</span>
+				<span class="spaninput"><input class="inputtext" type"text" size=200 id="past"      ></span>
+			</div>                                       
+			<div class="divinput">
+				<span class="textask">Participio:</span>
+				<span class="spaninput"><input class="inputtext" type"text" size=200 id="participle"></span>
+			</div>
+			<div class="divinput">
+				<span class="textask">3ra persona:</span>
+				<span class="spaninput"><input class="inputtext" type"text" size=200 id="person3"   ></span>
+			</div>
+			<div class="divinput">
+				<span class="textask">Gerundio:</span>
+				<span class="spaninput"><input class="inputtext" type"text" size=200 id="gerund"    ></span>
+			</div>
+		</div>
+	</form>
+	<button style="padding:15px;margin:15px;background:#eef;border:solid 1px #eef;" id="enter" onclick="getverb()"> Siguiente verbo </button>  
+</body>
+<script>
+function createWindow(cUrl,cName,cFeatures) {
+	var xWin = window.open(cUrl,cName,cFeatures);
+	//setTimeout(function(){ xWin.scroll(0,100); }, 3000);
+	//setTimeout(function(){ console.log(window.onfocus); }, 3000);
+}
+
+var formulario = document.getElementById("asks");
+formulario.addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("enter").click();
+    }
+});
+
+var addMeaningExtra = true;
+var thTagMeaningExtra = addMeaningExtra ? '<th>Significado</th>' : ""
+var results = '<table><tr><th>Infinitivo</th><th>Significado</th><th class="checksimbol"></th></tr>';
+var finalTag = "</table>"
+
+var verboEvaluado;
+
+var Score = 0;
+
+function comparaPalabras(correct, answer, incorrecto){
+	
+	var significados = correct.split("/");
+	var inputEdit = answer.replace(/ /g , "");
+	inputEdit = inputEdit?inputEdit.toLowerCase():'-';
+	var isCorrect = false;
+	for(var i=0; i<significados.length; i++){
+		if(significados[i].toLowerCase() == inputEdit){
+			isCorrect = true;
+		}
+	}
+
+	if( isCorrect ){
+		var retorno = '<td><span class="blue">'+ answer +'</span></td>';
+	}else{
+		incorrecto.valor = true;
+		var retorno = '<td><span class="red">'+ inputEdit +'</span> <span class="blue"> '+ correct + ' </span></td>';
+	}	
+	return retorno;
+}
+
+
+function evalua(verbo, ingresado){
+	console.log(verbo)
+
+	var incorrecto = {valor : false};
+
+	var cell = '<tr>';
+
+	//  Infinitivo 
+	var hrefGT = 'https://translate.google.com/?hl=es#en/es/'+ verbo.inf;
+	var newWindowFeatures = 'toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=0,width=800,height=500';
+	var onclickAttr = 'onclick="createWindow(\''+ hrefGT +'\',\'window2\',\''+ newWindowFeatures +'\')"';	
+	var hrefMeaning = 'https://dictionary.cambridge.org/es/diccionario/ingles-espanol/'+verbo.inf;
+	var tag_meaning = '<span class="mlink" style="float:right;" onclick="createWindow(\''+ hrefMeaning +'\',\'window2\',\''+ newWindowFeatures +'\');">&#10067;</span>'
+	var urlConjutation = 'http://conjugador.reverso.net/conjugacion-ingles-verbo-'+ verbo.inf +'.html';
+	var htmlConjutation = '<span class="mlink" style="float:right;" onclick="createWindow(\''+ urlConjutation +'\',\'window2\',\''+ newWindowFeatures +'\');">&#10067;</span>'
+	cell = cell + '<td><span '+ onclickAttr +'class="infcolum">'+ verbo.inf +'</span>'+ tag_meaning + htmlConjutation + '</td>';
+
+	//var pass = comparaPalabras( verbo.pas, ingresado.pas, incorrecto );
+	//var part = comparaPalabras( verbo.par, ingresado.par, incorrecto );
+	//var per3 = comparaPalabras( verbo.pe3, ingresado.pe3, incorrecto );
+	//var geru = comparaPalabras( verbo.ger, ingresado.ger, incorrecto );
+	var mean = comparaPalabras( verbo.mea, ingresado.mea, incorrecto );
+	//var mea2 = addMeaningExtra ? '<td><span class="blue">'+ verbo.me2 +'</td>': "";
+	
+	cell = cell + mean;
+
+	var checksimbol = incorrecto.valor?'<td class="checksimbol" style="color:red;">&#10007;</td>':'<td class="checksimbol" style="color:green;">&#10003;</td>'
+	
+	cell = cell + checksimbol + '</tr>';
+
+	Score = incorrecto.valor ? Score : Score+1;
+
+	document.getElementById("meaning").value = "";
+
+	results = results + cell;
+
+}
+
+function getverb(){
+
+	//Evita que se ejecute dos veces esta funcion cuando focus esta sobre el boton y se hace enter
+	var boton = document.getElementById('enter');
+	var isFocused = (document.activeElement === boton);
+	if(isFocused){		
+		document.getElementById("meaning").focus();
+		return 0;
+	}
+	//El primer getverb no tiene ninguno que evaluar, la variable es undefine
+	if( verboEvaluado ){
+		var inputs = {
+					mea : document.getElementById("meaning").value
+		}
+
+		evalua( verboEvaluado, inputs );
+	}
+
+	if(verbs.length == 0){
+		results = Score + '/' + v.length + results + finalTag;
+		document.body.innerHTML =   results;
+		return false;
+	}
+
+	
+	var x = Math.floor((Math.random() * (verbs.length)) );
+	document.getElementById("infinitive").innerHTML = verbs[x].inf;
+	verboEvaluado = verbs[x];
+	var a = verbs.slice(0, x);
+	var b = verbs.slice(x+1, verbs.length);
+	verbs = a.concat(b);
+
+	document.getElementById("meaning").focus();
+}
+
+
+       //infinitivo     pasado,        participio,       3er p,	         gerundio,              significado			significado extendido
+var v= [
+	["want",	"wanted","wanted","wants","wanting","querer/desear/necesitar",""],
+	["ignore",	"ignored","ignored","ignores","ignoring","ignorar/pasarporalto/hacercasoomiso",""],
+	["travel",	"travelled","travelled","travels","travelling","recorrer/desplazarse/ir",""],
+	["tune",	"tuned","tuned","tunes","tuning","sintonizar/afinar/ajustar",""],
+	["change",	"changed","changed","changes","changing","cambiar/modificar/variar",""],
+	["increase",	"increased","increased","increases","increasing","aumentar/incrementar/mejorar",""],		
+	["exercise",	"exercised","exercised","exercises","exercising","ejercer/ejercitar/actuar",""],
+	["locate",	"located","located","locates","locating","localizar/ubicar/encontrar",""],
+	["purchase",	"purchased","purchased","purchases","purchasing","comprar/adquirir/contratar",""],
+	["impress",	"impressed","impressed","impresses","impressing","impresionar/recalcar/impactar",""],
+	["try",		"tried","tried","tries","trying","intentar/tratar/probar",""],
+	["discover",	"discovered","discovered","discovers","discovering","descubrir/conocer/encontrar",""],
+	["recommend",	"recommended","recommended","recommends","recommending","recomendar/aconsejar/recomendarse",""],
+	["manage",	"managed","managed","manages","managing","gestionar/administrar/manejar",""],
+	["die",		"died","died","dies","dying","morir/morirse/matar",""],
+	["knock",	"knocked","knocked","knocks","knocking","llamar/golpear/tocar",""],
+	["join",	"joined","joined","joins","joining","unirsea/unir/unirse",""],
+	["look",	"looked","looked","looks","looking","mirar/parecer/buscar",""],
+	["express",	"expressed","expressed","expresses","expressing","expresar/manifestar/expresarse",""],
+	["talk",	"talked","talked","talks","talking","hablar/decir/conversar",""],
+	["hunt",	"hunted","hunted","hunts","hunting","cazar/buscar/perseguir",""],
+	["witness",	"witnessed","witnessed","witnesses","witnessing","presenciar/atestiguar/sertestigo",""],
+	["notice",	"noticed","noticed","notices","noticing","notar/darsecuenta/observar",""],
+	["love",	"loved","loved","loves","loving","amar/encantar/querer",""],
+	["relax",	"relaxed","relaxed","relaxes","relaxing","relajar/relajarse/calmar",""],
+	["fix",		"fixed","fixed","fixes","fixing","arreglar/fijar/solucionar",""],
+	["excuse",	"excused","excused","excuses","excusing","excusar/disculpar/justificar",""],
+	["organize",	"organized","organized","organizes","organizing","organizar/ordenar/convocar",""],
+	["greet",	"greeted","greeted","greets","greeting","saludar/recibir/darlabienvenida",""],
+	["introduce",	"introduced","introduced","introduces","introducing","introducir/presentar/establecer/adoptar","to make something exist or happen for the first time./He took me around the room and introduced me to everyone."],
+	["review",	"reviewed","reviewed","reviews","reviewing","examinar/revisar/estudiar",""],
+	["chat",	"chatted","chatted","chats","chatting","hablar/charlar/conversar",""],
+	["disagree",	"disagreed","disagreed","disagrees","disagreeing","discrepar/estarendesacuerdo/disentir",""],
+	["terrorize",	"terrorized","terrorized","terrorizes","terrorizing","aterrorizara/aterrorizar/atemorizara",""],
+	["program",	"programmed","programmed","programs","programming","programar",""],
+	["share",	"shared","shared","shares","sharing","compartir/intercambiar/repartir",""],
+	["date",	"dated","dated","dates","dating","salir/datar/partir",""],
+	["like",	"liked","liked","likes","liking","gustar/parecer/agradar",""],
+	["list",	"listed","listed","lists","listing","enumerar/registrar/listar",""],
+	["interview",	"interviewed","interviewed","interviews","interviewing","entrevistar/interrogar/entrevistarse",""],
+	["enjoy",	"enjoyed","enjoyed","enjoys","enjoying","disfrutar/gozar/gustar",""],
+	["plan",	"planned","planned","plans","planning","planear/planificar/prever",""],
+	["participate",	"participated","participated","participates","participating","participar/intervenir/colaborar",""],
+	["push",	"pushed","pushed","pushes","pushing","empujar/presionar/impulsar",""],
+	["dry",		"dried","dried","dries","drying","secar/secarse/enjugar",""],
+	["substitute",	"substituted","substituted","substitutes","substituting","sustituir/reemplazar/substituir",""],
+	["snow",	"snowed","snowed","snows","snowing","nevar",""],
+	["remember",	"remembered","remembered","remembers","remembering","recordar/acordar/acordarse",""],
+	["follow",	"followed","followed","follows","following","seguir/aplicar/cumplir",""],
+	["move",	"moved","moved","moves","moving","mover/avanzar/mudar",""],
+	["water",	"watered","watered","waters","watering","regar/beber/diluir",""],
+	["present",	"presented","presented","presents","presenting","presentar/plantear/exponer",""],
+	["welcome",	"welcomed","welcomed","welcomes","welcoming","recibir/saludar/agradecer",""],
+	["check",	"checked","checked","checks","checking","comprobar/revisar/mirar",""],
+	["handle",	"handled","handled","handles","handling","manejar/soportar/hacer",""],
+	["discuss",	"discussed","discussed","discusses","discussing","discutir/examinar/debatir",""],
+	["protect",	"protected","protected","protects","protecting","proteger/protegerse/defender",""],
+	["receive",	"received","received","receives","receiving","recibir/obtener/percibir",""],
+	["work",	"worked","worked","works","working","trabajar/funcionar/obrar",""],
+	["underline",	"underlined","underlined","underlines","underlining","subrayar/resaltar/destacar/recalcar",""],
+	["release",	"released","released","releases","releasing","liberar/soltar/entregar",""],
+	["decide",	"decided","decided","decides","deciding","decidir/determinar/pronunciarse",""],
+	["design",	"designed","designed","designs","designing","diseñar/elaborar/proyectar",""],
+	["fill",	"filled","filled","fills","filling","llenar/rellenar/cubrir",""],
+	["entertain",	"entertained","entertained","entertains","entertaining","entretener/considerar/entretenerse",""],
+	["provide",	"provided","provided","provides","providing","proporcionar/ofrecer/prestar",""],
+	["live",	"lived","lived","lives","living","vivir/residir/habitar",""],
+	["guess",	"guessed","guessed","guesses","guessing","conjeturar/suponer/adivinar/imaginar",""],
+	["use",		"used","used","uses","using","utilizar/usar/consumir",""],
+	["describe",	"described","described","describes","describing","describir/indicar/explicar",""],
+	["improve",	"improved","improved","improves","improving","mejorar/aumentar/perfeccionar",""],
+	["miss",	"missed","missed","misses","missing","extrañar/perder/echardemenos",""],
+	["scare",	"scared","scared","scares","scaring","asustar/espantar/intimidar",""],
+	["expect",	"expected","expected","expects","expecting","esperar/suponer/prever",""],
+	["last",	"lasted","lasted","lasts","lasting","durar/aguantar/perdurar",""],
+	["chase",	"chased","chased","chases","chasing","perseguir/seguir/cazar",""],
+	["suggest",	"suggested","suggested","suggests","suggesting","sugerir/indicar/proponer",""],
+	["surprise",	"surprised","surprised","surprises","surprising","sorprender/extrañar/sorprenderse",""],
+	["listen",	"listened","listened","listens","listening","escuchar/oír/prestaratención",""],
+	["dress",	"dressed","dressed","dresses","dressing","vestir/vestirse/vendar",""],
+	["scan",	"scanned","scanned","scans","scanning","escanear/ojear/explorar/rastrear",""],
+	["label",	"labelled","labelled","labels","labelling","etiquetar/calificar/marcar",""],
+	["repair",	"repaired","repaired","repairs","repairing","reparar/arreglar/repararse",""],
+	["open",	"opened","opened","opens","opening","abrirse/iniciar/incoar",""],
+	["touch",	"touched","touched","touches","touching","tocar/abordar/afectar",""],
+	["practice",	"practiced","practiced","practices","practicing","practicar/ensayar/ejercer",""],
+	["invite",	"invited","invited","invites","inviting","invitar/pedir/solicitar",""],
+	["rain",	"rained","rained","rains","raining","llover",""],
+	["wish",	"wished","wished","wishes","wishing","desear/felicitar",""],
+	["freeze",	"froze","frozen","freezes","freezing","congelar/congelarse/bloquear",""],
+	["disturb",	"disturbed","disturbed","disturbs","disturbing","molestar/perturbar/alterar",""],
+	["mark",	"marked","marked","marks","marking","marcar/conmemorar/celebrar",""],
+	["relate",	"related","related","relates","relating","relacionar/referirse/relacionarse",""],
+	["play",	"played","played","plays","playing","jugar/desempeñar/tocar",""],
+	["spell",	"spelled/spelt","spelled/spelt","spells","spelling","deletrear/escribir/explicar",""],
+	["solve",	"solved","solved","solves","solving","resolver/solucionar/arreglar",""],
+	["end",		"ended","ended","ends","ending","terminar/acabar/finalizar",""],
+	["jump",	"jumped","jumped","jumps","jumping","saltar/salirse/tirar",""],
+	["walk",	"walked","walked","walks","walking","caminar/ir/pasear",""],
+	["watch",	"watched","watched","watches","watching","mirar/vigilar/cuidar",""],
+	["depend",	"depended","depended","depends","depending","depender/contar/confiar",""],
+	["need",	"needed","needed","needs","needing","necesitar/precisar/requerir",""],
+	["pardon",	"pardoned","pardoned","pardons","pardoning","disculpar/perdonar/indultar",""],
+	["resist",	"resisted","resisted","resists","resisting","resistir/resistirse/evitar",""],
+	["sail",	"sailed","sailed","sails","sailing","navegar/zarpar/salir",""],
+	["imagine",	"imagined","imagined","imagines","imagining","imaginar/imaginarse/suponer",""],
+	["warn",	"warned","warned","warns","warning","advertir/avisar/alertar",""],
+	["hate",	"hated","hated","hates","hating","odiar",""],
+	["slow",	"slowed","slowed","slows","slowing","reducir/bajar/retardar/ralentizar",""],
+	["destroy",	"destroyed","destroyed","destroys","destroying","destruir/destrozar/destruirse",""],
+	["name",	"named","named","names","naming","llamar/nombrar/mencionar",""],
+	["turn",	"turned","turned","turns","turning","girar/voltear/convertir/apagar",""],
+	["pick",	"picked","picked","picks","picking","recoger/elegir/escoger",""],
+	["study",	"studied","studied","studies","studying","estudiar/examinar/analizar",""],
+	["sneeze",	"sneezed","sneezed","sneezes","sneezing","estornudar",""],
+	["jog",		"jogged","jogged","jogs","jogging","correr/refrescar/trotar",""],
+	["prefer",	"preferred","preferred","prefers","preferring","preferir/presentar",""],
+	["dance",	"danced","danced","dances","dancing","bailar/danzar/hacerbailar",""],
+	["please",	"pleased","pleased","pleases","pleasing","complacer/placer/agradar",""],
+	["happen",	"happened","happened","happens","happening","pasar/suceder/ocurrir",""],
+	["order",	"ordered","ordered","orders","ordering","ordenar/pedir/decretar",""],
+	["deliver",	"delivered","delivered","delivers","delivering","entregar/prestar/cumplir",""],
+	["hail",	"hailed","hailed","hails","hailing","saludar/llamar/aplaudir",""],
+	["fish",	"fished","fished","fishes","fishing","pescar/faenar/buscar",""],
+	["return",	"returned","returned","returns","returning","volver/regresar/devolver",""],
+	["damage",	"damaged","damaged","damages","damaging","dañar/perjudicar/lesionar",""],
+	["offer",	"offered","offered","offers","offering","ofrecer/dar/brindar",""],
+	["pack",	"packed","packed","packs","packing","empacar/envasar/hacerlasmaletas",""],
+	["measure",	"measured","measured","measures","measuring","medir/evaluar/cuantificar",""],
+	["taste",	"tasted","tasted","tastes","tasting","probar/saber/saborear",""],
+	["vary",	"varied","varied","varies","varying","variar/diferir/modificar",""],
+	["rest",	"rested","rested","rests","resting","descansar/reposar/recaer",""],
+	["hope",	"hoped","hoped","hopes","hoping","esperar/esperanzar",""],
+	["number",	"numbered","numbered","numbers","numbering","sumar/numerar/contar",""],
+	["worry",	"worried","worried","worries","worrying","preocupar/preocuparse/temer",""],
+	["wait",	"waited","waited","waits","waiting","esperar/aguardar/aguantar",""],
+	["skate",	"skated","skated","skates","skating","patinar",""],
+	["identify",	"identified","identified","identifies","identifying","identificar/determinar/detectar",""],
+	["mention",	"mentioned","mentioned","mentions","mentioning","mencionar/hablar/señalar",""],
+	["paint",	"painted","painted","paints","painting","pintar/pintarse/describir",""],
+	["note",	"noted","noted","notes","noting","observar/señalar/notar",""],
+	["match",	"matched","matched","matches","matching","igualar/coincidir/corresponder",""],
+	["step",	"stepped","stepped","steps","stepping","avanzar/pasar/pisar",""],
+	["help",	"helped","helped","helps","helping","ayudar/contribuir/evitar",""],
+	["shop",	"shopped","shopped","shops","shopping","comprar/irdecompras/hacercompras",""],
+	["persuade",	"persuaded","persuaded","persuades","persuading","persuadir/convencer/incitara",""],
+	["stress",	"stressed","stressed","stresses","stressing","subrayar/destacar/recalcar",""],
+	["predict",	"predicted","predicted","predicts","predicting","predecir/prever/pronosticar",""],
+	["eliminate",	"eliminated","eliminated","eliminates","eliminating","eliminar/erradicar/suprimir",""],
+	["fry",		"fried","fried","fries","frying","freír/freírse/quemar",""],
+	["include",	"included","included","includes","including","incluir/figurar/comprender",""],
+	["wash",	"washed","washed","washes","washing","lavar/lavarse/limpiar",""],
+	["thank",	"thanked","thanked","thanks","thanking","agradecer/darlasgracias/felicitar",""],
+	["land",	"landed","landed","lands","landing","aterrizar/desembarcar/conseguir",""],
+	["film",	"filmed","filmed","films","filming","filmar/grabar/rodar",""],
+	["shout",	"shouted","shouted","shouts","shouting","gritar/chillar/vociferar",""],
+	["wrestle",	"wrestled","wrestled","wrestles","wrestling","luchar/pelear/forcejear",""],
+	["pass",	"passed","passed","passes","passing","pasar/aprobar/transmitir",""],
+	["perform",	"performed","performed","performs","performing","realizar/desempeñar/cumplir",""],
+	["stop",	"stopped","stopped","stops","stopping","dejar/detener/parar",""],
+	["ski",		"skied","skied","skis","skiing","esquiar",""],
+	["pamper",	"pampered","pampered","pampers","pampering","mimar/consentir",""],
+	["start",	"started","started","starts","starting","empezar/comenzar/iniciar",""],
+	["link",	"linked","linked","links","linking","vincular/relacionar/conectar",""],
+	["repeat",	"repeated","repeated","repeats","repeating","repetir/reiterar/repetirse",""],
+	["park",	"parked","parked","parks","parking","estacionar/aparcar/estacionarse",""],
+	["save",	"saved","saved","saves","saving","salvar/ahorrar/guardar",""],
+	["learn",	"learned/learnt","learned/learnt","learns","learning","aprender/saber/enterarse",""],
+	["exhibit",	"exhibited","exhibited","exhibits","exhibiting","exhibir/mostrar/presentar",""],
+	//
+	["harm",	"harmed","harmed","harms","harming","perjudicar/dañar/lesionar",""],
+	["grant",	"granted","granted","grants","granting","conceder/otorgar/dar",""],		
+	["decrease",	"decreased","decreased","decreases","decreasing","disminuir/reducir/bajar",""],
+
+
+	]
+
+/*
+
+
+function copyToClipboard(text){
+    var dummy = document.createElement("input");
+    document.body.appendChild(dummy);
+    dummy.setAttribute('value', text);
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+}
+function a(){
+var traduccion = $(".word-translated-wrap")[0].children[1].innerHTML
+var significados = traduccion.replace(/ /g , "").replace(/;/g , "/");
+	var texto= '\t["' + document.getElementsByClassName("verb-forms-wrap")[0].children[0].children[0].children[0].innerHTML.slice(3)+'","' +
+			document.getElementsByClassName("verb-forms-wrap")[0].children[1].children[0].children[0].innerHTML  + '","' +
+					document.getElementsByClassName("verb-forms-wrap")[0].children[2].children[0].children[0].innerHTML  + '","' +
+					$(".word-wrap-row")[0].children[1].children[0].children[1].children[2].children[1].innerHTML  + '","' + 
+					$(".word-wrap-row")[4].children[1].children[1].children[0].children[1].children[0].children[0].innerHTML  + '","'  +
+					significados  + '",""],\n' ;
+copyToClipboard(texto)
+
+}
+a()
+
+
+*/
+
+function verbo(){
+    this.inf,
+    this.pas,
+    this.par,
+    this.pe3,
+    this.ger,
+    this.mea,
+    this.me2
+};
+
+var verbs = []
+
+
+for(var i=0; i< v.length; i++){
+	var e = new verbo;
+	e.inf = v[i][0];
+	e.pas = v[i][1];
+	e.par = v[i][2];
+	e.pe3 = v[i][3];
+	e.ger = v[i][4];
+	e.mea = v[i][5];
+	e.me2 = v[i][6];
+	verbs.push( e );
+}
+
+getverb();
+
+
+</script>
+</html>
