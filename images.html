@@ -191,6 +191,11 @@ function evalua(verbo, ingresado){
 
 }
 
+function sound( ){
+	var audio = document.getElementById("audi");
+	audio.play();
+}
+
 function getverb(){
 
 	//Evita que se ejecute dos veces esta funcion cuando focus esta sobre el boton y se hace enter
@@ -222,7 +227,12 @@ function getverb(){
 
 	
 	var x = Math.floor((Math.random() * (verbs.length)) );
-	document.getElementById("infinitive").innerHTML = '<img style="width:200px;height:auto;" src="'+verbs[x].inf +'.jpg">';
+	
+	var verInd = verbs[x].inf
+	var audioTag = '<audio id="audi"><source style="" src="mp3/'+ verInd +'.mp3"></source></audio>'
+	
+	
+	document.getElementById("infinitive").innerHTML = '<img style="width:200px;height:auto;" onmouseover="sound();" src="'+ verInd +'.jpg"> ' + audioTag;
 	verboEvaluado = verbs[x];
 	var a = verbs.slice(0, x);
 	var b = verbs.slice(x+1, verbs.length);
@@ -232,8 +242,11 @@ function getverb(){
 }
 
 
+
+
        //infinitivo     pasado,        participio,       3er p,	         gerundio,              significado			significado extendido
-var v= [/*["hit",		"hit", 		"hit", 		"hits", 	"hitting", 	"golpear/pegar",			""],
+var v= [
+	/*["hit",		"hit", 		"hit", 		"hits", 	"hitting", 	"golpear/pegar",			""],
 	["become", 	"became", 	"became", 	"becomes", 	"becoming", 	"convertir/convertirse/volverse",	""],
 	["fit",		"fitted/fit",	"fitted/fit",	"fits",		"fitting",	"ajustar/caber/adaptar/encajar",	""],
 	["split",	"split", 	"split", 	"splits", 	"splitting", 	"dividir/apartar/separar/partir",	""],
@@ -258,7 +271,7 @@ var v= [/*["hit",		"hit", 		"hit", 		"hits", 	"hitting", 	"golpear/pegar",			""]
 	["rid",		"ridded/rid", 	"ridded/rid",	"rids",		"ridding",	"eliminar/liberar/deshacerse/deshacer",	""],
 	["slit",	"slitted/slit", "slitted/slit", "slits", 	"slitting",	"cortar/rajar/degollar",		""],
 	["quit",	"quitted/quit", "quitted/quit", "quits", 	"quitting", 	"dejar/abandonar/renunciar/dimitir",	""],
-	///Group 2
+*/	///Group 2
 	["keep",	"kept",		"kept",		"keeps",	"keeping",	"mantener/retener",			""],
 	["sweep",	"swept",	"swept",	"sweeps",	"sweeping",	"barrer/arrastrar",			"Mover de un lado a otro"],
 	["meet",	"met",		"met",		"meets",	"meeting",	"conocer/quedar/verse/buscar",		"Ir a buscar, quedar verse, quedar(con)"],
@@ -278,9 +291,9 @@ var v= [/*["hit",		"hit", 		"hit", 		"hits", 	"hitting", 	"golpear/pegar",			""]
 	["dream",	"dreamed/dreamt","dreamed/dreamt","dreams",	"dreaming",	"soñar/imaginar",			""],
 	["read",	"read",		"read",		"reads",	"reading",	"leer",					""],
 	["hear",	"heard",	"heard",	"hears",	"hearing",	"oir/escuchar",				""],
-	["learn",	"learned/learnt","learned/learnt","learns",	"learning",	"aprender/saber/enterarse",		""],*/
+	["learn",	"learned/learnt","learned/learnt","learns",	"learning",	"aprender/saber/enterarse",		""],
 	///
-	["find",	"found",	"found",	"finds",	"finding",	"encontrar/hallar/descubrir",		""],
+/*	//["find",	"found",	"found",	"finds",	"finding",	"encontrar/hallar/descubrir",		""],
 	["bind",	"bound",	"bound",	"binds",	"binding",	"amarrar/unir/atar/unir",		""],
 	["grind","ground","ground","grinds","grinding","moler/triturar/rechinar",""],
 	["wind","winded/wound","winded/wound","winds","winding","darcuerda/enrollar/arrollar",""],
@@ -298,6 +311,7 @@ var v= [/*["hit",		"hit", 		"hit", 		"hits", 	"hitting", 	"golpear/pegar",			""]
 	["stick","stuck","stuck","sticks","sticking","meter/pegar/quedarse/mantener",""],
 	["dig","dug","dug","digs","digging","cavar/excavar/buscar",""],
 	["hang","hanged/hung","hanged/hung","hangs","hanging","colgar/tender/esperar/ahorcar",""],
+
 
 	["say","said","said","says","saying","decir/dar/afirmar",""],
 	["pay","paid","paid","pays","paying","pagar/prestar/rendir",""],
@@ -347,44 +361,11 @@ var v= [/*["hit",		"hit", 		"hit", 		"hits", 	"hitting", 	"golpear/pegar",			""]
 	["swear","swore","sworn","swears","swearing","jurar/prometer/maldecir",""],
 	["bear","bore","borne","bears","bearing","soportar/tener/llevar",""],
 	["tear","tore","torn","tears","tearing","arrancar/romper/desgarrar",""],
+	*/
 
-
-
-
-
-	/*
-	["","","","","",""],
-	["","","","","",""],
-	["","","","","",""],*/
 	]
 
-/*
 
-
-function copyToClipboard(text){
-    var dummy = document.createElement("input");
-    document.body.appendChild(dummy);
-    dummy.setAttribute('value', text);
-    dummy.select();
-    document.execCommand("copy");
-    document.body.removeChild(dummy);
-}
-function a(){
-var traduccion = $(".word-translated-wrap")[0].children[1].innerHTML
-var significados = traduccion.replace(/ /g , "").replace(/;/g , "/");
-	var texto= '\t["' + document.getElementsByClassName("verb-forms-wrap")[0].children[0].children[0].children[0].innerHTML.slice(3)+'","' +
-			document.getElementsByClassName("verb-forms-wrap")[0].children[1].children[0].children[0].innerHTML  + '","' +
-					document.getElementsByClassName("verb-forms-wrap")[0].children[2].children[0].children[0].innerHTML  + '","' +
-					$(".word-wrap-row")[0].children[1].children[0].children[1].children[2].children[1].innerHTML  + '","' + 
-					$(".word-wrap-row")[4].children[1].children[1].children[0].children[1].children[0].children[0].innerHTML  + '","'  +
-					significados  + '",""],\n' ;
-copyToClipboard(texto)
-
-}
-a()
-
-
-*/
 
 function verbo(){
     this.inf,

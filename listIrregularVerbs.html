@@ -73,9 +73,28 @@
 <body>
 
 	<h1 style="text-align: center;margin-buttom: 80px;">Irregular Verbs Test</h1>
+	<button onclick="filter();">Filtrar</button>
 
 </body>
 <script>
+
+function filter(){
+	
+	var cells = document.getElementsByTagName("tr");
+	
+	for( var c=1; c < cells.length ; c++ ){
+		console.log(cells[c].getElementsByClassName("checksimbol")[0])	
+		var isMarked = cells[c].getElementsByClassName("checksimbol")[0].children[0].checked;	
+		if( isMarked ){
+			//cells[c].style.display = '';
+		}
+		else{
+			cells[c].style.display = 'none';			
+		}
+	}
+	
+}
+
 function createWindow(cUrl,cName,cFeatures) {
 	var xWin = window.open(cUrl,cName,cFeatures);
 	//setTimeout(function(){ xWin.scroll(0,100); }, 3000);
@@ -85,7 +104,7 @@ function createWindow(cUrl,cName,cFeatures) {
 
 var addMeaningExtra = true;
 var thTagMeaningExtra = addMeaningExtra ? '<th style="width:150px;" >Significado</th>' : ""
-var results = '<table><tr><th>Infinitivo</th><th>Pasado</th><th>Participio</th><th>3ra Persona</th><th>Gerundio</th><th>Significado</th>'+thTagMeaningExtra+'<th class="checksimbol"></th></tr>';
+var results = '<button onclick="filter();">Filtrar</button><table><tr><th>Infinitivo</th><th>Pasado</th><th>Participio</th><th>3ra Persona</th><th>Gerundio</th><th>Significado</th>'+thTagMeaningExtra+'<th class="checksimbol"></th></tr>';
 var finalTag = "</table>"
 
 var verboEvaluado;
@@ -175,7 +194,7 @@ function evalua(verbo){
 
 	cell = cell + trHTMLInvinitive + pass + part + per3 + geru + mean + mea2;
 
-	var checksimbol = incorrecto.valor?'<td class="checksimbol" style="color:red;">&#10007;</td>':'<td class="checksimbol" style="color:green;">&#10003;</td>'
+	var checksimbol = '<td class="checksimbol" "><input type="checkbox"></td>';
 	
 	cell = cell + checksimbol + '</tr>';
 
@@ -229,8 +248,8 @@ function getverb(){
        //infinitivo     pasado,        participio,       3er p,	         gerundio,              significado			significado extendido
 var v= [
 	["hit",		"hit", 		"hit", 		"hits", 	"hitting", 	"golpear/pegar",			""],
-	["become", 	"became", 	"became", 	"becomes", 	"becoming", 	"convertir/convertirse/volverse",	""],
-	["fit",		"fitted/fit",	"fitted/fit",	"fits",		"fitting",	"ajustar/caber/adaptar/encajar",	""],
+	//["become", 	"became", 	"became", 	"becomes", 	"becoming", 	"convertir/convertirse/volverse",	""],
+	["fit",		"fitted/fit",	"fitted/fit",	"fits",		"fitting",	"ajustar/caber/adaptar/encajar",	"to be the right shape or size for someone or something"],
 	["split",	"split", 	"split", 	"splits", 	"splitting", 	"dividir/apartar/separar/partir",	""],
 	["let", 	"let", 		"let", 		"lets", 	"letting", 	"dejar/permitir",			""],
 	["set",		"set",		"set",		"sets",		"setting",	"establecer/ajustar/fijar",		""],
@@ -238,7 +257,7 @@ var v= [
 	["put",		"put",		"put",		"puts",		"putting",	"poner",				""],
 	["cut",		"cut",		"cut",		"cuts",		"cutting",	"cortar",				""],
 	["shut",	"shut",		"shut",		"shuts",	"shutting",	"cerrar",				""],
-	["thrust",	"thrust",	"thrust",	"thrusts",	"thrusting",	"empujar/introducir/impulsar/clavar",	"Meter bruscamente, Abrir camino, Empujón, empuje del cohete o un empuje repentino, a menudo con gran fuerza"],
+	["thrust",	"thrust",	"thrust",	"thrusts",	"thrusting",	"empujar/introducir/impulsar/clavar",	"to push suddenly and strongly, Meter bruscamente, Abrir camino, Empujón, empuje del cohete o un empuje repentino, a menudo con gran fuerza"],
 	["hurt",	"hurt",		"hurt",		"hurts",	"hurting",	"herir",				""],
 	["burst",	"burst",	"burst",	"bursts",	"bursting",	"estallar/reventar/irrumpir",		""],
 	["cast",	"cast",		"cast",		"casts",	"casting",	"emitir/transmitir/lanzar/arrojar",	"Lanzar un hechizo, Pasar a alguien algo(n)"],
@@ -259,7 +278,7 @@ var v= [
 	["meet",	"met",		"met",		"meets",	"meeting",	"conocer/quedar/verse/buscar",		"Ir a buscar, quedar verse, quedar(con)"],
 	["lead",	"led",		"led",		"leads",	"leading",	"dirigir/liderar/guiar/conducir/llevar","Ir ganando"],
 	["leap",	"leaped/leapt",	"leaped/leapt",	"leaps",	"leaping",	"salto/saltar",				"Salto horizotal, Jump hacia arriba"],
-	["deal",	"dealt",	"dealt",	"deals",	"dealing",	"repartir/encargarse",			""],
+	["deal",	"dealt",	"dealt",	"deals",	"dealing",	"repartir/encargarse/negociar",		""],
 	["lean",	"leaned/leant","leaned/leant",	"leans",	"leaning",	"recargar/apoyar/inclinar/apoyarse/ladear","Recargarse en algo, un sillón"],
 	["sleep",	"slept",	"slept",	"sleeps",	"sleeping",	"dormir",				""],
 	["weep",	"wept",		"wept",		"weeps",	"weeping",	"sollozar/llorar",			""],
@@ -267,7 +286,7 @@ var v= [
 	["kneel",	"kneeled/knelt","kneeled/knelt","kneels",	"kneeling",	"arrodillar/arrodillarse",		""],
 	["feed",	"fed",		"fed",		"feeds",	"feeding",	"alimentar/comer/alimentarse",		""],
 	["bleed",	"bled",		"bled",		"bleeds",	"bleeding",	"sangrar/desangrar/purgar",		""],
-	["breed",	"bred",		"bred",		"breeds",	"breeding",	"criar/reproducir/crear/procrear",	""],
+	["breed",	"bred",		"bred",		"breeds",	"breeding",	"criar/reproducir/crear",		"Criar a otros animales"],
 	["speed",	"speeded/sped",	"speeded/sped",	"speeds",	"speeding",	"acelerar/apresurar/rapidez",		"Ir muy rápido"],
 	["mean",	"meant",	"meant",	"means",	"meaning",	"significar/querer/implicar", 		""],
 	["dream",	"dreamed/dreamt","dreamed/dreamt","dreams",	"dreaming",	"soñar/imaginar",			""],
@@ -287,10 +306,10 @@ var v= [
 	["blend",	"blended",	"blended",	"blends",	"blending",	"mezclar/mezclarse/combinar",		""],
 	["lend",	"lent",		"lent",		"lends",	"lending",	"prestar/dar/dejar",			""],
 	["sting",	"stung",	"stung",	"stings",	"stinging",	"picar/doler/arder",			""],
-	["cling",	"clung",	"clung",	"clings",	"clinging",	"aferrar/aferrarse/agarrarse",		""],
+	["cling",	"clung",	"clung",	"clings",	"clinging",	"aferrar/aderir/aferrarse/agarrarse",	""],
 	["swing",	"swung",	"swung",	"swings",	"swinging",	"balancear/oscilar/mecer/columpiar/mover",""],
 	["slink",	"slunk",	"slunk",	"slinks",	"slinking",	"escabullirse/escabullir",		"Moverse sigilosamente"],
-	["stick",	"stuck",	"stuck",	"sticks",	"sticking",	"pegar/quedarse/aderir",		""],
+	["stick",	"stuck",	"stuck",	"sticks",	"sticking",	"pegar/quedarse/aderir/atascar",	""],
 	["dig",		"dug",		"dug",		"digs",		"digging",	"cavar/excavar",			"Mover tierra"],
 	["hang",	"hanged/hung",	"hanged/hung",	"hangs",	"hanging",	"colgar/esperar/ahorcar",		""],
 	//
@@ -299,13 +318,13 @@ var v= [
 	["lay",		"laid",		"laid",		"lays",		"laying",	"poner/hacer/colocar",			""],
 	//["inlay",	"inlaid",	"inlaid",	"inlays",	"inlaying",	"incrustar/embutir",			""],	
 	["tell",	"told",		"told",		"tells",	"telling",	"decir/contar/saber",			""],
-	["sell",	"sold",		"sold",		"sells",	"selling",	"vender/venderse/convencer",		""],
+	["sell",	"sold",		"sold",		"sells",	"selling",	"vender/venderse/convencer",		"Tambien to organize an event"],
 	["hold",	"held",		"held",		"holds",	"holding",	"sostener/guardar/celebrar/mantener",	""],
 	["behold",	"beheld",	"beheld",	"beholds",	"beholding",	"contemplar/mirar/observar",		""],
 	["uphold",	"upheld",	"upheld",	"upholds",	"upholding",	"defender/apoyar/mantener/respetar",	""],
 	["stand",	"stood",	"stood",	"stands",	"standing",	"soportar/quedar/estar",		""],
 	["understand",	"understood",	"understood",	"understands",	"understanding","entender/comprender/saber",		""],
-	["withstand",	"withstood",	"withstood",	"withstands",	"withstanding",	"soportar/resistir/aguantar",		""],
+	["withstand",	"withstood",	"withstood",	"withstands",	"withstanding",	"soportar/resistir/aguantar",		"un puente diseñado para soportar terremotos, ser lo suficientemente fuerte, o no ser cambiado por algo, o oponerse a una persona o cosa con éxito"],
 	["lose",	"lost",		"lost",		"loses",	"losing",	"perder/quitar/bajar",			""],
 	["shoot",	"shot",		"shot",		"shoots",	"shooting",	"disparar/matar/tirar",			""],
 	["bite",	"bit",		"bitten",	"bites",	"biting",	"morder/picar/arrancar",		""],
@@ -323,11 +342,11 @@ var v= [
 	["make",	"made",		"made",		"makes",	"making",	"hacer/tomar/realizar",			""],
 	//
 	["write",	"wrote",	"written",	"writes",	"writing",	"escribir/redactar/anotar",		""],
-	["ride",	"rode",		"ridden",	"rides",	"riding",	"llevar/viajar/montar",			""],
+	["ride",	"rode",		"ridden",	"rides",	"riding",	"llevar/viajar/montar/ir",		"to travel by sitting on a horse, bicycle, or motorcycle and controlling it"],
 	["drive",	"drove",	"driven",	"drives",	"driving",	"conducir/manejar/llevar",		""],
-	["rise",	"rose",		"risen",	"rises",	"rising",	"aumentar/subir/levantarse",		""],
+	["rise",	"rose",		"risen",	"rises",	"rising",	"aumentar/subir/levantar/ascender/crecer/elevar",		""],
 	["strive",	"strove",	"striven",	"strives",	"striving",	"esforzar/esforzarse/luchar",		""],
-	["stride",	"strode",	"stridden",	"strides",	"striding",	"darzancadas",				""],
+	["stride",	"strode",	"stridden",	"strides",	"striding",	"zancada/paso/pasar",			"Dar zancada"],
 //	["smite",	"smote",	"smitten",	"smites",	"smiting",	"golpear/castigar/aniquilar",		""],
 	["speak",	"spoke",	"spoken",	"speaks",	"speaking",	"hablar/decir/intervenir",		""],
 	["steal",	"stole",	"stolen",	"steals",	"stealing",	"robar/robarse/quitar",			""],
@@ -335,33 +354,33 @@ var v= [
 	["wake",	"woke/waked",	"woken/waked",	"wakes",	"waking",	"despertar/levantar",			""],
 	["begin",	"began",	"begun",	"begins",	"beginning",	"comenzar/empezar/iniciar",		""],
 	["drink",	"drank",	"drunk",	"drinks",	"drinking",	"tomar/brindar/beberse",		""],
-	["sink",	"sank",		"sunk",		"sinks",	"sinking",	"hundir/hundirse/caer",			""],
+	["sink",	"sank",		"sunk",		"sinks",	"sinking",	"hundir/hundirse/descender/caer",	""],
 	["stink",	"stank",	"stunk",	"stinks",	"stinking",	"apestar/olermal",			""],
 	["swim",	"swam",		"swum",		"swims",	"swimming",	"nadar/bañar/bañarse",			""],
-	["spring",	"sprang",	"sprung",	"springs",	"springing",	"saltar/brotar/soltar",			""],	
-	["wear",	"wore",		"worn",		"wears",	"wearing",	"usar/llevar/poner",		""],
+	["spring",	"sprang",	"sprung",	"springs",	"springing",	"saltar/brotar/soltar",			"to jump or move somewhere suddenly"],	
+	["wear",	"wore",		"worn",		"wears",	"wearing",	"usar/llevar/poner/vestir",		""],
 	["swear",	"swore",	"sworn",	"swears",	"swearing",	"jurar/prometer/maldecir",	""],
-	["bear",	"bore",		"borne",	"bears",	"bearing",	"soportar/tener/llevar",	""],
-	["tear",	"tore",		"torn",		"tears",	"tearing",	"arrancar/romper/desgarrar",	""],
+	["bear",	"bore",		"borne",	"bears",	"bearing",	"soportar/aguantar/resistir",	"to accept someone or something bad"],
+	["tear",	"tore",		"torn",		"tears",	"tearing",	"arrancar/romper/desgarrar/rasgar",	"Debatirse entre algo y algo, to pull paper, cloth, etc. into pieces, or to make a hole in it by accident"],
 	//
 	["take",	"took",		"taken",	"takes",	"taking",	"tomar/llevar/adoptar",		""],
 //	["undertake",	"undertook",	"undertaken",	"undertakes",	"undertaking",	"realizar/emprender/adoptar",	""],
 //	["partake",	"partook",	"partaken",	"partakes",	"partaking",	"participar/compartir/tomarparte",""],
-	["shake",	"shook",	"shaken",	"shakes",	"shaking",	"sacudir/agitar/estrechar",	""],
-	["get",		"got",		"got/gotten",	"gets",		"getting",	"conseguir/tener/llegar",	""],
+	["shake",	"shook",	"shaken",	"shakes",	"shaking",	"sacudir/agitar/mover/menear",	""],
+	["get",		"got",		"got/gotten",	"gets",		"getting",	"conseguir/tener/llegar/obtener",	""],
 	["forget",	"forgot",	"forgotten",	"forgets",	"forgetting",	"olvidar/olvidarse/perdonar",	""],
 	["give",	"gave",		"given",	"gives",	"giving",	"dar/hacer/prestar",		""],
 	["forgive",	"forgave",	"forgiven",	"forgives",	"forgiving",	"perdonar/disculpar/olvidar",	""],
 	["forbid",	"forbade/forbad","forbidden",	"forbids",	"forbidding",	"prohibir/impedir",		""],
 	["shrink",	"shrank",	"shrunk",	"shrinks",	"shrinking",	"reducir/encoger/disminuir",	""],
-	["ring",	"rang",		"rung",		"rings",	"ringing",	"sonar/llamar/tocar",		""],
+	["ring",	"rang",		"rung",		"rings",	"ringing",	"sonar/llamar/tocar",		"Llamar por telefono"],
 	["run",		"ran",		"run",		"runs",		"running",	"correr/huir/dirigir",		""],
 	["know",	"knew",		"known",	"knows",	"knowing",	"saber/conocer/entender",	""],
 	["grow",	"grew",		"grown",	"grows",	"growing",	"crecer/cultivar/aumentar",	""],
 	["throw",	"threw",	"thrown",	"throws",	"throwing",	"tirar/lanzar/echar",		""],
-	["blow",	"blew",		"blown",	"blows",	"blowing",	"volar/explotar/soplar",	""],
-	["draw",	"drew",		"drawn",	"draws",	"drawing",	"llamar/sacar/extraer",		""],
-	["withdraw",	"withdrew",	"withdrawn",	"withdraws",	"withdrawing",	"retirar/retirarse/extraer",	""],
+	["blow",	"blew",		"blown",	"blows",	"blowing",	"soplar/volar/explotar",	""],
+	["draw",	"drew",		"drawn",	"draws",	"drawing",	"dibujar/sacar/extraer",	""],
+	["withdraw",	"withdrew",	"withdrawn",	"withdraws",	"withdrawing",	"retirar/retirarse/extraer",	"to remove something, especially because of an official decision, He has threatened to withdraw his support, dinero del banco"],
 //	["overdraw",	"overdrew",	"overdrawn",	"overdraws",	"overdrawing",	"",				""],
 	["fly",		"flew",		"flown",	"flies",	"flying",	"volar/pilotar/viajar",		""],
 
@@ -373,8 +392,8 @@ var v= [
 	["oversee",	"oversaw",	"overseen",	"oversees",	"overseeing",	"supervisar/vigilar/velar",	""],
 	["see",		"saw",		"seen",		"sees",		"seeing",	"ver/mirar/saber",		""],
 	["overcome",	"overcame",	"overcome",	"overcomes",	"overcoming",	"superar/vencer/resolver",	""],
-	["become",	"became",	"become",	"becomes",	"becoming",	"convertirseen/volver/hacer",	""],
-	["undergo",	"underwent",	"undergone",	"undergoes",	"undergoing",	"sometersea/recibir/sufrir",	""],
+	["become",	"became",	"become",	"becomes",	"becoming",	"convertir/volver/hacer",	""],
+	["undergo",	"underwent",	"undergone",	"undergoes",	"undergoing",	"someter/recibir/sufrir",	"Someterse a, to experience something, especially a change or medical treatment"],
 	["eat",		"ate",		"eaten",	"eats",		"eating",	"comer/comerse/cenar",		""],
 	["fall",	"fell",		"fallen",	"falls",	"falling",	"caer/quedar/caerse",		""],
 	["be",		"was",		"been",		"is",		"being",	"ser/estar/haber",		""],

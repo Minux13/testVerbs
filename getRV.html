@@ -144,12 +144,12 @@ function getverb( verb, end ){
 	var tagA1 = getTag( verb.inf );
 	var tagA2 = getTag( verb.pas );
 	var tagA3 = getTag( verb.par );
-	//var tagA4 = getTag( verb.pe3 );
-	//var tagA5 = getTag( verb.ger );
+	var tagA4 = getTag( verb.pe3 );
+	var tagA5 = getTag( verb.ger );
 
 	
 	
-	var cell = tagA1 + tagA2 + tagA3 ;//+ tagA4 + tagA5;
+	var cell = tagA1 + tagA2 + tagA3 + tagA4 + tagA5;
 
 	results = results + cell;
 
@@ -158,64 +158,28 @@ function getverb( verb, end ){
 
        //infinitivo     pasado,        participio,       3er p,	         gerundio,              significado			significado extendido
 var v= [
-	//["hit",		"hit", 		"hit", 		"hits", 	"hitting", 	"golpear/pegar",			""],
-	["Accept",	"Accepted",	"Accepted",	"Aceptar"],
-	["Act",		"Acted",	"Acted",	"Actuar"],
-	["Achieve",	"Achieved",	"Achieved",	"Lograr, Alcanzar"],
-	["Admire",	"Admired",	"Admired",	"Admirar"],
-	["Advise",	"Advised",	"Advised",	"Aconsejar"],
-	["Affect",	"Affected",	"Affected",	"Afectar"],
-	["Agree",	"Agreed",	"Agreed",	"Acordar"],
-	["Amaze",	"Amazed",	"Amazed",	"Asombrar"],
-	["Amuse",	"Amused",	"Amused",	"Divertir"],
-	["Answer",	"Answered",	"Answered",	"Responder"],
-	["Appear",	"Appeared",	"Appeared",	"Aparecer"],
-	["Arrange",	"Arranged",	"Arranged",	"Arreglar, Disponer"],
-	["Arrive",	"Arrived",	"Arrived",	"Llegar"],
-	["Ask",		"Asked",	"Asked",	"Preguntar"],
-	["Attack",	"Attacked",	"Attacked",	"Atacar"],
-	["Bake",	"Baked",	"Baked",	"Hornear"],
-	["Behave",	"Behaved",	"Behaved",	"Comportarse"],
-	["Believe",	"Believed",	"Believed",	"Creer"],
-	["Belong",	"Belonged",	"Belonged",	"Pertenecer"],
-	["Blame",	"Blamed",	"Blamed",	"Culpar"],
-	["Borrow",	"Borrowed",	"Borrowed",	"Pedir prestado"],
-	["Bother",	"Bothered",	"Bothered",	"Molestar"],
-	["Call",	"Called",	"Called",	"Llamar"],
-	["Cancel",	"Canceled",	"Canceled",	"Cancelar, Suprimir"],
-	["Carry",	"Carried",	"Carried",	"Llevar"],
-	["Cause",	"Caused",	"Caused",	"Causar"],
-	["Celebrate",	"Celebrated",	"Celebrated",	"Celebrar"],
-	["Clean",	"Cleaned",	"Cleaned",	"Limpiar"],
-	["Clear",	"Cleared",	"Cleared",	"Aclarar"],
-	["Climb",	"Climbed",	"Climbed",	"Trepar"],
-	["Close",	"Closed",	"Closed",	"Cerrar"],
-	["Compare",	"Compared",	"Compared",	"Comparar"],
-	["Compete",	"Competed",	"Competed",	"Competir"],
-	["Complete",	"Completed",	"Completed",	"Completar"],
-	["Contain",	"Contained",	"Contained",	"Contener"],
-	["Continue",	"Continued",	"Continued",	"Continuar"],
-	["Cook",	"Cooked",	"Cooked",	"Cocinar"],
-	["Correct",	"Corrected",	"Corrected",	"Corregir"],
-	["Cough",	"Coughed",	"Coughed",	"Toser"],
-	["Count",	"Counted",	"Counted",	"Contar"],
-	["Crash",	"Crashed",	"Crashed",	"Chocar"],
-	["Create",	"Created",	"Created",	"Crear"],
-	["Cross",	"Crossed",	"Crossed",	"Cruzar"],
-	["Curse",	"Cursed",	"Cursed",	"Maldecir"]
+	["repeat","repeated","repeated","repeats","repeating","repetir/reiterar/repetirse",""],
+	["park","parked","parked","parks","parking","estacionar/aparcar/estacionarse",""],
+	["save","saved","saved","saves","saving","salvar/ahorrar/guardar",""],
+	["learn","learned/learnt","learned/learnt","learns","learning","aprender/saber/enterarse",""],
+	["exhibit","exhibited","exhibited","exhibits","exhibiting","exhibir/mostrar/presentar",""],
+	//
+	["harm","harmed","harmed","harms","harming","perjudicar/dañar/lesionar",""],
+	["grant","granted","granted","grants","granting","conceder/otorgar/dar",""],		
+	["decrease","decreased","decreased","decreases","decreasing","disminuir/reducir/bajar",""],
 
-	];
+	]
 
 
 function verbo(){
     this.inf,
     this.pas,
-    this.par
-    //this.pe3,
-    //this.ger,
-    //this.mea,
-    //this.me2
-}
+    this.par,
+    this.pe3,
+    this.ger,
+    this.mea,
+    this.me2
+};
 
 var verbs = []
 
@@ -225,10 +189,10 @@ for(var i=0; i< v.length; i++){
 	e.inf = v[i][0];
 	e.pas = v[i][1];
 	e.par = v[i][2];
-	//e.pe3 = v[i][3];
-	/*e.ger = v[i][4];
+	e.pe3 = v[i][3];
+	e.ger = v[i][4];
 	e.mea = v[i][5];
-	e.me2 = v[i][6];*/
+	e.me2 = v[i][6];
 	verbs.push( e );
 }
 

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<title>Minux</title>
+		<style>
+			body{
+				text-align: center;	
+			}
+			.inputtext{
+				border: none;	
+				max-width: 200px;
+				min-width: 50px;
+			}
+			.spaninput{
+				padding: 8px 13px;	
+				border: solid 1px #ddf;
+				display: inline-block;
+			}
+			.inputtext:focus{
+				outline: none;
+			}
+			.divinput{
+				display: inline-block;
+				margin: 0 15px;	
+			}
+			#asks{
+				text-align: center;
+			}
+			#infinitive{
+				font-size: 30px;
+				margin: 120px 0 60px 0;
+				text-align: center;	
+			}
+			.textask{
+				text-align: left;
+				width: 100%;
+				display: block;
+				margin: 0 0 5px 10px;
+			}
+			table {
+			    font-family: arial, sans-serif;
+			    border-collapse: collapse;
+			    width: calc(100% - 60px);
+			    margin: 30px;
+			}
+			tr:nth-child(even) {
+    				background-color: #f0f0f0;
+			}
+			
+			td, th {
+			    border: 1px solid #dddddd;
+			    text-align: left;
+			    padding: 8px;
+			}
+			.checksimbol{
+				border: none;
+			}
+			.red{
+				color: red;
+			}
+			.blue{
+				color: blue;
+			}
+			.infcolum, .mlink{
+				cursor: pointer;	
+			}
+		</style>
+
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+<body>
+
+	<h1 style="text-align: center;margin-buttom: 80px;">Irregular Verbs Test</h1>
+
+	<div id="infinitive"></div>
+	
+</body>
+<script>
+
+
+
+var addMeaningExtra = true;
+var thTagMeaningExtra = addMeaningExtra ? '<th>Significado</th>' : ""
+var results = '';
+var finalTag = ""
+
+var verboEvaluado;
+
+var Score = 0;
+
+
+function sound( e ){
+	var thisVerb = e.getAttribute("verbo");
+	
+	var audio = new Audio( 'mp3/' +thisVerb + '.mp3');
+	audio.play();
+	//var audio = document.getElementById("audio");
+	//audio.play();
+}
+
+var idAttr = 0;
+
+var verbosSinRepetir = [];
+
+function getTag( word ){
+
+	var palabras = word.split('/');
+	var retorno = ""
+	for(var w=0; w<palabras.length; w++){
+		var esNuevaPalabra=true;
+		for( var vsr = 0; vsr < verbosSinRepetir.length; vsr++ ) {
+			if (palabras[w] == verbosSinRepetir[vsr]){
+				esNuevaPalabra = false;
+			}		
+		}
+		
+		if( esNuevaPalabra ){	
+			verbosSinRepetir.push( palabras[w] )
+			var TagP = '<p class="blue"><a id="'+ palabras[w] +'" href="https://www.linguasorb.com/speech/en/' + palabras[w] + '" download >'+ palabras[w] +'</a></p>';
+			retorno = retorno + TagP;
+		}
+	}
+	
+	return retorno;
+}
+
+var elemId = 1;
+
+function getverb( verb, end ){
+
+	if( end ){
+		results = results + finalTag;
+		document.body.innerHTML =   results;
+		setInterval(function(){	
+			document.getElementById( verbosSinRepetir[elemId] ).click();
+			elemId = elemId + 1;
+		}, 20000)
+		return false;
+	}
+	
+
+	var tagA1 = getTag( verb.inf );
+	var tagA2 = getTag( verb.pas );
+	var tagA3 = getTag( verb.par );
+	//var tagA4 = getTag( verb.pe3 );
+	//var tagA5 = getTag( verb.ger );
+
+	
+	
+	var cell = tagA1 + tagA2 + tagA3 ;//+ tagA4 + tagA5;
+
+	results = results + cell;
+
+}
+
+
+       //infinitivo     pasado,        participio,       3er p,	         gerundio,              significado			significado extendido
+var v= [
+	//["hit",	"hit", 		"hit", 		"hits", 	"hitting", 	"golpear/pegar",			""],
+	["Change",	"Changed",	"Changed",	"Cambiar"],
+	["Chase",	"Chased",	"Chased",	"Perseguir"],
+	["Chat",	"Chatted",	"Chatted",	"Charlar"],
+	["Check",	"Checked",	"Checked",	"Verificar"],
+	["Damage",	"Damaged",	"Damaged",	"Dañar"],
+	["Dance",	"Danced",	"Danced",	"Bailar"],
+	["Date",	"Dated",	"Dated",	"Salir con/Pololear"],
+	["Decide",	"Decided",	"Decided",	"Decidir"],
+	["Deliver",	"Delivered",	"Delivered",	"Entregar"],
+	["Depend",	"Depended",	"Depended",	"Depender"],
+	["Describe",	"Described",	"Described",	"Describir"],
+	["Design",	"Designed",	"Designed",	"Diseñar"],
+	["Destroy",	"Destroyed",	"Destroyed",	"Destruir"],
+	["Dicrease",	"Dicreased",	"Dicreased",	"Disminuir"],
+	["Die",		"Died",		"Died",		"Morir"],
+	["Disagree",	"Disagreed",	"Disagreed",	"Estar en desacuerdo"],
+	["Discover",	"Discovered",	"Discovered",	"Descubrir"],
+	["Discuss",	"Discussed",	"Discussed",	"Discutir"],
+	["Disturb",	"Disturbed",	"Disturbed",	"Molestar"],
+	["Dress",	"Dressed",	"Dressed",	"Vestir"],
+	["Dry",		"Dried",	"Dried",	"Secar"],
+	["Eliminate",	"Eliminated",	"Eliminated",	"Eliminar"],
+	["End",		"Ended",	"Ended",	"Terminar"],
+	["Enjoy",	"Enjoyed",	"Enjoyed",	"Disfrutar"],
+	["Entertain",	"Entertained",	"Entertained",	"Entretener"],
+	["Excuse",	"Excused",	"Excused",	"Excusar"],
+	["Exercise",	"Exercised",	"Exercised",	"Ejercitar"],
+	["Exhibit",	"Exhibited",	"Exhibited",	"Exhibir"],
+	["Expect",	"Expected",	"Expected",	"Esperar"],
+	["Express",	"Expressed",	"Expressed",	"Expresar"],
+	["Film",	"Filmed",	"Filmed",	"Filmar"],
+	["Fill",	"Filled",	"Filled",	"Llenar"],
+	["Fish",	"Fished",	"Fished",	"Pescar"],
+	["Fix",		"Fixed",	"Fixed",	"Arreglar/Fijar"],
+	["Follow",	"Followed",	"Followed",	"Seguir"],
+	["Freeze",	"Freezed",	"Freezed",	"Congelar"],
+	["Fry",		"Fried",	"Fried",	"Freir"],
+	["Greet",	"Greeted",	"Greeted",	"Saludar"],
+	["Guess",	"Guessed",	"Guessed",	"Adivinar/Suponer"],
+	["Hail",	"Hailed",	"Hailed",	"Granizar"],
+	["Handle",	"Handled",	"Handled",	"Manejar"],
+	["Happen",	"Happened",	"Happened",	"Suceder"],
+	["Hate",	"Hated",	"Hated",	"Odiar/Cargarle a uno"],
+	["Help",	"Helped",	"Helped",	"Ayudar"],
+	["Hope",	"Hoped",	"Hoped",	"Esperar"],
+	["Hunt",	"Hunted",	"Hunted",	"Cazar"],
+	["Identify",	"Identified",	"Identified",	"Identificar"],
+//
+	["Ignore",	"Ignored",	"Ignored",	"Ignorar"],
+	["Imagine",	"Imagined",	"Imagined",	"Imaginar"],
+	["Impress",	"Impressed",	"Impressed",	"Impresionar"],
+	["Improve",	"Improved",	"Improved",	"Mejorar"],
+	["Include",	"Included",	"Included",	"Incluir"],
+	["Increase",	"Increased",	"Increased",	"Aumentar"],
+	["Interview",	"Interviewed",	"Interviewed",	"Entrevistar"],
+	["Introduce",	"Introduced",	"Introduced",	"Introducir/Presentar"],
+	["Invite",	"Invited",	"Invited",	"Invitar"],
+	["Jog",		"Jogged",	"Jogged",	"Trotar"],
+	["Join",	"Joined",	"Joined",	"Juntar/Unir/Acompañar"],
+	["Jump",	"Jumped",	"Jumped",	"Saltar"],
+	["Knock",	"Knocked",	"Knocked",	"Golpear"],
+	["Label",	"Labeled",	"Labeled",	"Rotular/Etiquetar"],
+	["Land",	"Landed",	"Landed",	"Aterrizar"],
+	["Last",	"Lasted",	"Lasted",	"Durar"],
+	["Learn",	"Learned",	"Learned",	"Aprender"],
+	["Like",	"Liked",	"Liked",	"Gustarle a uno"],
+	["Link",	"Linked",	"Linked",	"Unir/Vincular"],
+	["List",	"Listed",	"Listed",	"Listar"],
+	["Listen",	"Listened",	"Listened",	"Escuchar"],
+	["Live",	"Lived",	"Lived",	"Vivir"],
+	["Locate",	"Located",	"Located",	"Ubicar"],
+	["Look",	"Looked",	"Looked",	"Mirar/Parecer"],
+	["Love",	"Loved",	"Loved",	"Amar/Encantarle a uno"],
+	["Manage",	"Managed",	"Managed",	"Manejar/Dirigir"],
+	["Mark",	"Marked",	"Marked",	"Marcar"],
+	["Match",	"Matched",	"Matched",	"Unir/Aparejar"],
+	["Measure",	"Measured",	"Measured",	"Medir"],
+	["Mention",	"Mentioned",	"Mentioned",	"Mencionar"],
+	["Miss",	"Missed",	"Missed",	"Perderse/Echar de menos/Perder"],
+	["Move",	"Moved",	"Moved",	"Mover/Trasladar/Cambiarse"],
+	["Name",	"Named",	"Named",	"Nombrar"],
+	["Need",	"Needed",	"Needed",	"Necesitar"],
+	["Note",	"Noted",	"Noted",	"Notar"],
+	["Notice",	"Noticed",	"Noticed",	"Notar/Fijarse"],
+	["Number",	"Numbered",	"Numbered",	"Numerar"],
+	["Offer",	"Offered",	"Offered",	"Ofrecer"],
+	["Open",	"Opened",	"Opened",	"Abrir"],
+	["Order",	"Ordered",	"Ordered",	"Ordenar"],
+	["Organize",	"Organized",	"Organized",	"Organizar"],
+	["Pack",	"Packed",	"Packed",	"Empacar"],
+	["Paint",	"Painted",	"Painted",	"Pintar"],
+	["Pamper",	"Pampered",	"Pampered",	"Regalonear"],
+	["Pardon",	"Pardoned",	"Pardoned",	"Perdonar"],
+	["Park",	"Parked",	"Parked",	"Estacionar"],
+	["Participate",	"Participated",	"Participated",	"Participar"],
+//
+	["Pass",	"Passed",	"Passed",	"Pasar/Aprobar"],
+	["Perform",	"Performed",	"Performed",	"Realizar/Ejecutar"],
+	["Persuade",	"Persuaded",	"Persuaded",	"Persuadir"],
+	["Pick",	"Picked",	"Picked",	"Recoger"],
+	["Plan",	"Planned",	"Planned",	"Planear"],
+	["Play",	"Played",	"Played",	"Jugar/Tocar,"],
+	["Please",	"Pleased",	"Pleased",	"Complacer"],
+	["Practice",	"Practiced",	"Practiced",	"Practicar"],
+	["Predict",	"Predicted",	"Predicted",	"Predecir"],
+	["Prefer",	"Preferred",	"Preferred",	"Preferir"],
+	["Present",	"Presented",	"Presented",	"Presentar"],
+	["Program",	"Programmed",	"Programmed",	"Programar"],
+	["Protect",	"Protected",	"Protected",	"Proteger"],
+	["Provide",	"Provided",	"Provided",	"Proporcionar"],
+	["Purchase",	"Purchased",	"Purchased",	"Comprar"],
+	["Push",	"Pushed",	"Pushed",	"Empujar"],
+	["Rain",	"Rain",		"Rain",		"Llover"],
+	["Receive",	"Received",	"Received",	"Recibir"],
+	["Recommend",	"Recommended",	"Recommended",	"Recomendar"],
+	["Relate",	"Related",	"Related",	"Relacionar"],
+	["Relax",	"Relaxed",	"Relaxed",	"Descansar"],
+	["Release",	"Released",	"Released",	"Soltar/Producir"],
+	["Remember",	"Remembered",	"Remembered",	"Recordar"],
+	["Repair",	"Repaired",	"Repaired",	"Reparar"],
+	["Repeat",	"Repeated",	"Repeated",	"Repetir"],
+	["Resist",	"Resisted",	"Resisted",	"Resistir"],
+	["Rest",	"Rested",	"Rested",	"Descansar"],
+	["Return",	"Returned",	"Returned",	"Volver"],
+	["Review",	"Reviewed",	"Reviewed",	"Revisar"],
+	["Sail",	"Sailed",	"Sailed",	"Navegar"],
+	["Save",	"Saved",	"Saved",	"Ahorrar/Salvar"],
+	["Scan",	"Scanned",	"Scanned",	"Examinar"],
+	["Scare",	"Scared",	"Scared",	"Asustar"],
+	["Share",	"Shared",	"Shared",	"Compartir"],
+	["Shop",	"Shopped",	"Shopped",	"Comprar"],
+	["Shout",	"Shouted",	"Shouted",	"Gritar"],
+	["Skate",	"Skated",	"Skated",	"Patinar"],
+	["Ski",		"Skied",	"Skied",	"Esquiar"],
+	["Slow",	"Slowed",	"Slowed",	"Disminuir"],
+	["Sneeze",	"Sneezed",	"Sneezed",	"Estornudar"],
+	["Snow",	"Snowed",	"Snowed",	"Nevar"],
+	["Solve",	"Solved",	"Solved",	"Resolver"],
+	["Spell",	"Spelled",	"Spelled",	"Deletrear"],
+	["Start",	"Started",	"Started",	"Empezar"],
+	["Step",	"Stepped",	"Stepped",	"Pisar"],
+	["Stop",	"Stopped",	"Stopped",	"Detener"],
+	["Stress", 	"Stressed",	"Stressed",	"Acentuar"],
+//
+	["Study",	"Studied",	"Studied",	"Estudiar"],
+	["Substitute",	"Substituted",	"Substituted",	"Sustituir"],
+	["Suggest",	"Suggested",	"Suggested",	"Sugerir"],
+	["Surprise",	"Surprised",	"Surprised",	"Sorprender"],
+	["Talk",	"Talked",	"Talked",	"Hablar"],
+	["Taste",	"Tasted",	"Tasted",	"Probar"],
+	["Terrorize",	"Terrorized",	"Terrorized",	"Aterrorizar"],
+	["Thank",	"Thanked",	"Thanked",	"Agradecer"],
+	["Touch",	"Touched",	"Touched",	"Tocar"],
+	["Travel",	"Traveled",	"Traveled",	"Viajar"],
+	["Try",		"Tried",	"Tried",	"Tratar"],
+	["Tune",	"Tuned",	"Tuned",	"Sintonizar"],
+	["Turn",	"Turned",	"Turned",	"Girar"],
+	["Underline",	"Underlined",	"Underlined",	"Subrayar"],
+	["Use",		"Used",		"Used",		"Usar"],
+	["Vary",	"Varied",	"Varied",	"Variar"],
+	["Wait",	"Waited",	"Waited",	"Esperar"],
+	["Walk",	"Walked",	"Walked",	"Caminar"],
+	["Want",	"Wanted",	"Wanted",	"Desear"],
+	["Warn",	"Warned",	"Warned",	"Advertir"],
+	["Wash",	"Washed",	"Washed",	"Lavar"],
+	["Watch",	"Watched",	"Watched",	"Ver/Vigilar"],
+	["Water",	"Watered",	"Watered",	"Regar"],
+	["Welcome",	"Welcomed",	"Welcomed",	"Recibir"],
+	["Wish",	"Wished",	"Wished",	"Desear"],
+	["Witness",	"Witnessed",	"Witnessed",	"Ser testigo"],
+	["Work",	"Worked",	"Worked",	"Trabajar/funcionar"],
+	["Worry",	"Worried",	"Worried",	"Preocuparse"],
+	["Wrestle",	"Wrestled",	"Wrestled",	"Luchar"],
+
+	];
+
+
+function verbo(){
+    this.inf,
+    this.pas,
+    this.par
+    //this.pe3,
+    //this.ger,
+    //this.mea,
+    //this.me2
+}
+
+var verbs = []
+
+
+for(var i=0; i< v.length; i++){
+	var e = new verbo;
+	e.inf = v[i][0];
+	e.pas = v[i][1];
+	e.par = v[i][2];
+	//e.pe3 = v[i][3];
+	/*e.ger = v[i][4];
+	e.mea = v[i][5];
+	e.me2 = v[i][6];*/
+	verbs.push( e );
+}
+
+for(var i=0; i< v.length; i++){
+	getverb( verbs[i], false );
+}
+
+getverb( "dd" , true );
+
+</script>
+</html>
