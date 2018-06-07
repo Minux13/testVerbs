@@ -167,7 +167,7 @@ function evalua(verbo){
 	//  Columna infinitivo 
 	var urlGoogleTraslate  = 'https://translate.google.com/?hl=es#en/es/'+ verbo.inf;
 	var onclickAttr = 'onclick="createWindow(\''+ urlGoogleTraslate +'\',\'window2\',\''+ featuresNewWindow +'\')"';
-	var tagHTMLGoogleTraslate = '<span '+ onclickAttr +' '+ hoverSoundAttr +' class="infcolum">'+ verbo.inf +'</span>';
+	var tagHTMLGoogleTraslate = '<span '+ onclickAttr +' '+ hoverSoundAttr +' class="infcolum">'+ verbo.inf +'Ñ</span>';
 
 	var urlCambDic = 'https://dictionary.cambridge.org/es/diccionario/ingles-espanol/'+verbo.inf;
 	var onclickAttrCambDic = 'onclick="createWindow(\''+ urlCambDic +'\',\'window2\',\''+ featuresNewWindow +'\');"';
@@ -397,6 +397,8 @@ var v= [
 	["eat",		"ate",		"eaten",	"eats",		"eating",	"comer/comerse/cenar",		""],
 	["fall",	"fell",		"fallen",	"falls",	"falling",	"caer/quedar/caerse",		""],
 	["be",		"was",		"been",		"is",		"being",	"ser/estar/haber",		""],
+	["sit",		"sat",		"sat",		"sits",		"sitting",	"",				""],
+	["go",		"went",		"gone",		"goes",		"going",	"",				""]
 
 
 	]
