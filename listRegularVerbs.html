@@ -154,8 +154,20 @@ function getFieldCell(elemento){
 	return cell + endCell;
 }
 
-var ya = [
-"checar", 
+var iya = [
+"jog",
+"pick", 
+"shout", 
+"release", 
+"pardon", 
+"handle", 
+"travel", 
+"notice" ,
+"greet", 
+"shop",
+"tune", 
+"damage",
+"damage", "checar", 
 "jog",
 "pick", 
 "shout", 
@@ -196,10 +208,95 @@ var ya = [
 "vary",
 "locate",
 "hunt",
+"warn",
+"fix",
+"pamper",
+"link",
+"witness",
+"purchase",
+"welcome",
+"sneeze",
+"provide",
+"sail",
+"chase",
+"slow",
+"turn",
+"relate",
+"please",
+"stress",
+"disagree",
+"suggest",
+"last",
+"match",
+"pick",
+"performe",
+"wrestle",
+"manage",
+"vary",
+"locate",
+"hunt",
 "guess"
 
 ];
 
+var oya = [
+"pick" ,
+"purchase" ,
+"deliver" ,
+"locate" ,
+"park" ,
+"warn" ,
+"vary" ,
+"jog" ,
+"sail" ,
+"scan" ,
+"manage" ,
+"water" ,
+"land",
+"link" ,
+"plan" ,
+"suggest" ,
+"hail" ,
+"tune" ,
+"pamper" ,
+"suggest" ,
+"sneeze" ,
+"release" ,
+"shout" ,
+"stress" ,
+"wrestle" ,
+"witness" ,
+"greet" ,
+"pardon" ,
+"discuss" ,
+"substitute" ,
+"please" ,
+"relate" ,
+"chase"	
+];
+var ya = ["pick"];
+for( var g = 0; g<iya.length; g++){
+	for( var e = 0; e<ya.length; e++){
+		console.log("sdfasdf")
+		if(iya[g] == ya[e]){
+			break;
+		} else{
+			ya.push( iya[g] );
+			break;
+		}
+			
+	}
+}
+for( g = 0; g<oya.length; g++){
+	for( var e = 0; e<ya.length; e++){
+		if(oya[g] == ya[e]){
+			break;
+		}else{
+			ya.push( oya[g] );
+			break;
+		}
+	}
+}
 function checkada(este){
 	este.parentElement.parentElement.style.display = 'none';
 }
@@ -224,7 +321,7 @@ function evalua(verbo){
 
 	var urlConjutation = 'http://conjugador.reverso.net/conjugacion-ingles-verbo-'+ verbo.inf +'.html';
 	var onclickAttrConjugation = 'onclick="createWindow(\''+ urlConjutation +'\',\'window2\',\''+ featuresNewWindow +'\');"';
-	var tagHtmlConjugation = '<span class="mlink" '+ onclickAttrConjugation +' style="float:right;" >&#9740;</span>';
+	var tagHtmlConjugation = '<span class="mlink" '+ onclickAttrConjugation +' style="float:right;" >&#8354;</span>';
 
 	
 
@@ -269,7 +366,7 @@ function soundC( e ){
 	//var audio = document.getElementById("audio");
 	//audio.play();
 }
-
+var elmo=0;
 function getverb(){
 
 
@@ -294,7 +391,23 @@ function getverb(){
 		}	
 	}
 	*/
-	
+	var noestacontenido = true;
+	for( var e = 0; e<ya.length; e++){
+		if(ya[e]==currentVerb){
+			noestacontenido = false;
+			break;
+		}
+	}
+
+	if(noestacontenido){
+		console.log(ya[e])
+		verboEvaluado = verbs[x];
+		var a = verbs.slice(0, x);
+		var b = verbs.slice(x+1, verbs.length);
+		verbs = a.concat(b);
+		return 0;	
+	}
+
 	evalua(verbs[x])
 
 	
@@ -311,8 +424,8 @@ function getverb(){
 var v= [
 	["want",	"wanted","wanted","wants","wanting","querer/desear/necesitar",""],
 	["ignore",	"ignored","ignored","ignores","ignoring","ignorar/pasarporalto/hacercasoomiso",""],
-	["travel",	"travelled","travelled","travels","travelling","recorrer/desplazarse/ir",""],
-	["tune",	"tuned","tuned","tunes","tuning","afinar/ajustar",""],
+	["travel",	"travelled","travelled","travels","travelling","viajar/recorrer/desplazarse/ir",""],
+	["tune",	"tuned","tuned","tunes","tuning","afinar/sintonizar/ajustar",""],
 	["change",	"changed","changed","changes","changing","cambiar/modificar/variar",""],
 	["increase",	"increased","increased","increases","increasing","aumentar/incrementar/mejorar",""],		
 	["exercise",	"exercised","exercised","exercises","exercising","ejercer/ejercitar/actuar",""],
@@ -361,7 +474,7 @@ var v= [
 	["move",	"moved","moved","moves","moving","mover/avanzar/mudar",""],
 	["water",	"watered","watered","waters","watering","regar/beber/diluir",""],
 	["present",	"presented","presented","presents","presenting","presentar/plantear/exponer",""],
-	["welcome",	"welcomed","welcomed","welcomes","welcoming","recibir/saludar/agradecer",""],
+	["welcome",	"welcomed","welcomed","welcomes","welcoming","acoger/recibir/saludar/agradecer",""],
 	["check",	"checked","checked","checks","checking","comprobar/revisar/mirar",""],
 	["handle",	"handled","handled","handles","handling","manejar/manipular/soportar/hacer",""],
 	["discuss",	"discussed","discussed","discusses","discussing","discutir/examinar/debatir",""],
@@ -374,9 +487,9 @@ var v= [
 	["design",	"designed","designed","designs","designing","diseñar/elaborar/proyectar",""],
 	["fill",	"filled","filled","fills","filling","llenar/rellenar/cubrir",""],
 	["entertain",	"entertained","entertained","entertains","entertaining","entretener/considerar/entretenerse",""],
-	["provide",	"provided","provided","provides","providing","proporcionar/ofrecer/prestar",""],
+	["provide",	"provided","provided","provides","providing","proveer/mantener/proporcionar/suministrar",""],
 	["live",	"lived","lived","lives","living","vivir/residir/habitar",""],
-	["guess",	"guessed","guessed","guesses","guessing","suponer/adivinar/imaginar",""],
+	["guess",	"guessed","guessed","guesses","guessing","adivinar/imaginar/suponer",""],
 	["use",		"used","used","uses","using","utilizar/usar/consumir",""],
 	["describe",	"described","described","describes","describing","describir/indicar/explicar",""],
 	["improve",	"improved","improved","improves","improving","mejorar/aumentar/perfeccionar",""],
@@ -401,7 +514,7 @@ var v= [
 	["freeze",	"froze","frozen","freezes","freezing","congelar/congelarse/bloquear",""],
 	["disturb",	"disturbed","disturbed","disturbs","disturbing","molestar/perturbar/alterar",""],
 	["mark",	"marked","marked","marks","marking","marcar/conmemorar/celebrar",""],
-	["relate",	"related","related","relates","relating","relacionar/referirse/relacionarse",""],
+	["relate",	"related","related","relates","relating","relacionar/relatar/narrar",""],
 	["play",	"played","played","plays","playing","jugar/desempeñar/tocar",""],
 	["spell",	"spelled/spelt","spelled/spelt","spells","spelling","deletrear/escribir/explicar",""],
 	["solve",	"solved","solved","solves","solving","resolver/solucionar/arreglar",""],
@@ -421,7 +534,7 @@ var v= [
 	["destroy",	"destroyed","destroyed","destroys","destroying","destruir/destrozar/destruirse",""],
 	["name",	"named","named","names","naming","llamar/nombrar/mencionar",""],
 	["turn",	"turned","turned","turns","turning","girar/voltear/convertir/apagar",""],
-	["pick",	"picked","picked","picks","picking","recoger/elegir/escoger",""],
+	["pick",	"picked","picked","picks","picking","recoger/elegir/escoger/seleccionar",""],
 	["study",	"studied","studied","studies","studying","estudiar/examinar/analizar",""],
 	["sneeze",	"sneezed","sneezed","sneezes","sneezing","estornudar",""],
 	["jog",		"jogged","jogged","jogs","jogging","correr/refrescar/trotar",""],
@@ -431,7 +544,7 @@ var v= [
 	["happen",	"happened","happened","happens","happening","pasar/suceder/ocurrir",""],
 	["order",	"ordered","ordered","orders","ordering","ordenar/pedir/decretar",""],
 	["deliver",	"delivered","delivered","delivers","delivering","entregar/prestar/cumplir",""],
-	["hail",	"hailed","hailed","hails","hailing","saludar/llamar/aplaudir",""],
+	["hail",	"hailed","hailed","hails","hailing","saludar/aclamar/llamar/aplaudir",""],
 	["fish",	"fished","fished","fishes","fishing","pescar/faenar/buscar",""],
 	["return",	"returned","returned","returns","returning","volver/regresar/devolver",""],
 	["damage",	"damaged","damaged","damages","damaging","dañar/perjudicar/lesionar",""],
@@ -455,7 +568,7 @@ var v= [
 	["help",	"helped","helped","helps","helping","ayudar/contribuir/evitar",""],
 	["shop",	"shopped","shopped","shops","shopping","comprar/irdecompras/hacercompras",""],
 	["persuade",	"persuaded","persuaded","persuades","persuading","persuadir/convencer/incitara",""],
-	["stress",	"stressed","stressed","stresses","stressing","subrayar/destacar/recalcar",""],
+	["stress",	"stressed","stressed","stresses","stressing","subrayar/destacar/acentuar/recalcar",""],
 	["predict",	"predicted","predicted","predicts","predicting","predecir/prever/pronosticar",""],
 	["eliminate",	"eliminated","eliminated","eliminates","eliminating","eliminar/erradicar/suprimir",""],
 	["fry",		"fried","fried","fries","frying","freír/freírse/quemar",""],
@@ -481,10 +594,173 @@ var v= [
 	//
 	["harm",	"harmed","harmed","harms","harming","perjudicar/dañar/lesionar",""],
 	["grant",	"granted","granted","grants","granting","conceder/otorgar/dar",""],
-	["laugh",	"laughed","laughed","laughs","laughing","",""],	
-	["cough",	"coughed","coughed","coughs","coughing","",""],
 	["decrease",	"decreased","decreased","decreases","decreasing","disminuir/reducir/bajar",""],
+	//
+	["laugh",	"laughed","laughed","laughs","laughing","reir",""],	
+	["cough",	"coughed","coughed","coughs","coughing","toser",""],
+	["advise",	"advised","advised","advises","advising","aconsejar/asesorar/avisar",""],
+	["argue",	"argued","argued","argues","arguing","discutir/argumentar/sostener",""],
+	["apply",	"applied","applied","applies","applying","aplicar/aplicarse/solicitar",""],
+	["appear",	"appeared","appeared","appears","appearing","parecer/aparecer/figurar",""],
+	["answer",	"answered","answered","answers","answering","responder/contestar/atender",""],
+	["allow",	"allowed","allowed","allows","allowing","permitir/dejar/poder",""],
+	["aim",		"aimed","aimed","aims","aiming","apuntar/pretender/aspirar",""],
+	["agree",	"agreed","agreed","agrees","agreeing","acordar/aceptar/estardeacuerdo",""],
+	["affect",	"affected","affected","affects","affecting","afectar/influiren/alterar",""],
+	["admit",	"admitted","admitted","admits","admitting","admitir/reconocer/confesar",""],
+	["add",		"added","added","adds","adding","añadir/agregar/sumar",""],
+	["act",		"acted","acted","acts","acting","actuar/servir/obrar",""],
+	["achieve",	"achieved","achieved","achieves","achieving","lograr/alcanzar/conseguir",""],
+	["accept",	"accepted","accepted","accepts","accepting","aceptar/asumir/admitir",""],
+	["clean",	"cleaned","cleaned","cleans","cleaning","limpiar/lavar/recoger",""],
+	["claim",	"claimed","claimed","claims","claiming","reclamar/afirmar/alegar",""],
+	["charge",	"charged","charged","charges","charging","cobrar/acusar/cargar",""],
+	["cause",	"caused","caused","causes","causing","causar/provocar/producir",""],
+	["carry",	"carried","carried","carries","carrying","llevar/cargar/transportar",""],
+	["care",	"cared","cared","cares","caring","importar/cuidar/preocupar",""],
+	["call",	"called","called","calls","calling","llamar/pedir/avisar",""],
+	["belong",	"belonged","belonged","belongs","belonging","pertenecer/corresponder/formarparte",""],
+	["believe",	"believed","believed","believes","believing","creer/pensar/parecer",""],
+	["base",	"based","based","bases","basing","basar/fundamentar/basarse",""],
+	["avoid",	"avoided","avoided","avoids","avoiding","evitar/eludir/impedir",""],
+	["attack",	"attacked","attacked","attacks","attacking","atacar/combatir/agredir",""],
+	["ask",		"asked","asked","asks","asking","preguntar/pedir/hacer",""],
+	["arrive",	"arrived","arrived","arrives","arriving","llegar/lograr/venir",""],
+	["arrange",	"arranged","arranged","arranges","arranging","arreglar/organizar/disponer",""],
+	["contain",	"contained","contained","contains","containing","contener/incluir/figurar",""],
+	["contact",	"contacted","contacted","contacts","contacting","contactar/comunicarsecon/dirigirse",""],
+	["consist",	"consisted","consisted","consists","consisting","consistir/constar/componerse",""],
+	["consider",	"considered","considered","considers","considering","considerar/examinar/estudiar",""],
+	["connect",	"connected","connected","connects","connecting","conectar/conectarse/relacionar",""],
+	["confirm",	"confirmed","confirmed","confirms","confirming","confirmar/afirmar/comprobar",""],
+	["concern",	"concerned","concerned","concerns","concerning","preocupar/referir/concernir",""],
+	["complete",	"completed","completed","completes","completing","completar/concluir/terminar",""],
+	["complain",	"complained","complained","complains","complaining","quejar/quejarse/reclamar",""],
+	["compare",	"compared","compared","compares","comparing","comparar/compararse/cotejar",""],
+	["commit",	"committed","committed","commits","committing","cometer/comprometer/comprometerse",""],
+	["collect",	"collected","collected","collects","collecting","recoger/reunir/recopilar",""],
+	["close",	"closed","closed","closes","closing","acercarse/clausurar/concluir",""],
+	["climb",	"climbed","climbed","climbs","climbing","subir/escalar/trepar",""],
+	["clear",	"cleared","cleared","clears","clearing","aclarar/despejar/limpiar",""],
+	["disappear",	"disappeared","disappeared","disappears","disappearing","desaparecer/desparecer/desvanecerse",""],
+	["develop",	"developed","developed","develops","developing","desarrollar/elaborar/establecer",""],
+	["deny",	"denied","denied","denies","denying","negar/denegar/rechazar",""],
+	["demand",	"demanded","demanded","demands","demanding","exigir/pedir/demandar",""],
+	["cry",		"cried","cried","cries","crying","llorar/gritar",""],
+	["cross",	"crossed","crossed","crosses","crossing","cruzar/atravesar/pasar",""],
+	["create",	"created","created","creates","creating","crear/generar/establecer",""],
+	["cover",	"covered","covered","covers","covering","cubrir/abarcar/sufragar",""],
+	["count",	"counted","counted","counts","counting","contar/valer/importar",""],
+	["correct",	"corrected","corrected","corrects","correcting","corregir/rectificar/subsanar",""],
+	["copy",	"copied","copied","copies","copying","recibir/imitar/copiarse",""],
+	["cook",	"cooked","cooked","cooks","cooking","cocinar/preparar/cocer",""],
+	["control",	"controlled","controlled","controls","controlling","controlar/combatir/fiscalizar",""],
+	["contribute",	"contributed","contributed","contributes","contributing","contribuir/aportar/participar",""],
+	["continue",	"continued","continued","continues","continuing","seguir/continuar/proseguir",""],
+	["fold",	"folded","folded","folds","folding","doblar/plegar/retirarse",""],
+	["finish",	"finished","finished","finishes","finishing","terminar/acabar/finalizar",""],
+	["fasten",	"fastened","fastened","fastens","fastening","abrochar/abrocharse/ajustar",""],
+	["fail",	"failed","failed","fails","failing","fallar/fracasar/dejar",""],
+	["face",	"faced","faced","faces","facing","enfrentar/afrontar/hacerfrente",""],
+	["extend",	"extended","extended","extends","extending","ampliar/extender/prorrogar",""],
+	["explain",	"explained","explained","explains","explaining","explicar/explicarse/aclarar",""],
+	["experience",	"experienced","experienced","experiences","experiencing","experimentar/sufrir/disfrutar",""],
+	["exist",	"existed","existed","exists","existing","existir/haber/subsistir",""],
+	["examine",	"examined","examined","examines","examining","examinar/estudiar/analizar",""],
+	["encourage",	"encouraged","encouraged","encourages","encouraging","fomentar/alentar/promover",""],
+	["enable",	"enabled","enabled","enables","enabling","permitir/poder/facilitar",""],
+	["drop",	"dropped","dropped","drops","dropping","dejar/caer/tirar",""],
+	["divide",	"divided","divided","divides","dividing","dividir/separar/dividirse",""],
+	["own",		"owned","owned","owns","owning","tener/poseer/confesar",""],
+	["occur",	"occurred","occurred","occurs","occurring","ocurrir/producirse/producir",""],
+	["obtain",	"obtained","obtained","obtains","obtaining","obtener/conseguir/recibir",""],
+	["mind",	"minded","minded","minds","minding","importar/molestar/pensar",""],
+	["matter",	"mattered","mattered","matters","mattering","importar/darigual",""],
+	["limit",	"limited","limited","limits","limiting","limitar/reducir/restringir",""],
+	["kill",	"killed","killed","kills","killing","matar/asesinar/acabar",""],
+	["kick",	"kicked","kicked","kicks","kicking","patear/echar/golpear",""],
+	["involve",	"involved","involved","involves","involving","implicar/entrañar/incluir",""],
+	["intend",	"intended","intended","intends","intending","pretender/proponer/intentar",""],
+	["inform",	"informed","informed","informs","informing","informar/comunicar/fundamentar",""],
+	["influence",	"influenced","influenced","influences","influencing","influiren/influir/influenciar",""],
+	["indicate",	"indicated","indicated","indicates","indicating","indicar/señalar/indicarse",""],
+	["head",	"headed","headed","heads","heading","ir/dirigir/dirigirse",""],
+	["gain",	"gained","gained","gains","gaining","ganar/obtener/adquirir",""],
+	["form",	"formed","formed","forms","forming","formar/constituir/crear",""],
+	["force",	"forced","forced","forces","forcing","obligar/forzar/imponer",""],
+	["survive",	"survived","survived","survives","surviving","sobrevivir/vivir/subsistir",""],
+	["tend",	"tended","tended","tends","tending","atender/tender/cuidar",""],
+	["test",	"tested","tested","tests","testing","ensayar/probar/comprobar",""],
+	["train",	"trained","trained","trains","training","entrenar/formar/capacitara",""],
+	["treat",	"treated","treated","treats","treating","tratar/considerar/curar",""],
+	["vote",	"voted","voted","votes","voting","votar/elegir/aprobar",""],
+	["stay",	"stayed","stayed","stays","staying","quedar/quedarse/permanecer",""],
+	["visit",	"visited","visited","visits","visiting","visitar/viajar/consultar",""],
+	["wonder",	"wondered","wondered","wonders","wondering","preguntar/preguntarse/pensar",""],
+	["separate",	"separated","separated","separates","separating","separar/apartar/separarse",""],
+	["serve",	"served","served","serves","serving","servir/cumplir/atender",""],
+	["settle",	"settled","settled","settles","settling","resolver/arreglar/solucionar",""],
+	["smile",	"smiled","smiled","smiles","smiling","sonreír/reír/sonreírse",""],
+	["sort",	"sorted","sorted","sorts","sorting","arreglar",""],
+	["sound",	"sounded","sounded","sounds","sounding","sonar/parecer/tocar",""],
+	["state",	"stated","stated","states","stating","indicar/afirmar/decir",""],
+	["succeed",	"succeeded","succeeded","succeeds","succeeding","teneréxito/lograr/conseguir",""],
+	["suffer",	"suffered","suffered","suffers","suffering","sufrir/padecer/serobjeto",""],
+	["suit",	"suited","suited","suits","suiting","convenir/satisfacer/adaptarse",""],
+	["supply",	"supplied","supplied","supplies","supplying","suministrar/proporcionar/abastecer",""],
+	["support",	"supported","supported","supports","supporting","apoyar/ayudar/respaldar",""],
+	["suppose",	"supposed","supposed","supposes","supposing","suponer/creer/presumir",""],
+	["reflect",	"reflected","reflected","reflects","reflecting","reflejar/reflexionar/recoger",""],
+	["refuse",	"refused","refused","refuses","refusing","negar/rechazar/negarse",""],
+	["regard",	"regarded","regarded","regards","regarding","considerar/mirar/tratar",""],
+	["remain",	"remained","remained","remains","remaining","permanecer/quedar/mantener",""],
+	["remove",	"removed","removed","removes","removing","eliminar/quitar/retirar",""],
+	["replace",	"replaced","replaced","replaces","replacing","sustituir/reemplazar/cambiar",""],
+	["reply",	"replied","replied","replies","replying","responder/contestar/replicar",""],
+	["report",	"reported","reported","reports","reporting","informar/reportar/denunciar",""],
+	["represent",	"represented","represented","represents","representing","representar/constituir/suponer",""],
+	["require",	"required","required","requires","requiring","requerir/exigir/necesitar",""],
+	["result",	"resulted","resulted","results","resulting","resultar/derivar/ocasionar",""],
+	["reveal",	"revealed","revealed","reveals","revealing","revelar/mostrar/ponerdemanifiesto",""],
+	["roll",	"rolled","rolled","rolls","rolling","rodar/tirar/girar",""],
+	["seem",	"seemed","seemed","seems","seeming","parecer/resultar/sonar",""],
+	["record",	"recorded","recorded","records","recording","registrar/grabar/constar",""],
+	["recognize",	"recognized","recognized","recognizes","recognizing","reconocer/conocer/reconocerse",""],
+	["realize",	"realized","realized","realizes","realizing","darsecuenta/realizar/hacerrealidad",""],
+	["reach",	"reached","reached","reaches","reaching","alcanzar/llegar/lograr",""],
+	["raise",	"raised","raised","raises","raising","",""],
+	["pull",	"pulled","pulled","pulls","pulling","",""],
+	["publish",	"published","published","publishes","publishing","",""],
+	["prove",	"proved","proved","proves","proving","probar/demostrar/resultar",""],
+	["promise",	"promised","promised","promises","promising","prometer/jurar/comprometerse",""],
+	["produce",	"produced","produced","produces","producing","producir/elaborar/presentar",""],
+	["prevent",	"prevented","prevented","prevents","preventing","",""],
+	["press",	"pressed","pressed","presses","pressing","",""],
+	["prepare",	"prepared","prepared","prepares","preparing","preparar/prepararse/elaborar",""],
+	["point",	"pointed","pointed","points","pointing","señalar/apuntar/indicar",""],
+	["place",	"placed","placed","places","placing","colocar/poner/hacer",""],
+	["refer",	"referred","referred","refers","referring","referir/remitir/referirse",""],
+	["reduce",	"reduced","reduced","reduces","reducing","reducir/disminuir/limitar",""],
+	["focus",	"focused","focused","focuses","focusing","centrar/centrarse/concentrar",""],
+	["enter",	"entered","entered","enters","entering","entrar/entraren/introducir",""],
+	["determine",	"determined","determined","determines","determining","determinar/decidir/establecer",""],
+	//["lay","laid","laid","lays","laying","poner/hacer/colocar",""],
 
+	["curse",	"cursed","cursed","curses","cursing","",""],
+	["crash",	"crashed","crashed","crashes","crashing","",""],
+	["compete",	"competed","competed","competes","competing","",""],
+	["celebrate",	"celebrated","celebrated","celebrates","celebrating","",""],
+	["cancel",	"cancelled","cancelled","cancels","cancelling","",""],
+	["bother",	"bothered","bothered","bothers","bothering","",""],
+	["borrow",	"borrowed","borrowed","borrows","borrowing","",""],
+	["blame",	"blamed","blamed","blames","blaming","culpar/reprochar/acusar",""],
+	["behave",	"behaved","behaved","behaves","behaving","",""],
+	["bake",	"baked","baked","bakes","baking","",""],
+	["amuse",	"amused","amused","amuses","amusing","",""],
+	["amaze",	"amazed","amazed","amazes","amazing","",""],
+	["admire",	"admired","admired","admires","admiring","admirar/contemplar/admirarse",""],
+
+	["disgust","disgusted","disgusted","disgusts","disgusting","",""],
 	];
 
 
