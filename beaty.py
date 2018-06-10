@@ -15,27 +15,21 @@ print(medio)"""
 from pyquery import PyQuery    
 import urllib2
 #program, spell, shop
-words = [		
-"thank",	
-"land",	
-"film",	
-"shout",	
-"wrestle",	
-"pass",	
-"perform",	
-"stop",	
-"ski",		
-"pamper",	
-"start",	
-"link",	
-"repeat",	
-"park",	
-"save",	
-"learn",	
-"exhibit",	           
-"harm",	
-"grant",	
-"decrease"
+words = [				
+"curse",	
+"crash",	
+"compete",	
+"celebrate",	
+"cancel",	
+"bother",	
+"borrow",	
+"blame",	
+"behave",	
+"bake",	
+"amuse",	
+"amaze",	
+"admire",	      
+"disgust"
 ]
 
 for word in words:
