@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<title>Minux</title>
+		<style>
+			body{
+				text-align: center;	
+			}
+			.inputtext{
+				border: none;	
+				max-width: 200px;
+				min-width: 50px;
+			}
+			.spaninput{
+				padding: 8px 13px;	
+				border: solid 1px #ddf;
+				display: inline-block;
+			}
+			.inputtext:focus{
+				outline: none;
+			}
+			.divinput{
+				display: inline-block;
+				margin: 0 15px;	
+			}
+			#asks{
+				text-align: center;
+			}
+			#infinitive{
+				font-size: 30px;
+				margin: 120px 0 60px 0;
+				text-align: center;	
+			}
+			.textask{
+				text-align: left;
+				width: 100%;
+				display: block;
+				margin: 0 0 5px 10px;
+			}
+			table {
+			    font-family: arial, sans-serif;
+			    border-collapse: collapse;
+			    width: calc(100% - 60px);
+			    margin: 30px;
+			}
+			
+			td, th {
+			    border: 1px solid #dddddd;
+			    text-align: left;
+			    padding: 8px;
+			}
+			.checksimbol{
+				border: none;
+			}
+			.red{
+				color: red;
+			}
+			.blue{
+				color: blue;
+			}
+			.infcolum, .mlink{
+				cursor: pointer;	
+			}
+		</style>
+
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="regularVerbs.js"></script>
+	</head>
+<body>
+
+	<h1 style="text-align: center;margin-buttom: 80px;">Escribre el verbo en inglés que signifique lo que se da.</h1>
+
+	<div id="infinitive"></div>
+	
+	<div id="asks">
+		<div class="divinput">
+			<span class="textask">Significado:</span>
+			<span class="spaninput"><input class="inputtext" type"text" size=200 id="meaning"   ></span>
+		</div> 
+		
+	</div>
+	
+	<button style="padding:15px;margin:15px;background:#eef;border:solid 1px #eef;" id="enter" onclick="getverb();"> Siguiente verbo </button>  
+</body>
+<script>
+function createWindow(cUrl,cName,cFeatures) {
+	var xWin = window.open(cUrl,cName,cFeatures);
+}
+
+var formulario = document.getElementById("asks");
+formulario.addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        //document.getElementById("enter").click();
+        getverb();
+    }
+});
+
+var addMeaningExtra = true;
+var thTagMeaningExtra = addMeaningExtra ? '<th>Significado</th>' : ""
+var results = '<table><tr><th>Infinitivo</th><th>Significado</th><th class="checksimbol"></th></tr>';
+var finalTag = "</table>"
+
+var verboEvaluado;
+
+var Score = 0;
+
+function comparaPalabras(correct, answer, incorrecto){
+	
+	var significados = correct.split("/");
+	var inputEdit = answer.replace(/ /g , "");
+	inputEdit = inputEdit?inputEdit.toLowerCase():'-';
+	var isCorrect = false;
+	for(var i=0; i<significados.length; i++){
+		if(significados[i].toLowerCase() == inputEdit){
+			isCorrect = true;
+		}
+	}
+
+	if( isCorrect ){
+		var retorno = '<td><span class="blue">'+ answer +'</span></td>';
+	}else{
+		incorrecto.valor = true;
+		var retorno = '<td><span class="red">'+ inputEdit +'</span> <span class="blue"> '+ correct + ' </span></td>';
+	}	
+	return retorno;
+}
+
+
+function evalua(verbo, ingresado){
+	console.log(verbo)
+
+	var incorrecto = {valor : false};
+
+	var cell = '<tr>';
+
+	//  Infinitivo 
+	var hrefGT = 'https://translate.google.com/?hl=es#en/es/'+ verbo.inf;
+	var newWindowFeatures = 'toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=0,width=800,height=500';
+	var onclickAttr = 'onclick="createWindow(\''+ hrefGT +'\',\'window2\',\''+ newWindowFeatures +'\')"';	
+	var hrefMeaning = 'https://dictionary.cambridge.org/es/diccionario/ingles-espanol/'+verbo.inf;
+	var tag_meaning = '<span class="mlink" style="float:right;" onclick="createWindow(\''+ hrefMeaning +'\',\'window2\',\''+ newWindowFeatures +'\');">&#10067;</span>'
+	var urlConjutation = 'http://conjugador.reverso.net/conjugacion-ingles-verbo-'+ verbo.inf +'.html';
+	var htmlConjutation = '<span class="mlink" style="float:right;" onclick="createWindow(\''+ urlConjutation +'\',\'window2\',\''+ newWindowFeatures +'\');">&#10067;</span>'
+	cell = cell + '<td><span '+ onclickAttr +'class="infcolum">'+ verbo.inf +'</span>'+ tag_meaning + htmlConjutation + '</td>';
+
+	
+	var mean = comparaPalabras( verbo.inf, ingresado.inf, incorrecto );
+
+	
+	cell = cell + mean;
+
+	var checksimbol = incorrecto.valor?'<td class="checksimbol" style="color:red;">&#10007;</td>':'<td class="checksimbol" style="color:green;">&#10003;</td>'
+	
+	cell = cell + checksimbol + '</tr>';
+
+	Score = incorrecto.valor ? Score : Score+1;
+
+	document.getElementById("meaning").value = "";
+
+	results = results + cell;
+
+}
+
+var audioVerb;
+
+function getverb(){
+
+	//El primer getverb no tiene ninguno que evaluar, la variable es undefine
+	if( verboEvaluado ){
+		var inputs = {
+					inf : document.getElementById("meaning").value
+		}
+
+		evalua( verboEvaluado, inputs );
+	}
+
+	if(verbs.length == 0){
+		results = Score + '/' + v.length + results + finalTag;
+		document.body.innerHTML =   results;
+		return false;
+	}
+
+	//Obtengo el numero del elemento al azar
+	var x = Math.floor((Math.random() * (verbs.length)) );
+	
+	var currentVerbsInf = verbs[x].inf;
+	var significados = verbs[x].mea
+
+	document.getElementById("infinitive").innerHTML = significados;		
+	
+	
+	verboEvaluado = verbs[x];
+	
+	
+	var a = verbs.slice(0, x);
+	var b = verbs.slice(x+1, verbs.length);
+	verbs = a.concat(b);
+
+	document.getElementById("meaning").focus();
+}
+
+
+function verbo(){
+    this.inf,
+    this.pas,
+    this.par,
+    this.pe3,
+    this.ger,
+    this.mea,
+    this.me2
+};
+
+var verbs = []
+
+
+var iya = [
+"jog",
+"pick", 
+"shout", 
+"release", 
+"pardon", 
+"handle", 
+"travel", 
+"notice" ,
+"greet", 
+"shop",
+"tune", 
+"damage",
+"damage", "checar", 
+"jog",
+"pick", 
+"shout", 
+"release", 
+"pardon", 
+"handle", 
+"travel", 
+"notice" ,
+"greet", 
+"shop",
+"tune", 
+"damage",
+"damage", 
+"warn",
+"fix",
+"pamper",
+"link",
+"witness",
+"purchase",
+"wolcome",
+"sneeze",
+"provide",
+"sail",
+"chase",
+"slow",
+"turn",
+"relate",
+"please",
+"stress",
+"disagree",
+"suggest",
+"last",
+"match",
+"pick",
+"performe",
+"wrestle",
+"manage",
+"vary",
+"locate",
+"hunt",
+"warn",
+"fix",
+"pamper",
+"link",
+"witness",
+"purchase",
+"welcome",
+"sneeze",
+"provide",
+"sail",
+"chase",
+"slow",
+"turn",
+"relate",
+"please",
+"stress",
+"disagree",
+"suggest",
+"last",
+"match",
+"pick",
+"performe",
+"wrestle",
+"manage",
+"vary",
+"locate",
+"hunt",
+"guess"
+
+];
+
+var oya = [
+"pick" ,
+"purchase" ,
+"deliver" ,
+"locate" ,
+"park" ,
+"warn" ,
+"vary" ,
+"jog" ,
+"sail" ,
+"scan" ,
+"manage" ,
+"water" ,
+"land",
+"link" ,
+"plan" ,
+"suggest" ,
+"hail" ,
+"tune" ,
+"pamper" ,
+"suggest" ,
+"sneeze" ,
+"release" ,
+"shout" ,
+"stress" ,
+"wrestle" ,
+"witness" ,
+"greet" ,
+"pardon" ,
+"discuss" ,
+"substitute" ,
+"please" ,
+"relate" ,
+"chase"	
+];
+var ya = ["pick"];
+for( var g = 0; g<iya.length; g++){
+	for( var e = 0; e<ya.length; e++){
+		console.log("sdfasdf")
+		if(iya[g] == ya[e]){
+			break;
+		} else{
+			ya.push( iya[g] );
+			break;
+		}
+			
+	}
+}
+for( g = 0; g<oya.length; g++){
+	for( var e = 0; e<ya.length; e++){
+		if(oya[g] == ya[e]){
+			break;
+		}else{
+			ya.push( oya[g] );
+			break;
+		}
+	}
+}
+
+
+
+for(var i=0; i< v.length; i++){
+
+	var incluir = false;
+	for( var o = 0; o<ya.length; o++){
+		if( ya[o]== v[i][0] ){
+			incluir = true;
+			break;
+		}
+	}
+
+	if(incluir){		
+		var e = new verbo;
+		e.inf = v[i][0];
+		e.pas = v[i][1];
+		e.par = v[i][2];
+		e.pe3 = v[i][3];
+		e.ger = v[i][4];
+		e.mea = v[i][5];
+		e.me2 = v[i][6];
+		verbs.push( e );
+	}
+}
+
+getverb();
+
+
+</script>
+</html>
