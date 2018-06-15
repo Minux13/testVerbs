@@ -324,7 +324,7 @@ var v= [
 	["focus",	"focused","focused","focuses","focusing","centrar/centrarse/concentrar",""],
 	["enter",	"entered","entered","enters","entering","entrar/entraren/introducir",""],
 	["determine",	"determined","determined","determines","determining","determinar/decidir/establecer",""],
-	// stretch, grab, approach wail grumble, whine, bleat, carp, hurry rush creep flee know lie sew shine sow spill (split spil lie lay) spoil tear tread weave wring
+	// stretch, grab, approach wail grumble, whine, bleat, carp, hurry rush creep flee know lie sew shine sow spill (split spil lie lay) spoil tear tread weave wring tie atach
 
 	["curse",	"cursed","cursed","curses","cursing","",""],
 	["crash",	"crashed","crashed","crashes","crashing","chocar/estallar",""],
