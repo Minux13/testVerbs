@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<title>Minux</title>
+		<style>
+			body{
+				text-align: center;	
+			}
+			.inputtext{
+				border: none;	
+				max-width: 200px;
+				min-width: 50px;
+			}
+			.spaninput{
+				padding: 8px 13px;	
+				border: solid 1px #ddf;
+				display: inline-block;
+			}
+			.inputtext:focus{
+				outline: none;
+			}
+			.divinput{
+				display: inline-block;
+				margin: 0 15px;	
+			}
+			#asks{
+				text-align: center;
+			}
+			#infinitive{
+				font-size: 30px;
+				margin: 120px 0 60px 0;
+				text-align: center;	
+			}
+			.textask{
+				text-align: left;
+				width: 100%;
+				display: block;
+				margin: 0 0 5px 10px;
+			}
+			table {
+			    font-family: arial, sans-serif;
+			    border-collapse: collapse;
+			    width: calc(100% - 60px);
+			    margin: 30px;
+			}
+			
+			td, th {
+			    border: 1px solid #dddddd;
+			    text-align: left;
+			    padding: 8px;
+			}
+			.checksimbol{
+				border: none;
+			}
+			.red{
+				color: red;
+			}
+			.blue{
+				color: blue;
+			}
+			.infcolum, .mlink{
+				cursor: pointer;	
+			}
+		</style>
+
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="regularVerbs.js"></script>
+	</head>
+<body>
+
+	<h1 style="text-align: center;margin-buttom: 80px;">Escucha el verbo en ingles.</h1>
+
+	<div id="spanishverb">
+				
+	</div>
+	
+	<button style="padding:15px;margin:15px;background:#eef;border:solid 1px #eef;" id="enter" onclick="newVerb();"> Siguiente verbo </button>  
+</body>
+<script>
+
+var folderSounds = "../cambridgeRV/"
+
+function sound( e ){
+	var thisVerb = e.getAttribute("verbo");
+	
+	var audio = new Audio( folderSounds + thisVerb + '.mp3');
+	audio.play();
+	//var audio = document.getElementById("audio");
+	//audio.play();
+}
+
+function autoPlay( verbo ){
+	var audio = new Audio( folderSounds + verbo + '.mp3');	
+	audio.play();
+}
+
+var numberVerb = -1;
+
+function newVerb(){
+	numberVerb++;
+	var thisVerb = verbs[numberVerb];
+	var strElement = '<span onmouseover="sound(this);" verbo="'+ thisVerb.inf +'" >'+ thisVerb.mea + ' <br> ' + thisVerb.me2 +'</span>';
+	document.getElementById("spanishverb").innerHTML = strElement ;
+	autoPlay( thisVerb.inf )
+}
+
+
+function verbo(){
+    this.inf,
+    this.pas,
+    this.par,
+    this.pe3,
+    this.ger,
+    this.mea,
+    this.me2
+};
+
+var verbs = []
+
+
+for(var i=0; i< v.length; i++){
+	var e = new verbo;
+	e.inf = v[i][0];
+	e.pas = v[i][1];
+	e.par = v[i][2];
+	e.pe3 = v[i][3];
+	e.ger = v[i][4];
+	e.mea = v[i][5];
+	e.me2 = v[i][6];
+	verbs.push( e );
+}
+
+
+
+</script>
+</html>
