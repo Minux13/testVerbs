@@ -101,7 +101,8 @@ var numberVerb = -1;
 function newVerb(){
 	numberVerb++;
 	var thisVerb = verbs[numberVerb];
-	var strElement = '<span onmouseover="sound(this);" verbo="'+ thisVerb.inf +'" >'+ thisVerb.mea + ' <br> ' + thisVerb.me2 +'</span>';
+	var examples = '<div style="color:#005;" >' + thisVerb.me2.replace(/\//g, "<br>-") + '</div>';
+	var strElement = '<span onmouseover="sound(this);" verbo="'+ thisVerb.inf +'" ><h3>'+ thisVerb.mea + '</h3> <br> ' + examples +'</span>';
 	document.getElementById("spanishverb").innerHTML = strElement ;
 	autoPlay( thisVerb.inf )
 }
