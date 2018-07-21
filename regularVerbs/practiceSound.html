@@ -66,6 +66,7 @@
 
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="examplesVerbs.js"></script>
 		<script src="regularVerbs.js"></script>
 	</head>
 <body>
@@ -101,8 +102,8 @@ var numberVerb = -1;
 function newVerb(){
 	numberVerb++;
 	var thisVerb = verbs[numberVerb];
-	var examples = '<div style="color:#005;" >' + thisVerb.me2.replace(/\//g, "<br>-") + '</div>';
-	var strElement = '<span onmouseover="sound(this);" verbo="'+ thisVerb.inf +'" ><h3>'+ thisVerb.mea + '</h3> <br> ' + examples +'</span>';
+	var examplesHTML = '<div style="color:#005;" >' + examples[ thisVerb.inf ].replace(/\//g, "<br>-") + '</div>';
+	var strElement = '<span onmouseover="sound(this);" verbo="'+ thisVerb.inf +'" ><h3>'+ thisVerb.mea + '</h3> <br> ' + examplesHTML +'</span>';
 	document.getElementById("spanishverb").innerHTML = strElement ;
 	autoPlay( thisVerb.inf )
 }
