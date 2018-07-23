@@ -7,7 +7,7 @@ argue    :"She argued that it would be cheaper to travel by bus./\
        	Persuadir (positivo): I’ll try to argue him into going;disuadir de (negativo): He argued her out of buying the dress/\
        	Sostener con argumentos",
 apply	  :"",
-appear   :"",
+appear   :"He appeared calm and relaxed/She suddenly appeared in the doorway/She appears briefly in the new James Bond movie",
 answer   :"",
 allow    :"",
 aim      :"Aspirar, pretender:We’re aiming for a ten percent increase in sales/\
@@ -18,7 +18,7 @@ affect   :"",
 admit    :"",
 add      :"",
 act      :"",
-achieve  :"We finally achieved our goal of buying a house",
+achieve  :"Steve achieved his ambition of becoming a pilot",
 accept   :"",
 clean    :"",
 claim    :"Reclamar:She claimed $2,500 in travel expenses./\
@@ -34,5 +34,11 @@ charge   :"Cobrar:How much do you charge for delivery?/\
        Correr: The children charged out of the school.",
 cause   : "",
 carry   : "He was carrying my bags/She still carries his photo in her wallet/\
-	Trasportar en aviones o mosquitos enfermedades"
+	Trasportar en aviones o mosquitos enfermedades",
+tune	: "He tuned the harp for me/\
+	  The radio was tuned to the CBC",
+want	: "Do you want a biscuit?/\
+	  She wants to know where he is/\
+	  She wants to go home",
+ignore	: "He ignored all my warnings"
 }
