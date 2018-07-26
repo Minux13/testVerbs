@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<title>Minux</title>
+		<style>
+			body{
+				text-align: center;	
+			}
+			.inputtext{
+				border: none;	
+				max-width: 200px;
+				min-width: 50px;
+			}
+			.spaninput{
+				padding: 8px 13px;	
+				border: solid 1px #ddf;
+				display: inline-block;
+			}
+			.inputtext:focus{
+				outline: none;
+			}
+			.divinput{
+				display: inline-block;
+				margin: 0 15px;	
+			}
+			#asks{
+				text-align: center;
+			}
+			#infinitive{
+				font-size: 30px;
+				margin: 120px 0 60px 0;
+				text-align: center;	
+			}
+			.textask{
+				text-align: left;
+				width: 100%;
+				display: block;
+				margin: 0 0 5px 10px;
+			}
+			table {
+			    font-family: arial, sans-serif;
+			    border-collapse: collapse;
+			    width: calc(100% - 60px);
+			    margin: 30px;
+			}
+			tr:nth-child(even) {
+    				background-color: #f0f0f0;
+			}
+			
+			td, th {
+			    border: 1px solid #dddddd;
+			    text-align: left;
+			    padding: 8px;
+			}
+			.checksimbol{
+				border: none;
+			}
+			.red{
+				color: red;
+			}
+			.blue{
+				color: blue;
+			}
+			.infcolum, .mlink{
+				cursor: pointer;	
+			}
+		</style>
+
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="symbolsSvg.js"></script>
+		<script src="verbs.js"></script>
+	</head>
+<body>
+
+	<h1 style="text-align: center;margin-buttom: 80px;">Lista de verbos regulares</h1>
+
+</body>
+<script>
+
+function filter(){
+	
+	var cells = document.getElementsByTagName("tr");
+	
+	for( var c=1; c < cells.length ; c++ ){
+		console.log(cells[c].getElementsByClassName("checksimbol")[0])	
+		var isMarked = cells[c].getElementsByClassName("checksimbol")[0].children[0].checked;	
+		if( isMarked ){
+			//cells[c].style.display = '';
+		}
+		else{
+			cells[c].style.display = 'none';			
+		}
+	}
+	
+}
+
+function createWindow(cUrl,cName,cFeatures) {
+	var xWin = window.open(cUrl,cName,cFeatures);
+	//setTimeout(function(){ xWin.scroll(0,100); }, 3000);
+	//setTimeout(function(){ console.log(window.onfocus); }, 3000);
+}
+
+
+var addMeaningExtra = false;
+var thTagMeaningExtra = addMeaningExtra ? '<th style="width:150px;" >Significado</th>' : ""
+var results = '<button onclick="filter();">Filtrar</button><table><tr><th>Infinitivo</th><th>Pasado</th><th>Participio</th><th>3ra Persona</th><th>Gerundio</th><th>Significado</th>'+thTagMeaningExtra+'<th class="checksimbol"></th></tr>';
+var finalTag = "</table>"
+
+var verboEvaluado;
+
+var Score = 0;
+
+
+function getFieldCellWithSound(elemento){
+	
+	var palabras = elemento.replace(/ /g , "");
+	var palabras = palabras.split("/");
+	var cell = "<td>";
+	var endCell = "</td>"
+	var espacio = ""
+	
+	var featuresNewWindow = 'toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=0,width=800,height=500';
+
+	for(var i=0; i < palabras.length; i++){
+		var thisWord = palabras[i];
+		var onhoverAttr = ' verbo="'+ palabras[i] +'" onmouseenter="sound(this);" ';
+		cell = cell + espacio;
+		var urlGoogleTraslate  = 'https://translate.google.com/?hl=es#en/es/'+ thisWord;
+		var onclickAttr = 'onclick="createWindow(\''+ urlGoogleTraslate +'\',\'window2\',\''+ featuresNewWindow +'\')"';
+		var tagHTMLGoogleTraslate = '<span '+ onhoverAttr + onclickAttr +' class="infcolum">'+ thisWord +'</span>';
+
+		var cell = cell + tagHTMLGoogleTraslate;
+		espacio = " - "
+	}
+
+	return cell + endCell;
+}
+
+
+function getFieldCell(elemento){
+	
+	var palabras = elemento.replace(/ /g , "");
+	var palabras = palabras.split("/");
+	var cell = "<td>";
+	var endCell = "</td>"
+	var espacio = ""
+	for(var i=0; i < palabras.length; i++){
+		cell = cell + espacio;
+		var cell = cell + '<span class="blue">'+ palabras[i] +'</span>';
+		espacio = " - "
+	}
+
+	return cell + endCell;
+}
+
+var iya = [
+"jog",
+"pick", 
+"shout", 
+"release", 
+"pardon", 
+"handle", 
+"travel", 
+"notice" ,
+"greet", 
+"shop",
+"tune", 
+"damage",
+"damage", "checar", 
+"jog",
+"pick", 
+"shout", 
+"release", 
+"pardon", 
+"handle", 
+"travel", 
+"notice" ,
+"greet", 
+"shop",
+"tune", 
+"damage",
+"damage", 
+"warn",
+"fix",
+"pamper",
+"link",
+"witness",
+"purchase",
+"wolcome",
+"sneeze",
+"provide",
+"sail",
+"chase",
+"slow",
+"turn",
+"relate",
+"please",
+"stress",
+"disagree",
+"suggest",
+"last",
+"match",
+"pick",
+"performe",
+"wrestle",
+"manage",
+"vary",
+"locate",
+"hunt",
+"warn",
+"fix",
+"pamper",
+"link",
+"witness",
+"purchase",
+"welcome",
+"sneeze",
+"provide",
+"sail",
+"chase",
+"slow",
+"turn",
+"relate",
+"please",
+"stress",
+"disagree",
+"suggest",
+"last",
+"match",
+"pick",
+"performe",
+"wrestle",
+"manage",
+"vary",
+"locate",
+"hunt",
+"guess"
+
+];
+
+var oya = [
+"pick" ,
+"purchase" ,
+"deliver" ,
+"locate" ,
+"park" ,
+"warn" ,
+"vary" ,
+"jog" ,
+"sail" ,
+"scan" ,
+"manage" ,
+"water" ,
+"land",
+"link" ,
+"plan" ,
+"suggest" ,
+"hail" ,
+"tune" ,
+"pamper" ,
+"suggest" ,
+"sneeze" ,
+"release" ,
+"shout" ,
+"stress" ,
+"wrestle" ,
+"witness" ,
+"greet" ,
+"pardon" ,
+"discuss" ,
+"substitute" ,
+"please" ,
+"relate" ,
+"chase"	
+];
+var ya = ["pick"];
+for( var g = 0; g<iya.length; g++){
+	for( var e = 0; e<ya.length; e++){
+		console.log("sdfasdf")
+		if(iya[g] == ya[e]){
+			break;
+		} else{
+			ya.push( iya[g] );
+			break;
+		}
+			
+	}
+}
+for( g = 0; g<oya.length; g++){
+	for( var e = 0; e<ya.length; e++){
+		if(oya[g] == ya[e]){
+			break;
+		}else{
+			ya.push( oya[g] );
+			break;
+		}
+	}
+}
+function checkada(este){
+	este.parentElement.parentElement.style.display = 'none';
+}
+
+function evalua(verbo){
+	
+	var incorrecto = {valor : false};
+	
+	//Sound
+	var hoverSoundAttr = ' verbo="'+ verbo.inf +'" onmouseenter="sound(this);" ';
+	var hoverSoundAttrC = ' verbo="'+ verbo.inf +'" onmouseenter="soundC(this);" ';
+	var hoverSoundAttrD = ' verbo="'+ verbo.inf +'" onmouseenter="soundD(this);" ';
+
+	var featuresNewWindow = 'toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=0,width=800,height=500';
+	//  Columna infinitivo 
+	var urlGoogleTraslate  = 'https://translate.google.com/?hl=es#en/es/'+ verbo.inf;
+	var onclickAttr = 'onclick="createWindow(\''+ urlGoogleTraslate +'\',\'window2\',\''+ featuresNewWindow +'\')"';
+	var tagHTMLGoogleTraslate = '<span '+ onclickAttr +' '+ hoverSoundAttr +' class="infcolum">'+ verbo.inf +'</span>';
+
+	var urlCambDic = 'https://dictionary.cambridge.org/es/diccionario/ingles-espanol/'+verbo.inf;
+	var onclickAttrCambDic = 'onclick="createWindow(\''+ urlCambDic +'\',\'window2\',\''+ featuresNewWindow +'\');"';	//&#128366;
+	var tagHTMLCamDic = '<span class="mlink" '+ onclickAttrCambDic + hoverSoundAttrC + ' style="float:right;margin:5px;" >'+dictionarySymbol+'</span>';
+
+	var urlConjutation = 'http://conjugador.reverso.net/conjugacion-ingles-verbo-'+ verbo.inf +'.html';
+	var onclickAttrConjugation = 'onclick="createWindow(\''+ urlConjutation +'\',\'window2\',\''+ featuresNewWindow +'\');"';
+	var tagHtmlConjugation = '<span class="mlink" '+ onclickAttrConjugation + hoverSoundAttrD +' style="float:right;margin:5px;" >'+bookSymbol+'</span>';
+
+	
+
+	var trHTMLInvinitive = '<td>'+ tagHTMLGoogleTraslate + tagHTMLCamDic + tagHtmlConjugation + '</td>';
+
+	var pass = getFieldCellWithSound( verbo.pas );
+	var part = getFieldCellWithSound( verbo.par );
+	var per3 = getFieldCellWithSound( verbo.pe3 );
+	var geru = getFieldCellWithSound( verbo.ger );
+	var mean = getFieldCell( verbo.mea );
+	var mea2 = addMeaningExtra ? '<td><span class="blue">'+ verbo.me2 +'</td>': "";
+	//Color columna
+	var isMeanCorrect = mean.slice(0,21)=='<td><span class="red"'? false: true;
+	var cell = isMeanCorrect ? '<tr>' : '<tr style="background:#ffcccc;">';
+	//var cell =  '<tr>' ;
+
+	cell = cell + trHTMLInvinitive + pass + part + per3 + geru + mean + mea2;
+
+	var checksimbol = '<td class="checksimbol" "><input type="checkbox"  onchange="checkada(this)" ></td>';
+	
+	cell = cell + checksimbol + '</tr>';
+
+	console.log("asdf")
+	results = results + cell;
+
+}
+
+function sound( e ){
+	var thisVerb = e.getAttribute("verbo");
+	
+	var audio = new Audio( 'linguasorbRV/' +thisVerb + '.mp3');
+	audio.play();
+	//var audio = document.getElementById("audio");
+	//audio.play();
+}
+
+function soundC( e ){
+	var thisVerb = e.getAttribute("verbo");
+	
+	var audio = new Audio( 'cambridgeRV/' +thisVerb + '.mp3');
+	audio.play();
+	//var audio = document.getElementById("audio");
+	//audio.play();
+}
+
+function soundD( e ){
+	var thisVerb = e.getAttribute("verbo");
+	
+	var audio = new Audio( 'dictionaryRV/' +thisVerb + '.mp3');
+	audio.play();
+}
+
+var elmo=0;
+function getverb(){
+
+
+	if(verbs.length == 0){
+		results = Score + '/' + v.length + results + finalTag;
+		document.body.innerHTML =   results;
+		return false;
+	}
+
+	var x = Math.floor((Math.random() * (verbs.length)) );
+
+	var currentVerb = verbs[x].inf;
+
+	/*
+	for( var e = 0; e<ya.length; e++){
+		if(ya[e]==currentVerb){
+			verboEvaluado = verbs[x];
+			var a = verbs.slice(0, x);
+			var b = verbs.slice(x+1, verbs.length);
+			verbs = a.concat(b);
+			return 0;	
+		}	
+	}
+	*/
+	/*
+	var noestacontenido = true;
+	for( var e = 0; e<ya.length; e++){
+		if(ya[e]==currentVerb){
+			noestacontenido = false;
+			break;
+		}
+	}
+
+	if(noestacontenido){
+		console.log(ya[e])
+		verboEvaluado = verbs[x];
+		var a = verbs.slice(0, x);
+		var b = verbs.slice(x+1, verbs.length);
+		verbs = a.concat(b);
+		return 0;	
+		
+	}
+	*/
+	
+	evalua(verbs[x])
+
+	
+
+	verboEvaluado = verbs[x];
+	var a = verbs.slice(0, x);
+	var b = verbs.slice(x+1, verbs.length);
+	verbs = a.concat(b);
+
+}
+
+
+function verbo(){
+    this.inf,
+    this.pas,
+    this.par,
+    this.pe3,
+    this.ger,
+    this.mea,
+    this.me2
+};
+
+var verbs = []
+
+
+for(var i=0; i< v.length; i++){
+	var e = new verbo;
+	e.inf = v[i][0];
+	e.pas = v[i][1];
+	e.par = v[i][2];
+	e.pe3 = v[i][3];
+	e.ger = v[i][4];
+	e.mea = v[i][5];
+	e.me2 = v[i][6];
+	verbs.push( e );
+}
+
+for (var i=0; i<= v.length; i++){
+
+	getverb();
+
+}
+
+
+</script>
+</html>

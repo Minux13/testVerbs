@@ -42,7 +42,7 @@
 			    font-family: arial, sans-serif;
 			    border-collapse: collapse;
 			    width: calc(100% - 60px);
-			    margin: 30px;
+			    margin: 10px 30px;
 			}
 			tr:nth-child(even) {
     				background-color: #f0f0f0;
@@ -65,10 +65,36 @@
 			.infcolum, .mlink{
 				cursor: pointer;	
 			}
+.hide{
+	display: none;	
+}
+button {
+  display: inline-block;
+  text-align: center;
+  width: 35px;
+  transition: all 0.5s;
+  cursor: pointer;
+  padding:5px;
+  background:#fff;  
+  border:solid 2px #fff;
+  cursor: pointer;
+  border-radius: 5px;
+  outline: none;
+}
+
+button:hover  {
+  border: solid 2px #00f;
+  border-radius: 5px;
+}
+#botones{
+	text-align: right;
+	margin-right: 20px;
+}
 		</style>
 
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="symbolsSvg.js"></script>
 		<script src="verbs.js"></script>
 	</head>
 <body>
@@ -104,12 +130,10 @@ function createWindow(cUrl,cName,cFeatures) {
 
 var addMeaningExtra = false;
 var thTagMeaningExtra = addMeaningExtra ? '<th style="width:150px;" >Significado</th>' : ""
-var results = '<button onclick="filter();">Filtrar</button><table><tr><th>Infinitivo</th><th>Pasado</th><th>Participio</th><th>3ra Persona</th><th>Gerundio</th><th>Significado</th>'+thTagMeaningExtra+'<th class="checksimbol"></th></tr>';
+var results = '<table><tr><th>Infinitivo</th><th>Pasado</th><th>Participio</th><th>3ra Persona</th><th>Gerundio</th><th>Significado</th>'+thTagMeaningExtra+'<th class="checksimbol"></th></tr>';
 var finalTag = "</table>"
 
-var verboEvaluado;
-
-var Score = 0;
+var NUMPAGINATION = 20;
 
 
 function getFieldCellWithSound(elemento){
@@ -154,154 +178,12 @@ function getFieldCell(elemento){
 	return cell + endCell;
 }
 
-var iya = [
-"jog",
-"pick", 
-"shout", 
-"release", 
-"pardon", 
-"handle", 
-"travel", 
-"notice" ,
-"greet", 
-"shop",
-"tune", 
-"damage",
-"damage", "checar", 
-"jog",
-"pick", 
-"shout", 
-"release", 
-"pardon", 
-"handle", 
-"travel", 
-"notice" ,
-"greet", 
-"shop",
-"tune", 
-"damage",
-"damage", 
-"warn",
-"fix",
-"pamper",
-"link",
-"witness",
-"purchase",
-"wolcome",
-"sneeze",
-"provide",
-"sail",
-"chase",
-"slow",
-"turn",
-"relate",
-"please",
-"stress",
-"disagree",
-"suggest",
-"last",
-"match",
-"pick",
-"performe",
-"wrestle",
-"manage",
-"vary",
-"locate",
-"hunt",
-"warn",
-"fix",
-"pamper",
-"link",
-"witness",
-"purchase",
-"welcome",
-"sneeze",
-"provide",
-"sail",
-"chase",
-"slow",
-"turn",
-"relate",
-"please",
-"stress",
-"disagree",
-"suggest",
-"last",
-"match",
-"pick",
-"performe",
-"wrestle",
-"manage",
-"vary",
-"locate",
-"hunt",
-"guess"
 
-];
-
-var oya = [
-"pick" ,
-"purchase" ,
-"deliver" ,
-"locate" ,
-"park" ,
-"warn" ,
-"vary" ,
-"jog" ,
-"sail" ,
-"scan" ,
-"manage" ,
-"water" ,
-"land",
-"link" ,
-"plan" ,
-"suggest" ,
-"hail" ,
-"tune" ,
-"pamper" ,
-"suggest" ,
-"sneeze" ,
-"release" ,
-"shout" ,
-"stress" ,
-"wrestle" ,
-"witness" ,
-"greet" ,
-"pardon" ,
-"discuss" ,
-"substitute" ,
-"please" ,
-"relate" ,
-"chase"	
-];
-var ya = ["pick"];
-for( var g = 0; g<iya.length; g++){
-	for( var e = 0; e<ya.length; e++){
-		console.log("sdfasdf")
-		if(iya[g] == ya[e]){
-			break;
-		} else{
-			ya.push( iya[g] );
-			break;
-		}
-			
-	}
-}
-for( g = 0; g<oya.length; g++){
-	for( var e = 0; e<ya.length; e++){
-		if(oya[g] == ya[e]){
-			break;
-		}else{
-			ya.push( oya[g] );
-			break;
-		}
-	}
-}
 function checkada(este){
-	este.parentElement.parentElement.style.display = 'none';
+	este.parentElement.parentElement.classList.add("hide");
 }
 
-function evalua(verbo){
+function evalua(verbo, numVerbo){
 	
 	var incorrecto = {valor : false};
 	
@@ -317,12 +199,12 @@ function evalua(verbo){
 	var tagHTMLGoogleTraslate = '<span '+ onclickAttr +' '+ hoverSoundAttr +' class="infcolum">'+ verbo.inf +'</span>';
 
 	var urlCambDic = 'https://dictionary.cambridge.org/es/diccionario/ingles-espanol/'+verbo.inf;
-	var onclickAttrCambDic = 'onclick="createWindow(\''+ urlCambDic +'\',\'window2\',\''+ featuresNewWindow +'\');"';
-	var tagHTMLCamDic = '<span class="mlink" '+ onclickAttrCambDic + hoverSoundAttrC + ' style="float:right;margin:5px;" > &#128366; </span>';
+	var onclickAttrCambDic = 'onclick="createWindow(\''+ urlCambDic +'\',\'window2\',\''+ featuresNewWindow +'\');"';	//&#128366;
+	var tagHTMLCamDic = '<span class="mlink" '+ onclickAttrCambDic + hoverSoundAttrC + ' style="float:right;margin:5px;" >'+dictionarySymbol+'</span>';
 
 	var urlConjutation = 'http://conjugador.reverso.net/conjugacion-ingles-verbo-'+ verbo.inf +'.html';
 	var onclickAttrConjugation = 'onclick="createWindow(\''+ urlConjutation +'\',\'window2\',\''+ featuresNewWindow +'\');"';
-	var tagHtmlConjugation = '<span class="mlink" '+ onclickAttrConjugation + hoverSoundAttrD +' style="float:right;margin:5px;" > &#8986; </span>';
+	var tagHtmlConjugation = '<span class="mlink" '+ onclickAttrConjugation + hoverSoundAttrD +' style="float:right;margin:5px;" >'+bookSymbol+'</span>';
 
 	
 
@@ -336,7 +218,7 @@ function evalua(verbo){
 	var mea2 = addMeaningExtra ? '<td><span class="blue">'+ verbo.me2 +'</td>': "";
 	//Color columna
 	var isMeanCorrect = mean.slice(0,21)=='<td><span class="red"'? false: true;
-	var cell = isMeanCorrect ? '<tr>' : '<tr style="background:#ffcccc;">';
+	var cell = isMeanCorrect ? '<tr class="num'+numVerbo+'">' : '<tr class="num'+numVerbo+'" style="background:#ffcccc;">';
 	//var cell =  '<tr>' ;
 
 	cell = cell + trHTMLInvinitive + pass + part + per3 + geru + mean + mea2;
@@ -375,63 +257,6 @@ function soundD( e ){
 	audio.play();
 }
 
-var elmo=0;
-function getverb(){
-
-
-	if(verbs.length == 0){
-		results = Score + '/' + v.length + results + finalTag;
-		document.body.innerHTML =   results;
-		return false;
-	}
-
-	var x = Math.floor((Math.random() * (verbs.length)) );
-
-	var currentVerb = verbs[x].inf;
-
-	/*
-	for( var e = 0; e<ya.length; e++){
-		if(ya[e]==currentVerb){
-			verboEvaluado = verbs[x];
-			var a = verbs.slice(0, x);
-			var b = verbs.slice(x+1, verbs.length);
-			verbs = a.concat(b);
-			return 0;	
-		}	
-	}
-	*/
-	/*
-	var noestacontenido = true;
-	for( var e = 0; e<ya.length; e++){
-		if(ya[e]==currentVerb){
-			noestacontenido = false;
-			break;
-		}
-	}
-
-	if(noestacontenido){
-		console.log(ya[e])
-		verboEvaluado = verbs[x];
-		var a = verbs.slice(0, x);
-		var b = verbs.slice(x+1, verbs.length);
-		verbs = a.concat(b);
-		return 0;	
-		
-	}
-	*/
-	
-	evalua(verbs[x])
-
-	
-
-	verboEvaluado = verbs[x];
-	var a = verbs.slice(0, x);
-	var b = verbs.slice(x+1, verbs.length);
-	verbs = a.concat(b);
-
-}
-
-
 function verbo(){
     this.inf,
     this.pas,
@@ -457,11 +282,55 @@ for(var i=0; i< v.length; i++){
 	verbs.push( e );
 }
 
-for (var i=0; i<= v.length; i++){
+function creaBotones(){
+	var htmlBotones = '<div id="botones">';
+	for( i = 0; i<v.length; i=i+NUMPAGINATION ){
+		var to = i + NUMPAGINATION < v.length ? i + NUMPAGINATION: verbs.length;
+		var from = i + 1;
+		var label = parseInt(i/NUMPAGINATION) + 1;
+		var elementHtmlButton = '<button class="paginacion" onclick="pagination(this, '+to+','+from+');"  ><span>' + label +'</span></button>';
 
-	getverb();
-
+		htmlBotones = htmlBotones + elementHtmlButton;
+	}
+	return htmlBotones+'</div>';
+	//document.getElementById("botones").innerHTML = htmlBotones;
+	//document.getElementById("instrucciones").innerHTML = 'Hay un total de '+ verbs.length +' verbos, para estudiar un rango, ingresaló en los campos y selecciona "Iniciar" o selecciona un rango definido con un boton';
 }
+
+
+function creaTabla(to, from){
+	for (var i=to; i< from; i++){
+		var classNum = parseInt(i/20);
+		evalua(verbs[i],classNum)
+	}
+	var botones = creaBotones()
+	results = botones + results + finalTag;
+	document.body.innerHTML =   results;
+}
+creaTabla( 0, v.length );
+
+function pagination(e, to, from){
+	var tagButton = document.getElementsByClassName("paginacion");
+	for(var b=0; b<tagButton.length; b++){
+		tagButton[b].style.background = "#FFF"	
+		//tagButton[b].style.border = "solid 2px #FFF"	
+	}
+		var de=from;
+	var hasta=to;
+	//var classNum = parseInt((from-1)/(to-1));
+	tagTR = document.getElementsByTagName('tr');
+	for( var i=1; i<tagTR.length; i++ ){
+		tagTR[i].style.display = 'none';
+	}
+	for( var o = de; o<=hasta; o++){
+		tagTR[o].style.display = '';	
+	}
+	e.style.background = "#00F";
+	//e.style.border = "solid 2px #00F"	
+}
+
+
+
 
 
 </script>
