@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<title>Minux</title>
+		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+		<style>
+			body{
+				text-align: center;	
+				font-family: 'Source Sans Pro', sans-serif;
+			}
+			.inputtext{
+				border: none;	
+				max-width: 200px;
+				min-width: 50px;
+			}
+			.spaninput{
+				padding: 8px 13px;	
+				border: solid 1px #ddf;
+				display: inline-block;
+			}
+			.inputtext:focus{
+				outline: none;
+			}
+			.divinput{
+				display: inline-block;
+				margin: 0 15px;	
+			}
+			#asks{
+				text-align: center;
+			}
+			#infinitive{
+				font-size: 30px;
+				margin: 120px 0 60px 0;
+				text-align: center;	
+			}
+			.textask{
+				text-align: left;
+				width: 100%;
+				display: block;
+				margin: 0 0 5px 10px;
+			}
+			table {
+			    font-family: arial, sans-serif;
+			    border-collapse: collapse;
+			    width: calc(100% - 60px);
+			    margin: 30px;
+			}
+			tr:nth-child(even) {
+    				background-color: #f0f0f0;
+			}
+			
+			td, th {
+			    border: 1px solid #dddddd;
+			    text-align: left;
+			    padding: 8px;
+			}
+			.checksimbol{
+				border: none;
+			}
+			.red{
+				color: red;
+			}
+			.blue{
+				color: blue;
+			}
+			.infcolum, .mlink{
+				cursor: pointer;	
+			}
+			#instrucciones{
+				color: #999;	
+				font-size: 18px;				
+			}
+button {
+  display: inline-block;
+  text-align: center;
+  width: 190px;
+  transition: all 0.5s;
+  cursor: pointer;
+  padding:15px;
+  margin:15px;
+  background:#eef;
+  border:solid 1px #eef;
+}
+button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+button:hover span {
+  padding-right: 25px;
+}
+
+button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+.hide{
+	display: none;	
+}
+
+
+		</style>
+
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="verbs.js"></script>
+	</head>
+<body>
+
+	<h1 style="text-align: center;margin-buttom: 80px;">Prueba de verbos regulares</h1>
+	<div id="pantallainicio"></div>
+	<div id="infinitive"></div>
+	<form id="containerasks" style="display:none;" onsubmit="return false;" >
+		<div id="asks">
+			<div class="divinput">
+				<span class="textask">Significado:</span>
+				<span class="spaninput"><input class="inputtext" type"text" size=200 id="meaning"   ></span>
+			</div> 
+			<div class="divinput">
+				<span class="textask">Pasado:</span>
+				<span class="spaninput"><input class="inputtext" type"text" size=200 id="past"      ></span>
+			</div>                                       
+			<div class="divinput">
+				<span class="textask">Participio:</span>
+				<span class="spaninput"><input class="inputtext" type"text" size=200 id="participle"></span>
+			</div>
+			<div class="divinput">
+				<span class="textask">3ra persona:</span>
+				<span class="spaninput"><input class="inputtext" type"text" size=200 id="person3"   ></span>
+			</div>
+			<div class="divinput">
+				<span class="textask">Gerundio:</span>
+				<span class="spaninput"><input class="inputtext" type"text" size=200 id="gerund"    ></span>
+			</div>
+		</div>
+		<button style="padding:15px;margin:15px;background:#eef;border:solid 1px #eef;" id="enter" onclick="getverb()"><span> Siguiente verbo</span> </button>
+	</form>
+	  
+</body>
+<script>
+
+var CARPETASONIDO = "cambridgeRV/";
+var RANGO = 20;
+var numerosAleatorios = [];
+
+function createWindow(cUrl,cName,cFeatures) {
+	var xWin = window.open(cUrl,cName,cFeatures);
+}
+
+
+
+var addMeaningExtra = false;
+var thTagMeaningExtra = addMeaningExtra ? '<th>Significado</th>' : ""
+var results = '<table><tr><th>Infinitivo</th><th>Pasado</th><th>Participio</th><th>3ra Persona</th><th>Gerundio</th><th>Significado</th>'+thTagMeaningExtra+'<th class="checksimbol"></th></tr>';
+var finalTag = "</table>"
+
+var verboEvaluado;
+
+var Score = 0;
+
+function comparaPalabras(correct, answer, incorrecto){
+	
+	var significados = correct.split("/");
+	var inputEdit = answer.replace(/ /g , "");
+	inputEdit = inputEdit?inputEdit.toLowerCase():'-';
+	var isCorrect = false;
+	for(var i=0; i<significados.length; i++){
+		if(significados[i].toLowerCase() == inputEdit){
+			isCorrect = true;
+		}
+	}
+
+	if( isCorrect ){
+		var retorno = '<td><span class="blue">'+ answer +'</span></td>';
+	}else{
+		incorrecto.valor = true;
+		var retorno = '<td><span class="red">'+ inputEdit +'</span> <span class="blue"> '+ correct + ' </span></td>';
+	}	
+	return retorno;
+}
+
+
+function evalua(verbo, ingresado){
+	
+	var incorrecto = {valor : false};
+
+	var featuresNewWindow = 'toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=0,width=800,height=500';
+	//  Columna infinitivo 
+	var urlGoogleTraslate  = 'https://translate.google.com/?hl=es#en/es/'+ verbo.inf;
+	var onclickAttr = 'onclick="createWindow(\''+ urlGoogleTraslate +'\',\'window2\',\''+ featuresNewWindow +'\')"';
+	var tagHTMLGoogleTraslate = '<span '+ onclickAttr +'class="infcolum">'+ verbo.inf +'</span>';
+
+	var urlCambDic = 'https://dictionary.cambridge.org/es/diccionario/ingles-espanol/'+verbo.inf;
+	var onclickAttrCambDic = 'onclick="createWindow(\''+ urlCambDic +'\',\'window2\',\''+ featuresNewWindow +'\');"';
+	var tagHTMLCamDic = '<span class="mlink" '+ onclickAttrCambDic +' style="float:right;" >&#9758;</span>';
+
+	var urlConjutation = 'http://conjugador.reverso.net/conjugacion-ingles-verbo-'+ verbo.inf +'.html';
+	var onclickAttrConjugation = 'onclick="createWindow(\''+ urlConjutation +'\',\'window2\',\''+ featuresNewWindow +'\');"';
+	var tagHtmlConjugation = '<span class="mlink" '+ onclickAttrConjugation +' style="float:right;margin-right:5px;" >&#9757;</span>';
+
+	//Sound
+	var hoverSoundAttr = ' verbo="'+ verbo.inf +'" onmouseenter="sound(this);"';
+
+	var trHTMLInvinitive = '<td '+ hoverSoundAttr +' >'+ tagHTMLGoogleTraslate + tagHTMLCamDic + tagHtmlConjugation + '</td>';
+
+	var pass = comparaPalabras( verbo.pas, ingresado.pas, incorrecto );
+	var part = comparaPalabras( verbo.par, ingresado.par, incorrecto );
+	var per3 = comparaPalabras( verbo.pe3, ingresado.pe3, incorrecto );
+	var geru = comparaPalabras( verbo.ger, ingresado.ger, incorrecto );
+	var mean = comparaPalabras( verbo.mea, ingresado.mea, incorrecto );
+	var mea2 = addMeaningExtra ? '<td><span class="blue">'+ verbo.me2 +'</td>': "";
+	//Color columna
+	var isMeanCorrect = mean.slice(0,21)=='<td><span class="red"'? false: true;
+	var cell = isMeanCorrect ? '<tr>' : '<tr style="background:#ffcccc;">';
+	//var cell =  '<tr>' ;
+
+	cell = cell + trHTMLInvinitive + pass + part + per3 + geru + mean + mea2;
+
+	var checksimbol = incorrecto.valor?'<td class="checksimbol" style="color:red;">&#10007;</td>':'<td class="checksimbol" style="color:green;">&#10003;</td>'
+	
+	cell = cell + checksimbol + '</tr>';
+
+	Score = incorrecto.valor ? Score : Score+1;
+
+	document.getElementById("meaning").value = "";
+	document.getElementById("past").value = "";
+	document.getElementById("participle").value = "";
+	document.getElementById("person3").value = "";
+	document.getElementById("gerund").value = "";
+
+	results = results + cell;
+
+}
+
+function sound( e ){
+	var thisVerb = e.getAttribute("verbo");
+	
+	var audio = new Audio( CARPETASONIDO +thisVerb + '.mp3');
+	audio.play();
+}
+
+function getverb(){
+	//El primer getverb no tiene ninguno que evaluar, la variable es undefine
+	if( verboEvaluado ){
+		var inputs = {
+			inf : document.getElementById("meaning").value,
+			pas : document.getElementById("past").value,
+			par : document.getElementById("participle").value,
+			pe3 : document.getElementById("person3").value,
+			ger : document.getElementById("gerund").value,
+			mea : document.getElementById("meaning").value
+		}
+
+		evalua( verboEvaluado, inputs );
+	}
+
+	if(verbs.length == 0){
+		results = Score + '/' + RANGO + results + finalTag;
+		document.body.innerHTML =   results;
+		return false;
+	}
+
+	
+	var x = Math.floor((Math.random() * (verbs.length)) );
+
+	var currentVerb = verbs[x].inf;
+
+	var elementAskVerb = '<span id="lala" verbo="'+ currentVerb +'" onmouseenter="sound(this);" >'+ currentVerb +'</span>';
+	document.getElementById("infinitive").innerHTML = elementAskVerb;
+	var audioVerb = new Audio( CARPETASONIDO + currentVerb + '.mp3');
+	audioVerb.play();
+
+	verboEvaluado = verbs[x];
+	var a = verbs.slice(0, x);
+	var b = verbs.slice(x+1, verbs.length);
+	verbs = a.concat(b);
+
+	document.getElementById("meaning").focus();
+
+}
+
+function verbo(){
+    this.inf,
+    this.pas,
+    this.par,
+    this.pe3,
+    this.ger,
+    this.mea,
+    this.me2
+};
+
+var verbs = []
+
+function creaBotones(){
+	var rango = RANGO;
+	var htmlBotones = '<div id="instrucciones" >Escoge un rango para contestar.</div><br>';
+	var cantidadDeVerbos = v.length;
+	for( var i = 0; i < cantidadDeVerbos ; i=i+rango ){
+		var hasta = i + rango < cantidadDeVerbos ? i + rango: cantidadDeVerbos;
+		var desde = i + 1;
+		var elementHtmlButton = '<button onclick="iniciar('+ desde +','+ hasta +');" ><span>' + desde +'-'+ hasta +'</span></button>';
+
+		htmlBotones = htmlBotones + elementHtmlButton;
+	}
+	document.getElementById("pantallainicio").innerHTML = htmlBotones;
+}
+creaBotones();
+
+function iniciar(desde, hasta){
+	
+	document.getElementById("containerasks").style.display = "";
+	document.getElementById("pantallainicio").style.display = "none";
+
+	for(var i=(desde-1); i <= (hasta-1); i++){
+		var e = new verbo;
+		e.inf = v[i][0];
+		e.pas = v[i][1];
+		e.par = v[i][2];
+		e.pe3 = v[i][3];
+		e.ger = v[i][4];
+		e.mea = v[i][5];
+		e.me2 = v[i][6];
+		verbs.push( e );
+	}
+	
+	getverb();
+}
+
+
+</script>
+</html>
