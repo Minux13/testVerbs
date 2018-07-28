@@ -112,6 +112,9 @@ button:hover span:after {
 .hide{
 	display: none;	
 }
+a { color: inherit;
+text-decoration: none;
+ } 
 		</style>
 
 
@@ -161,17 +164,31 @@ function clickToDictionary(e){
   	win.focus();
 }
 
+function tagsFrases(verboInfinitivo){
+	//examples[ thisVerb.inf ].replace(/\//g, "<br>-")
+	var frases = examples[verboInfinitivo].split('/');
+	var stringFrases = '';
+	for(var f=0; f<frases.length; f++){
+		var fraseLink = 'https://translate.google.es/#en/es/'+ (frases[f].replace(/ /g, "%20") ) ; 
+		stringFrases = stringFrases + '<span><a href="'+ fraseLink +'" target="_blank" >  - '+frases[f]+'</a></span><br>';
+	}
+	return stringFrases;
+}
+
 var numberVerb = -1;
 
 function newVerb(){
 	numberVerb++;
 	var thisVerb = verbs[numberVerb];
-	var oraciones = examples[ thisVerb.inf ] ? examples[ thisVerb.inf ].replace(/\//g, "<br>-") : verbs[numberVerb].me2;
+	var oraciones = examples[ thisVerb.inf ] ? tagsFrases(thisVerb.inf) : verbs[numberVerb].me2;
 	var events = ' onmouseover="sound(this);" onclick="clickToDictionary(this);" verbo="'+ thisVerb.inf +'" ';
-	var sentencesHTML = '<div id="sentencesexamples" > - ' + oraciones + '</div>';
-	var strElement = '<div ' + events + ' id="meanings" ><h3>'+ thisVerb.mea + '</h3> <br> ' + sentencesHTML +'</div>';
+	var sentencesHTML = '<div id="sentencesexamples" > ' + oraciones + '</div>';
+	var strElement = '<div id="meanings" ><h3 ' + events + ' >'+ thisVerb.mea + '</h3> <br> ' + sentencesHTML +'</div>';
 	document.getElementById("spanishverb").innerHTML = strElement ;
 	autoPlay( thisVerb.inf )
+	if( verbs[ numberVerb + 1 ] === undefined ){
+		document.getElementById('next').style.display = 'none';
+	}
 }
 
 

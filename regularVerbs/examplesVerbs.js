@@ -40,5 +40,30 @@ tune	: "He tuned the harp for me/\
 want	: "Do you want a biscuit?/\
 	  She wants to know where he is/\
 	  She wants to go home",
-ignore	: "He ignored all my warnings"
+ignore	: "He ignored all my warnings",
+purchase: "Tickets must be purchased two weeks in advance/\
+	  The illegal purchase of guns",
+impress	: "I was impressed by his good manners./\
+	  I must impress upon you the need for silence in the library/\
+	  She re-read the plans in order to impress the details on her memory/\
+	  A footprint impressed in the sand",
+try	: "He tried to answer the questions/\
+	   Let’s try and climb that tree!/\
+	   You are trying my patience",
+locate	: "He located the street he was looking for on the map/\
+	  The kitchen is located in the basement/\
+	  Police are still trying to locate the criminal",
+manage	: "I managed to persuade him to come./\
+	   She’s good at managing people./\
+	   My lawyer manages all my legal affairs money/\
+	   Will you manage to repair your bicycle?/\
+	   Can you manage (to eat) some more meat?/\
+	   He used to manage the bookshop on King Street",
+die	: "I’m dying for a drink/\
+	   Those flowers are dying",
+knock	: "He knocked the other man senseless/\
+		I knocked my head on the car door/\
+		He accidentally knocked the plate off the table/\
+		There’s someone knocking at the door",
+
 }
