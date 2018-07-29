@@ -16,6 +16,9 @@
 				line-height: 23px;
 				font-size:17px;
 			}
+			.sentences:hover{
+				cursor:	pointer;
+			}
 			#meanings{
 				cursor: pointer;
 				margin-top: 40px;	
@@ -75,6 +78,10 @@
 			.infcolum, .mlink{
 				cursor: pointer;	
 			}
+			img{
+				vertical-align: -9px;
+    				margin-left: 13px;
+			}
 button {
   display: inline-block;
   text-align: center;
@@ -125,7 +132,7 @@ text-decoration: none;
 <body>
 
 	<h1 style="text-align: center;margin-buttom: 80px;">Escucha el sonido en inglés.</h1>
-	<span id="recomendaciones" class="hide" style="color: #444;font-size: 13px;">Haz click sobre el significado para ir al diccionario <br> Pasa el mouse por el significado para volverlo a escuchar</span>
+	<span id="recomendaciones" class="hide" style="color: #444;font-size: 13px;">Haz click sobre el significado para ir al diccionario Cambridge o en el icono de google traslate para consultarlo ahí. <br>Pasa el mouse por el significado para volverlo a escuchar. Para ver el significado de una oración haz click sobre ella. </span>
 
 	<div id="spanishverb">
 		<p id="instrucciones" ></p>
@@ -165,25 +172,29 @@ function clickToDictionary(e){
 }
 
 function tagsFrases(verboInfinitivo){
-	//examples[ thisVerb.inf ].replace(/\//g, "<br>-")
 	var frases = examples[verboInfinitivo].split('/');
 	var stringFrases = '';
 	for(var f=0; f<frases.length; f++){
 		var fraseLink = 'https://translate.google.es/#en/es/'+ (frases[f].replace(/ /g, "%20") ) ; 
-		stringFrases = stringFrases + '<span><a href="'+ fraseLink +'" target="_blank" >  - '+frases[f]+'</a></span><br>';
+		stringFrases = stringFrases + '<span class="sentences"><a href="'+ fraseLink +'" target="_blank" >  - '+frases[f]+'</a></span><br>';
 	}
 	return stringFrases;
 }
 
 var numberVerb = -1;
 
+//function linksMeanings( verbo ){
+//	var tagGoogleTraslate = '<a href="https://translate.google.com/#en/es/'+thisVerb.inf+'" target="_blanck"><img src="traslateicon.jpeg" height="30px" ></a>';
+//	return tagGoogleTraslate;
+//}
+
 function newVerb(){
 	numberVerb++;
 	var thisVerb = verbs[numberVerb];
 	var oraciones = examples[ thisVerb.inf ] ? tagsFrases(thisVerb.inf) : verbs[numberVerb].me2;
 	var events = ' onmouseover="sound(this);" onclick="clickToDictionary(this);" verbo="'+ thisVerb.inf +'" ';
-	var sentencesHTML = '<div id="sentencesexamples" > ' + oraciones + '</div>';
-	var strElement = '<div id="meanings" ><h3 ' + events + ' >'+ thisVerb.mea + '</h3> <br> ' + sentencesHTML +'</div>';
+	var sentencesHTML = '<div id="sentencesexamples" > ' + oraciones + '</div>';	
+	var strElement = '<h3 id="meanings"' + events + ' >'+ thisVerb.mea + '</h3><br> ' + sentencesHTML ;
 	document.getElementById("spanishverb").innerHTML = strElement ;
 	autoPlay( thisVerb.inf )
 	if( verbs[ numberVerb + 1 ] === undefined ){
