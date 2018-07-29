@@ -22,6 +22,7 @@
 			#meanings{
 				cursor: pointer;
 				margin-top: 40px;	
+				display: inline-block;
 			}
 			.inputtext{
 				border: none;	
@@ -181,12 +182,13 @@ function tagsFrases(verboInfinitivo){
 	return stringFrases;
 }
 
-var numberVerb = -1;
 
-//function linksMeanings( verbo ){
-//	var tagGoogleTraslate = '<a href="https://translate.google.com/#en/es/'+thisVerb.inf+'" target="_blanck"><img src="traslateicon.jpeg" height="30px" ></a>';
-//	return tagGoogleTraslate;
-//}
+function linkGoogleT( verbo ){
+	var tagGoogleTraslate = '<a href="https://translate.google.com/#en/es/'+verbo+'" target="_blanck"><img src="traslateicon.jpeg" height="30px" ></a>';
+	return tagGoogleTraslate;
+}
+
+var numberVerb = -1;
 
 function newVerb(){
 	numberVerb++;
@@ -194,7 +196,7 @@ function newVerb(){
 	var oraciones = examples[ thisVerb.inf ] ? tagsFrases(thisVerb.inf) : verbs[numberVerb].me2;
 	var events = ' onmouseover="sound(this);" onclick="clickToDictionary(this);" verbo="'+ thisVerb.inf +'" ';
 	var sentencesHTML = '<div id="sentencesexamples" > ' + oraciones + '</div>';	
-	var strElement = '<h3 id="meanings"' + events + ' >'+ thisVerb.mea + '</h3><br> ' + sentencesHTML ;
+	var strElement = '<h3 id="meanings"' + events + ' >'+ thisVerb.mea + '</h3>'+linkGoogleT(thisVerb.inf)+'<br> ' + sentencesHTML ;
 	document.getElementById("spanishverb").innerHTML = strElement ;
 	autoPlay( thisVerb.inf )
 	if( verbs[ numberVerb + 1 ] === undefined ){
