@@ -65,5 +65,27 @@ knock	: "He knocked the other man senseless/\
 		I knocked my head on the car door/\
 		He accidentally knocked the plate off the table/\
 		There’s someone knocking at the door",
+fix	: "Can you fix my watch?/\
+		I’ll fix you a sandwich/\
+		They fixed the bookcase to the wall",
+hunt	: "He spent the whole day hunting (deer)./\
+		The murderer was hunted from town to town",
+witness	: "Did anyone witness the murder?",
+notice	: "I noticed that he was alone./\
+		No one noticed my new haircut",
+excuse	: "Could I be excused from football training today?/\
+		Excuse me, does this bus go to Oxford Street?/\
+		I’ll excuse your carelessness this time.",
+greet 	: "He greeted me at the door.",
+introduce : "to make something exist or happen for the first time: He took me around the room and introduced me to everyone./\
+		He introduced the guests/\
+		Let me introduce you to my mother/\
+		May I introduce myself? I’m John Brown./\
+		Grey squirrels were introduced into Britain from Canada/\
+		Children are introduced to algebra at about the age of eleven",
+review	: "the company's safety procedures are being reviewed/\
+		all slides were then reviewed by one pathologist/\
+		He reviews movies for the Times",
 
+		
 }

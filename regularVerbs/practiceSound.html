@@ -172,8 +172,8 @@ function clickToDictionary(e){
   	win.focus();
 }
 
-function tagsFrases(verboInfinitivo){
-	var frases = examples[verboInfinitivo].split('/');
+function tagsFrases(frases){
+	var frases = frases.split('/');
 	var stringFrases = '';
 	for(var f=0; f<frases.length; f++){
 		var fraseLink = 'https://translate.google.es/#en/es/'+ (frases[f].replace(/ /g, "%20") ) ; 
@@ -193,7 +193,7 @@ var numberVerb = -1;
 function newVerb(){
 	numberVerb++;
 	var thisVerb = verbs[numberVerb];
-	var oraciones = examples[ thisVerb.inf ] ? tagsFrases(thisVerb.inf) : verbs[numberVerb].me2;
+	var oraciones = examples[ thisVerb.inf ] ? tagsFrases(examples[thisVerb.inf]) : tagsFrases(verbs[numberVerb].me2);
 	var events = ' onmouseover="sound(this);" onclick="clickToDictionary(this);" verbo="'+ thisVerb.inf +'" ';
 	var sentencesHTML = '<div id="sentencesexamples" > ' + oraciones + '</div>';	
 	var strElement = '<h3 id="meanings"' + events + ' >'+ thisVerb.mea + '</h3>'+linkGoogleT(thisVerb.inf)+'<br> ' + sentencesHTML ;
