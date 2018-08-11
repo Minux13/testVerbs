@@ -86,6 +86,36 @@ introduce : "to make something exist or happen for the first time: He took me ar
 review	: "the company's safety procedures are being reviewed/\
 		all slides were then reviewed by one pathologist/\
 		He reviews movies for the Times",
+date	: "Thank you for your letter dated 30 August./\
+		They dated for five years before they got married./\
+		How long have you been dating Nicky?",
+follow	: "Do you follow (my argument)? (entender)/\
+		Follow this road (to go along (a road, river etc))/\
+		I will follow (you)./\
+		I followed his advice (to act according to)",
+move	: "She’s moving into a new apartment./\
+		I was deeply moved by his speech (to make someone feel sad)/\
+		I was deeply moved by the film (conmover)",
+present	: 'They presented her with a medal (to give something to someone, often at a formal ceremony)/\
+		Dr Potter presented prizes to all the winners (Se usa mas como "entregar")',
+discuss	: "Se usa mas como: to talk about something with someone and tell each other your ideas or opinions, aunque se usa para los dos ",
+receive	: "They received a good education./\
+		The Pope received the Queen in the Vatican./\
+		He was received into the group./\
+		He was found guilty of receiving stolen goods. (Comerciar)",
+underline: "All the technical words have been underlined in red./\
+		The report underlines the need for more teachers in schools. (Enfatizar)/\
+		In his speech he underlined several points. (destacar)",
+last	: "How long will the meeting last?/\
+		The batteries last about ten hours./\
+		Enjoy the sun while it lasts!/\
+		We’ve got enough food to last a week.",
+chase	: "He chased after them but did not catch them/\
+		Tom chases Jerry/\
+		I often have to chase the boys away from my fruit trees (auyentar)",
+suggest	: "Can you suggest a good hotel?/\
+		She suggested to me one or two suitable people for the committee/\
+		Are you suggesting that I’m too old for the job? (insinuar)/\
+		An explanation suddenly suggested itself to me (ocurrirse)",
 
-		
 }
