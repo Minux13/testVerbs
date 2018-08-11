@@ -2,6 +2,7 @@
 <html lang="es">
 	<head>
 		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Minux</title>
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
 		<style>
@@ -117,12 +118,45 @@ button:hover span:after {
   opacity: 1;
   right: 0;
 }
+#alllinks{
+	text-align: center;
+	margin: 40px;
+}
 .hide{
 	display: none;	
 }
 a { color: inherit;
 text-decoration: none;
  } 
+.links{
+  /*box-shadow: 0px 5px 10px #999;
+  padding: 7px 15px;*/
+  font-size: 20px;
+  cursor: pointer;
+  position: relative;
+}
+
+
+.links .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: -50px;
+    left: -20px;
+}
+
+.links:hover .tooltiptext {
+    visibility: visible;
+}
+
 		</style>
 
 
@@ -132,7 +166,7 @@ text-decoration: none;
 	</head>
 <body>
 
-	<h1 style="text-align: center;margin-buttom: 80px;">Escucha el sonido en inglés.</h1>
+	<h1 style="text-align: center;margin-buttom: 80px; display:inline-block;">Escucha el sonido en inglés.</h1> <br>
 	<span id="recomendaciones" class="hide" style="color: #444;font-size: 13px;">Haz click sobre el significado para ir al diccionario Cambridge o en el icono de google traslate para consultarlo ahí. <br>Pasa el mouse por el significado para volverlo a escuchar. Para ver el significado de una oración haz click sobre ella. </span>
 
 	<div id="spanishverb">
@@ -142,10 +176,15 @@ text-decoration: none;
 		<br>
 		<div id="botones"></div>
 		<br>
-		<button onclick="iniciar();"> <span style="color:#009;">Iniciar </span></button>  
+		<button onclick="pagina.iniciar();"> <span style="color:#009;">Iniciar </span></button>  
 	</div>
 	
-	<button id="next" class="hide" onclick="newVerb();"> <span>Siguiente verbo </span></button>  
+	<button id="next" class="hide" onclick="pagina.newVerb();"> <span>Siguiente verbo </span></button>  <br><br>
+	<div id="alllinks" class="hide" >
+		<span onclick="pagina.reiniciar();" class="links" > <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTst8ahpDOvmRDdSNfwL6rlXEsHi-c_tR8H62aQzdsBi8_Knnp3" height="40px">  <span class="tooltiptext">Comenzar</span> </span>
+		<span onclick="pagina.reload();" class="links" > <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8DWQ7gElkmS5ZmsyEEaL2ryLtqJUbel_-uR8E1kTCfdXZlVvw" height="40px">  <span class="tooltiptext">Regresar</span> </span>
+	</div>
+	
 </body>
 <script>
 
@@ -188,22 +227,6 @@ function linkGoogleT( verbo ){
 	return tagGoogleTraslate;
 }
 
-var numberVerb = -1;
-
-function newVerb(){
-	numberVerb++;
-	var thisVerb = verbs[numberVerb];
-	var oraciones = examples[ thisVerb.inf ] ? tagsFrases(examples[thisVerb.inf]) : tagsFrases(verbs[numberVerb].me2);
-	var events = ' onmouseover="sound(this);" onclick="clickToDictionary(this);" verbo="'+ thisVerb.inf +'" ';
-	var sentencesHTML = '<div id="sentencesexamples" > ' + oraciones + '</div>';	
-	var strElement = '<h3 id="meanings"' + events + ' >'+ thisVerb.mea + '</h3>'+linkGoogleT(thisVerb.inf)+'<br> ' + sentencesHTML ;
-	document.getElementById("spanishverb").innerHTML = strElement ;
-	autoPlay( thisVerb.inf )
-	if( verbs[ numberVerb + 1 ] === undefined ){
-		document.getElementById('next').style.display = 'none';
-	}
-}
-
 
 function verbo(){
     this.inf,
@@ -230,17 +253,61 @@ for(var i=0; i< v.length; i++){
 	verbs.push( e );
 }
 
-function iniciar(){
-	var inicio = parseInt(document.getElementById("from").value) - 1 ;
-	var hasta  = parseInt(document.getElementById("to").value);
-	if( hasta > inicio && hasta <= verbs.length ){
-		verbs = verbs.slice( inicio, hasta )
-		var element = document.getElementById("next");
-    		element.classList.remove("hide");
-    		document.getElementById('recomendaciones').classList.remove("hide");
-		newVerb();
+
+var pagina = {
+	desde : 0,
+	hasta : 0,
+	numElementVerb : -1,
+	iniciar : function(){
+		this.desde = parseInt(document.getElementById("from").value) - 1 ;
+		this.hasta = parseInt(document.getElementById("to").value);
+		if( this.hasta > this.desde && this.hasta <= verbs.length ){
+			verbs = verbs.slice( this.desde, this.hasta )
+			var element = document.getElementById("next");
+    			element.classList.remove("hide");
+    			document.getElementById('recomendaciones').classList.remove("hide");
+    			document.getElementById('alllinks').classList.remove("hide");
+			this.newVerb();
+		}	
+	},
+	newVerb(){
+		this.numElementVerb++;
+		var thisVerb = verbs[this.numElementVerb];
+		var oraciones = examples[ thisVerb.inf ] ? tagsFrases(examples[thisVerb.inf]) : tagsFrases(verbs[this.numElementVerb].me2);
+		var events = ' onmouseover="sound(this);" onclick="clickToDictionary(this);" verbo="'+ thisVerb.inf +'" ';
+		var sentencesHTML = '<div id="sentencesexamples" > ' + oraciones + '</div>';	
+		var strElement = '<h3 id="meanings"' + events + ' >'+ thisVerb.mea + '</h3>'+linkGoogleT(thisVerb.inf)+'<br> ' + sentencesHTML ;
+		document.getElementById("spanishverb").innerHTML = strElement ;
+		autoPlay( thisVerb.inf )
+		if( verbs[ this.numElementVerb + 1 ] === undefined ){
+			document.getElementById('next').style.display = 'none';
+		}	
+	},
+	reiniciar : function(){
+		this.numElementVerb = -1;
+		this.newVerb();			
+	},
+	reload : function(){
+		location.reload();
 	}
 }
+
+/*
+function newVerb(){
+	numberVerb++;
+	var thisVerb = verbs[numberVerb];
+	var oraciones = examples[ thisVerb.inf ] ? tagsFrases(examples[thisVerb.inf]) : tagsFrases(verbs[numberVerb].me2);
+	var events = ' onmouseover="sound(this);" onclick="clickToDictionary(this);" verbo="'+ thisVerb.inf +'" ';
+	var sentencesHTML = '<div id="sentencesexamples" > ' + oraciones + '</div>';	
+	var strElement = '<h3 id="meanings"' + events + ' >'+ thisVerb.mea + '</h3>'+linkGoogleT(thisVerb.inf)+'<br> ' + sentencesHTML ;
+	document.getElementById("spanishverb").innerHTML = strElement ;
+	autoPlay( thisVerb.inf )
+	if( verbs[ numberVerb + 1 ] === undefined ){
+		document.getElementById('next').style.display = 'none';
+	}
+}
+*/
+
 
 function creaBotones(){
 	var rango = 20;
@@ -249,7 +316,7 @@ function creaBotones(){
 		var to = i + rango < verbs.length ? i + rango: verbs.length;
 		var from = i + 1;
 		var elementHtmlButton = '<button onclick="document.getElementById(\'from\').value='+ from +' ;'+
-					'document.getElementById(\'to\').value='+ to +' ;iniciar();" ><span>' + from +'-'+ to +'</span></button>';
+					'document.getElementById(\'to\').value='+ to +' ;pagina.iniciar();" ><span>' + from +'-'+ to +'</span></button>';
 
 		htmlBotones = htmlBotones + elementHtmlButton;
 	}
