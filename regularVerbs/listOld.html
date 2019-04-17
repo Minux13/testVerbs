@@ -90,125 +90,19 @@ button:hover  {
 	text-align: right;
 	margin-right: 20px;
 }
-
-
-html {
-  scroll-behavior: smooth;
-}
-.diccionario{
-    height: 20px;
-    width: auto;
-}
-.volume_sup{
-    vertical-align: super;
-    font-size: 0.72em;
-    margin-left: 2px;
-}
-.volumeup{
-    color: #6d6;
-}
-.cellSound:hover{
-    cursor: url("sp.png") 10 10, pointer;
-}
-.diccionario:hover{
-    cursor: pointer;
-}
 		</style>
 
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-
+		<script src="symbolsSvg.js"></script>
 		<script src="verbs.js"></script>
 	</head>
 <body>
 
 	<h1 style="text-align: center;margin-buttom: 80px;">Lista de verbos regulares</h1>
 
-    <table id="table">
-    
-    </table>
-    
-    <div id="pagination" class=""></div>
 </body>
 <script>
-
-var NUMBERCELLSTABLE = 20;
-function createWindow(cUrl,cName,cFeatures) {
-	var xWin = window.open(cUrl,cName,cFeatures);
-}
-function sound( e ){
-	var thisVerb = e.getAttribute("verb");
-	var audio = new Audio( 'linguasorbRV/' +thisVerb + '.mp3');
-	audio.play();
-    e.childNodes[1].innerHTML = '<i class="fas fa-volume-up volumeup"></i>'
-    audio.onended = function(){
-        e.childNodes[1].innerHTML = '<i class="fas fa-volume-off"></i>';
-    }
-}
-
-function createButtonsPagination(){
-    var totalVerbs = v.length;
-    var totalButtons = Math.ceil( totalVerbs/NUMBERCELLSTABLE );
-
-    var buttonsHTML = '';
-    for(var i = 0; i<totalButtons; i++){
-        var init = i*20;
-        var end = i*20 + 20;
-
-        buttonsHTML += '<button class="buttonPagination" onclick="constructTable('+ init +','+ end +')">'+i+'</button>'
-    }
-
-    document.getElementById('pagination').innerHTML = buttonsHTML ;
-}
-
-function createCell(row){
-    
-    var featuresNewWindow = ' toolbar=yes, scrollbars=yes, resizable=yes, top=0, left=0, width=800, height=500 ';
-    var urlGoogleTraslate  = 'https://translate.google.com/?hl=es#en/es/'+ row[0];
-	var onclickAttr = ' onclick="createWindow(\''+ urlGoogleTraslate +'\',\'window2\',\''+ featuresNewWindow +'\')" ';
-
-
-    var cell = `
-    <tr>
-        <td><div onmouseenter="sound(this);" verb="`+row[0]+`" class="cellSound">`+row[0]+` <span class="volume_sup"><i class="fas fa-volume-off"></i></span></div></td>
-        <td><div onmouseenter="sound(this);" verb="`+row[1]+`" class="cellSound">`+row[1]+` <span class="volume_sup"><i class="fas fa-volume-off"></i></span></div></td>
-        <td><div onmouseenter="sound(this);" verb="`+row[2]+`" class="cellSound">`+row[2]+` <span class="volume_sup"><i class="fas fa-volume-off"></i></span></div></td>
-        <td><div onmouseenter="sound(this);" verb="`+row[3]+`" class="cellSound">`+row[3]+` <span class="volume_sup"><i class="fas fa-volume-off"></i></span></div></td>
-        <td><div onmouseenter="sound(this);" verb="`+row[4]+`" class="cellSound">`+row[4]+` <span class="volume_sup"><i class="fas fa-volume-off"></i></span></div></td>
-        <td>`+row[5]+`</td>
-        <td><img class="diccionario" `+ onclickAttr +` src="traslateicon.jpeg"></td>
-    </tr>`;
-    return cell;
-}
-
-function constructTable(init,end){  //end no lo toca
-    var th = `
-    <tr>
-        <th>Presente</th>
-        <th>Pasado</th>
-        <th>Participio</th>
-        <th>3ra Persona</th>
-        <th>Gerundio</th>
-        <th>Significado</th>
-        <th>Diccionario</th>
-    </tr>`;
-    
-    var trs = "";
-
-    for(var rowV = init; rowV < end; rowV++){
-
-        trs += v[rowV] ? createCell(v[rowV]) : "";
-    }
-
-    document.getElementById('table').innerHTML = th + trs ;
-    window.scrollTo(0,0);
-}
-
-constructTable(0,20);
-createButtonsPagination();
-
-/*
 
 function filter(){
 	
@@ -434,7 +328,8 @@ function pagination(e, to, from){
 	e.style.background = "#00F";
 	//e.style.border = "solid 2px #00F"	
 }
-*/
+
+
 
 
 
