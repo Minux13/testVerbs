@@ -5,6 +5,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Minux</title>
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
 		<style>
 			body{
 				text-align: center;	
@@ -85,15 +87,16 @@
     				margin-left: 13px;
 			}
 button {
-  display: inline-block;
-  text-align: center;
-  width: 190px;
-  transition: all 0.5s;
-  cursor: pointer;
-  padding:15px;
-  margin:15px;
-  background:#eef;
-  border:solid 1px #eef;
+    display: inline-block;
+    text-align: center;
+    width: 190px;
+    transition: all 0.5s;
+    cursor: pointer;
+    padding:15px;
+    margin:15px;
+    background:#eef;
+    border:solid 1px #eef;
+    border-radius: 8px;
 }
 button span {
   cursor: pointer;
@@ -121,6 +124,7 @@ button:hover span:after {
 #alllinks{
 	text-align: center;
 	margin: 40px;
+    /*display: inline-flex;*/
 }
 .hide{
 	display: none;	
@@ -129,33 +133,27 @@ a { color: inherit;
 text-decoration: none;
  } 
 .links{
-  /*box-shadow: 0px 5px 10px #999;
-  padding: 7px 15px;*/
-  font-size: 20px;
-  cursor: pointer;
-  position: relative;
+    cursor: pointer;
+    margin: 10px;
+    display: inline-block;
 }
-
-
-.links .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-
-    /* Position the tooltip */
-    position: absolute;
-    z-index: 1;
-    top: -50px;
-    left: -20px;
+.links-icon{
+    display: inline-block;
+    font-size: 23px;
+    position: relative;
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    box-sizing: border-box;
+    line-height: 55px;
+    /*box-shadow: 0 4px 10px #666;*/
+    border: 1px solid #ccc;
+    color: #555;
 }
+/*.links:hover .links-icon{
+    box-shadow: 0 3px 10px #666;
+}*/
 
-.links:hover .tooltiptext {
-    visibility: visible;
-}
 
 		</style>
 
@@ -181,8 +179,20 @@ text-decoration: none;
 	
 	<button id="next" class="hide" onclick="pagina.newVerb();"> <span>Siguiente verbo </span></button>  <br><br>
 	<div id="alllinks" class="hide" >
-		<span onclick="pagina.reiniciar();" class="links" > <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTst8ahpDOvmRDdSNfwL6rlXEsHi-c_tR8H62aQzdsBi8_Knnp3" height="40px">  <span class="tooltiptext">Comenzar</span> </span>
-		<span onclick="pagina.reload();" class="links" > <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8DWQ7gElkmS5ZmsyEEaL2ryLtqJUbel_-uR8E1kTCfdXZlVvw" height="40px">  <span class="tooltiptext">Regresar</span> </span>
+		<div onclick="pagina.reiniciar();" class="links" > 
+		    <div class="links-icon" > 
+                <i class="fas fa-sync-alt"></i>
+            </div><br>
+            <span>Comenzar</span>
+            <!-- <span class="tooltiptext">Comenzar</span> -->
+        </div>
+		<div onclick="pagina.reload();" class="links" > 
+		    <div class="links-icon" > 
+                <i class="fas fa-undo-alt"></i>
+            </div><br>
+            <span>Regresar</span>
+            <!-- <span class="tooltiptext">Regresar</span> -->
+        </div>
 	</div>
 	
 </body>
